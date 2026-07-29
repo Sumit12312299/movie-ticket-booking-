@@ -1,5 +1,5 @@
 import React from 'react';
-import { Film, Heart } from 'lucide-react';
+import { Film } from 'lucide-react';
 
 export default function Footer() {
   return (
@@ -42,13 +42,8 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="pt-8 border-t border-slate-100 text-center text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="pt-8 border-t border-slate-100 text-center text-xs text-slate-500">
           <p>© 2026 CineTicket Project. All rights reserved.</p>
-          <div className="flex items-center gap-1.5 text-slate-600 font-medium">
-            <span>Built with</span>
-            <Heart className="w-3.5 h-3.5 text-red-600 fill-red-600" />
-            <span>FastAPI & React</span>
-          </div>
         </div>
       </div>
     </footer>
