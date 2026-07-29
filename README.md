@@ -81,6 +81,77 @@ Online ticket booking platforms frequently face challenges regarding concurrent 
 
 ---
 
+## 📁 Project Folder Structure
+
+```
+movie ticket booking/
+├── backend/
+│   ├── app/
+│   │   ├── config/
+│   │   │   └── config.py         # App environment & settings
+│   │   ├── database/
+│   │   │   └── db.py             # MongoDB Motor connection & Fallback DB
+│   │   ├── models/
+│   │   │   ├── user.py           # User Pydantic models
+│   │   │   └── movie.py          # Movie Pydantic models
+│   │   ├── routes/
+│   │   │   ├── admin_routes.py   # Admin metrics & management APIs
+│   │   │   ├── auth_routes.py    # Authentication & Profile APIs
+│   │   │   ├── booking_routes.py # Booking, seat lock & E-ticket APIs
+│   │   │   ├── movie_routes.py   # Movie CRUD, search & review APIs
+│   │   │   └── showtime_routes.py# Showtime & seat availability APIs
+│   │   ├── schemas/
+│   │   │   ├── booking_schema.py # Booking request & response validation
+│   │   │   ├── movie_schema.py   # Movie & review validation schemas
+│   │   │   ├── showtime_schema.py# Showtime slot schemas
+│   │   │   └── user_schema.py    # Auth & token validation schemas
+│   │   ├── services/
+│   │   │   ├── auth_service.py   # JWT authorization dependency
+│   │   │   └── seat_locking_service.py # 5-min concurrent seat lock manager
+│   │   ├── utils/
+│   │   │   ├── logger.py         # Application logger
+│   │   │   └── security.py       # Password hashing & JWT helpers
+│   │   ├── main.py               # FastAPI entry point & CORS
+│   │   └── seed.py               # Startup database seeding script
+│   ├── .env                      # Environment variables
+│   ├── requirements.txt          # Python dependencies
+│   └── run.py                    # Uvicorn server launcher
+└── frontend/
+    ├── src/
+    │   ├── components/
+    │   │   ├── Footer.jsx        # Footer component
+    │   │   ├── MovieCard.jsx     # Movie poster card component
+    │   │   ├── Navbar.jsx        # Navigation header & live search
+    │   │   ├── SeatMap.jsx       # Interactive theater seat map
+    │   │   ├── TicketPass.jsx    # Digital E-Ticket pass with QR Code
+    │   │   └── TrailerModal.jsx  # YouTube trailer modal
+    │   ├── context/
+    │   │   ├── AuthContext.jsx   # Authentication context provider
+    │   │   └── NotificationContext.jsx # Toast notification manager
+    │   ├── layouts/
+    │   │   └── MainLayout.jsx    # Application shell layout
+    │   ├── pages/
+    │   │   ├── AdminDashboard.jsx# Admin metrics & inventory portal
+    │   │   ├── AuthPage.jsx      # Login & Registration page
+    │   │   ├── BookingConfirmationPage.jsx # Ticket confirmation page
+    │   │   ├── CheckoutPage.jsx  # Payment checkout gateway page
+    │   │   ├── HomePage.jsx      # Home hero slider & movies grid
+    │   │   ├── MovieDetailsPage.jsx # Movie specs & user reviews page
+    │   │   ├── SeatSelectionPage.jsx # Interactive seat locking page
+    │   │   ├── ShowtimeSelectionPage.jsx # Showtime date & venue picker
+    │   │   ├── SystemDesignPage.jsx # System architecture documentation
+    │   │   └── UserDashboard.jsx # My Bookings & Wishlist page
+    │   ├── services/
+    │   │   └── api.js            # Axios HTTP client with JWT interceptor
+    │   ├── App.jsx               # React Router routes setup
+    │   ├── index.css             # Tailwind CSS & design system
+    │   └── main.jsx              # React app mounting root
+    ├── package.json              # Frontend npm dependencies
+    └── vite.config.js            # Vite build & proxy config
+```
+
+---
+
 ## 🗄️ Database Schemas & Collections
 
 ### 1. `users` Collection
