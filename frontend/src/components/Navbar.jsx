@@ -11,11 +11,26 @@ export default function Navbar({ onSearchChange }) {
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  // Theme toggle state with localStorage persistence
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    return localStorage.getItem('cineticket_theme') === 'dark';
+  });
 
   const navigate = useNavigate();
   const location = useLocation();
   const searchRef = useRef(null);
+
+  // Sync theme class on mount and change
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('cineticket_theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('cineticket_theme', 'light');
+    }
+  }, [isDarkMode]);
 
   // Live Instant Search as user types single letter
   useEffect(() => {
@@ -29,7 +44,7 @@ export default function Navbar({ onSearchChange }) {
           })
           .catch(() => setSearchResults([]))
           .finally(() => setIsSearching(false));
-      }, 150); // Fast debounce
+      }, 150);
 
       return () => clearTimeout(timer);
     } else {
@@ -55,7 +70,6 @@ export default function Navbar({ onSearchChange }) {
 
   const toggleTheme = () => {
     setIsDarkMode((prev) => !prev);
-    document.documentElement.classList.toggle('dark');
   };
 
   const handleMovieSelect = (movieId) => {
@@ -146,7 +160,7 @@ export default function Navbar({ onSearchChange }) {
           {/* Theme Toggle Button */}
           <button
             onClick={toggleTheme}
-            className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 flex items-center justify-center transition-all"
+            className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 flex items-center justify-center transition-all shadow-sm"
             title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
           >
             {isDarkMode ? (
