@@ -1,10 +1,13 @@
 # CineTicket - Full Stack Movie Ticket Booking Platform
 
+[![GitHub Repo](https://img.shields.io/badge/GitHub-Repository-181717.svg?style=flat&logo=github)](https://github.com/Sumit12312299/movie-ticket-booking-.git)
 [![FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688.svg?style=flat&logo=fastapi)](https://fastapi.tiangolo.com/)
 [![MongoDB](https://img.shields.io/badge/Database-MongoDB-47A248.svg?style=flat&logo=mongodb)](https://www.mongodb.com/)
 [![React](https://img.shields.io/badge/Frontend-React_19-61DAFB.svg?style=flat&logo=react)](https://react.dev/)
 [![TailwindCSS](https://img.shields.io/badge/Styling-Tailwind_CSS-06B6D4.svg?style=flat&logo=tailwindcss)](https://tailwindcss.com/)
 [![JWT Auth](https://img.shields.io/badge/Security-JWT_Auth-000000.svg?style=flat&logo=jsonwebtokens)](https://jwt.io/)
+
+🔗 **GitHub Repository Link**: [https://github.com/Sumit12312299/movie-ticket-booking-.git](https://github.com/Sumit12312299/movie-ticket-booking-.git)
 
 A complete, production-ready Full Stack Web Application designed for online movie ticket booking, seat reservation, and cinema management. Built with **FastAPI**, **MongoDB**, **React**, and **Tailwind CSS**.
 
