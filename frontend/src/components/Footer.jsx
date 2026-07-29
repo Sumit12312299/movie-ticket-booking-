@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { Film, Mail, Phone, ShieldCheck, Heart, Send, CheckCircle2 } from 'lucide-react';
+import { Film, Mail, Phone, ShieldCheck, Heart, Send, CheckCircle2, Smartphone, CreditCard, Download, Shield } from 'lucide-react';
 import { useNotification } from '../context/NotificationContext';
 
 export default function Footer() {
   const { addToast } = useNotification();
   const [email, setEmail] = useState('');
-  const [subscribed, setSubscribed] = useState(false);
 
   const handleSubscribe = (e) => {
     e.preventDefault();
@@ -13,14 +12,13 @@ export default function Footer() {
       addToast('Please enter a valid email address', 'warning');
       return;
     }
-    setSubscribed(true);
     addToast('Subscribed to CineTicket VIP Deals & Discounts!', 'success');
     setEmail('');
   };
 
   return (
     <footer className="mt-20 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 transition-colors">
-      {/* 📩 Top Newsletter & App Download Section */}
+      {/* Top Newsletter & App Download Section */}
       <div className="border-b border-slate-100 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/50 py-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
@@ -61,18 +59,18 @@ export default function Footer() {
                 <span className="text-[11px] text-slate-500">Download CineTicket App</span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="px-4 py-2 bg-slate-900 dark:bg-slate-800 text-white rounded-xl border border-slate-800 text-xs font-bold flex items-center gap-2 shadow-sm cursor-pointer hover:bg-slate-800">
-                  <span className="text-base"></span>
+                <div className="px-4 py-2.5 bg-slate-900 dark:bg-slate-800 text-white rounded-xl border border-slate-800 text-xs font-bold flex items-center gap-2 shadow-sm cursor-pointer hover:bg-slate-800 transition-colors">
+                  <Smartphone className="w-5 h-5 text-red-500" />
                   <div>
-                    <span className="text-[9px] block text-slate-400 font-normal">Download on</span>
-                    <span>App Store</span>
+                    <span className="text-[9px] block text-slate-400 font-normal">iOS App Store</span>
+                    <span>Download App</span>
                   </div>
                 </div>
-                <div className="px-4 py-2 bg-slate-900 dark:bg-slate-800 text-white rounded-xl border border-slate-800 text-xs font-bold flex items-center gap-2 shadow-sm cursor-pointer hover:bg-slate-800">
-                  <span className="text-base">🤖</span>
+                <div className="px-4 py-2.5 bg-slate-900 dark:bg-slate-800 text-white rounded-xl border border-slate-800 text-xs font-bold flex items-center gap-2 shadow-sm cursor-pointer hover:bg-slate-800 transition-colors">
+                  <Download className="w-5 h-5 text-emerald-400" />
                   <div>
-                    <span className="text-[9px] block text-slate-400 font-normal">GET IT ON</span>
-                    <span>Google Play</span>
+                    <span className="text-[9px] block text-slate-400 font-normal">Google Play</span>
+                    <span>Get APK</span>
                   </div>
                 </div>
               </div>
@@ -81,7 +79,7 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* 🏬 Main Links Grid */}
+      {/* Main Links Grid */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           {/* Brand Info */}
@@ -129,20 +127,17 @@ export default function Footer() {
           <div>
             <h4 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-3">Accepted Payment Modes</h4>
             <div className="flex flex-wrap gap-2 text-[11px] font-bold">
-              <span className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
-                💳 VISA
+              <span className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 flex items-center gap-1.5">
+                <CreditCard className="w-3.5 h-3.5 text-red-600" /> VISA
               </span>
-              <span className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
-                💳 Mastercard
+              <span className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 flex items-center gap-1.5">
+                <CreditCard className="w-3.5 h-3.5 text-amber-500" /> Mastercard
               </span>
-              <span className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
-                📲 UPI / QR
+              <span className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 flex items-center gap-1.5">
+                <Smartphone className="w-3.5 h-3.5 text-emerald-500" /> UPI / QR
               </span>
-              <span className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
-                 Pay
-              </span>
-              <span className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
-                G Pay
+              <span className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 flex items-center gap-1.5">
+                <ShieldCheck className="w-3.5 h-3.5 text-sky-500" /> Net Banking
               </span>
             </div>
           </div>
@@ -154,7 +149,7 @@ export default function Footer() {
           <div className="flex items-center gap-4 text-xs font-medium text-slate-600 dark:text-slate-400">
             <span>Security: 256-Bit SSL Encrypted</span>
             <span>•</span>
-            <span className="text-emerald-600 font-bold flex items-center gap-1">
+            <span className="text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1">
               <CheckCircle2 className="w-3.5 h-3.5" /> Verified Ticketing Gateway
             </span>
           </div>

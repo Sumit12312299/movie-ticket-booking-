@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { Film, Search, Star, Sparkles, Filter, Play, ChevronRight, TrendingUp, Flame, Tag, ShieldCheck, Ticket } from 'lucide-react';
+import { Film, Search, Star, Sparkles, Filter, Play, ChevronRight, TrendingUp, Flame, Tag, ShieldCheck, Ticket, Crown, Headphones, Tv, Clapperboard } from 'lucide-react';
 import API from '../services/api';
 import MovieCard from '../components/MovieCard';
 import TrailerModal from '../components/TrailerModal';
@@ -18,10 +18,10 @@ export default function HomePage() {
   const genres = ['All', 'Sci-Fi', 'Action', 'Drama', 'Adventure', 'Cyberpunk', 'Biography', 'Fantasy'];
 
   const experienceBadges = [
-    { title: 'IMAX 3D Laser', icon: '🎬' },
-    { title: 'VIP Recliner Lounge', icon: '👑' },
-    { title: 'Dolby Atmos Audio', icon: '🎧' },
-    { title: '4DX Motion Experience', icon: '🍿' }
+    { title: 'IMAX 3D Laser', icon: Tv, color: 'text-sky-500' },
+    { title: 'VIP Recliner Lounge', icon: Crown, color: 'text-amber-500' },
+    { title: 'Dolby Atmos Audio', icon: Headphones, color: 'text-emerald-500' },
+    { title: '4DX Motion Experience', icon: Clapperboard, color: 'text-red-500' }
   ];
 
   useEffect(() => {
@@ -119,20 +119,27 @@ export default function HomePage() {
         </section>
       )}
 
-      {/* 🎬 Experience Category Badges */}
+      {/* 🎬 Experience Category Badges with Lucide SVG Icons */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        {experienceBadges.map((exp, idx) => (
-          <div
-            key={idx}
-            className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 rounded-2xl flex items-center gap-3 shadow-sm hover:shadow-md transition-all cursor-pointer"
-          >
-            <span className="text-2xl">{exp.icon}</span>
-            <div>
-              <h4 className="text-xs font-bold text-slate-900 dark:text-white">{exp.title}</h4>
-              <span className="text-[10px] text-slate-500 dark:text-slate-400">Premium Screenings</span>
+        {experienceBadges.map((exp, idx) => {
+          const IconComp = exp.icon;
+          return (
+            <div
+              key={idx}
+              className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 rounded-2xl flex items-center gap-3 shadow-sm hover:shadow-md transition-all cursor-pointer group"
+            >
+              <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center shrink-0">
+                <IconComp className={`w-5 h-5 ${exp.color}`} />
+              </div>
+              <div>
+                <h4 className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-red-600 transition-colors">
+                  {exp.title}
+                </h4>
+                <span className="text-[10px] text-slate-500 dark:text-slate-400">Premium Screenings</span>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Movies Catalog Filter & Header */}
@@ -140,7 +147,7 @@ export default function HomePage() {
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-5">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl bg-red-100 dark:bg-red-950/50 text-red-600 flex items-center justify-center">
-              <Flame className="w-5 h-5 fill-red-600" />
+              <Flame className="w-5 h-5 fill-red-600 text-red-600" />
             </div>
             <div>
               <h2 className="text-xl font-black text-slate-900 dark:text-white tracking-tight">
@@ -156,23 +163,23 @@ export default function HomePage() {
             <div className="flex items-center gap-1 bg-slate-200/80 dark:bg-slate-900 p-1 rounded-2xl border border-slate-300 dark:border-slate-800">
               <button
                 onClick={() => setSelectedStatus('now_showing')}
-                className={`px-4 py-2 rounded-xl text-xs font-extrabold transition-all ${
+                className={`px-4 py-2 rounded-xl text-xs font-extrabold transition-all flex items-center gap-1.5 ${
                   selectedStatus === 'now_showing'
                     ? 'bg-red-600 text-white shadow-sm'
                     : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
-                🎬 Now Showing
+                <Film className="w-3.5 h-3.5" /> Now Showing
               </button>
               <button
                 onClick={() => setSelectedStatus('coming_soon')}
-                className={`px-4 py-2 rounded-xl text-xs font-extrabold transition-all ${
+                className={`px-4 py-2 rounded-xl text-xs font-extrabold transition-all flex items-center gap-1.5 ${
                   selectedStatus === 'coming_soon'
                     ? 'bg-red-600 text-white shadow-sm'
                     : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
-                📅 Coming Soon
+                <Sparkles className="w-3.5 h-3.5" /> Coming Soon
               </button>
             </div>
 
