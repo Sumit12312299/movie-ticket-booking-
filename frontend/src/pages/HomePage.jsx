@@ -46,7 +46,7 @@ export default function HomePage() {
     <div className="space-y-10 pb-16">
       {/* Hero Banner Carousel (Featured Blockbuster) */}
       {featuredMovie && !searchQuery && selectedGenre === 'All' && (
-        <section className="relative w-full rounded-3xl overflow-hidden bg-slate-900 shadow-xl border border-slate-200 min-h-[420px] flex items-end p-6 sm:p-12 text-white">
+        <section className="relative w-full rounded-3xl overflow-hidden bg-slate-900 shadow-xl border border-slate-200 dark:border-slate-800 min-h-[420px] flex items-end p-6 sm:p-12 text-white">
           {/* Background Image Overlay */}
           <div className="absolute inset-0 z-0">
             <img
@@ -104,15 +104,15 @@ export default function HomePage() {
 
       {/* Filter Tabs & Controls */}
       <section className="space-y-6">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-4">
           {/* Status Tabs */}
-          <div className="flex items-center gap-2 bg-slate-200/80 p-1 rounded-2xl border border-slate-300">
+          <div className="flex items-center gap-2 bg-slate-200/80 dark:bg-slate-900 p-1 rounded-2xl border border-slate-300 dark:border-slate-800">
             <button
               onClick={() => setSelectedStatus('now_showing')}
               className={`px-5 py-2 rounded-xl text-xs font-extrabold transition-all ${
                 selectedStatus === 'now_showing'
                   ? 'bg-red-600 text-white shadow-sm'
-                  : 'text-slate-700 hover:text-slate-900'
+                  : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
               🎬 Now Showing
@@ -122,7 +122,7 @@ export default function HomePage() {
               className={`px-5 py-2 rounded-xl text-xs font-extrabold transition-all ${
                 selectedStatus === 'coming_soon'
                   ? 'bg-red-600 text-white shadow-sm'
-                  : 'text-slate-700 hover:text-slate-900'
+                  : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
               📅 Coming Soon
@@ -138,8 +138,8 @@ export default function HomePage() {
                 onClick={() => setSelectedGenre(genre)}
                 className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold shrink-0 transition-all ${
                   selectedGenre === genre
-                    ? 'bg-slate-900 text-white shadow-sm font-bold'
-                    : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
+                    ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-sm font-bold'
+                    : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800'
                 }`}
               >
                 {genre}
@@ -152,13 +152,13 @@ export default function HomePage() {
         {loading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[1, 2, 3, 4].map((n) => (
-              <div key={n} className="h-96 rounded-2xl bg-slate-200/70 animate-pulse border border-slate-300"></div>
+              <div key={n} className="h-96 rounded-2xl bg-slate-200/70 dark:bg-slate-900 animate-pulse border border-slate-300 dark:border-slate-800"></div>
             ))}
           </div>
         ) : movies.length === 0 ? (
-          <div className="text-center py-16 bg-white rounded-3xl border border-slate-200 space-y-3">
+          <div className="text-center py-16 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-3">
             <Film className="w-12 h-12 text-slate-400 mx-auto" />
-            <h3 className="text-base font-bold text-slate-700">No Movies Found</h3>
+            <h3 className="text-base font-bold text-slate-700 dark:text-slate-300">No Movies Found</h3>
             <p className="text-xs text-slate-500">Try clearing your search query or selecting another genre filter.</p>
           </div>
         ) : (
