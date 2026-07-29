@@ -11,22 +11,22 @@ export default function HomePage() {
   const [selectedGenre, setSelectedGenre] = useState('All');
   const [selectedStatus, setSelectedStatus] = useState('now_showing');
   const [activeTrailerMovie, setActiveTrailerMovie] = useState(null);
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const searchQuery = searchParams.get('search') || '';
+  const [liveQuery, setLiveQuery] = useState(searchParams.get('search') || '');
 
   const genres = ['All', 'Sci-Fi', 'Action', 'Drama', 'Adventure', 'Cyberpunk', 'Biography', 'Fantasy'];
 
   useEffect(() => {
     fetchMovies();
-  }, [selectedGenre, selectedStatus, searchQuery]);
+  }, [selectedGenre, selectedStatus, liveQuery]);
 
   const fetchMovies = async () => {
     setLoading(true);
     try {
       const res = await API.get('/movies', {
         params: {
-          search: searchQuery,
+          search: liveQuery.trim() || undefined,
           genre: selectedGenre !== 'All' ? selectedGenre : undefined,
           status: selectedStatus,
           limit: 20
@@ -44,10 +44,9 @@ export default function HomePage() {
 
   return (
     <div className="space-y-10 pb-16">
-      {/* Hero Banner Carousel (Featured Blockbuster) */}
-      {featuredMovie && !searchQuery && selectedGenre === 'All' && (
+      {/* Featured Hero Banner */}
+      {featuredMovie && !liveQuery && selectedGenre === 'All' && (
         <section className="relative w-full rounded-3xl overflow-hidden bg-slate-900 shadow-xl border border-slate-200 dark:border-slate-800 min-h-[420px] flex items-end p-6 sm:p-12 text-white">
-          {/* Background Image Overlay */}
           <div className="absolute inset-0 z-0">
             <img
               src={featuredMovie.banner_url || featuredMovie.poster_url}
@@ -58,7 +57,6 @@ export default function HomePage() {
             <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/60 to-transparent"></div>
           </div>
 
-          {/* Hero Content */}
           <div className="relative z-10 max-w-2xl space-y-4">
             <div className="flex flex-wrap items-center gap-2">
               <span className="px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider bg-red-600 text-white shadow-md flex items-center gap-1">
@@ -101,6 +99,20 @@ export default function HomePage() {
           </div>
         </section>
       )}
+
+      {/* Instant Search Bar on Mobile / Local Filter Input */}
+      <div className="md:hidden">
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="Type single letter to filter (e.g. d, a, c)..."
+            value={liveQuery}
+            onChange={(e) => setLiveQuery(e.target.value)}
+            className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl py-3 pl-11 pr-4 text-sm text-slate-900 dark:text-white"
+          />
+          <Search className="w-4 h-4 text-slate-400 absolute left-4 top-3.5" />
+        </div>
+      </div>
 
       {/* Filter Tabs & Controls */}
       <section className="space-y-6">
@@ -159,7 +171,7 @@ export default function HomePage() {
           <div className="text-center py-16 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-3">
             <Film className="w-12 h-12 text-slate-400 mx-auto" />
             <h3 className="text-base font-bold text-slate-700 dark:text-slate-300">No Movies Found</h3>
-            <p className="text-xs text-slate-500">Try clearing your search query or selecting another genre filter.</p>
+            <p className="text-xs text-slate-500">Try typing another letter or clearing the search query.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">

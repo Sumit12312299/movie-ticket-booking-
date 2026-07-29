@@ -1,29 +1,67 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Film, Search, Heart, User, LogOut, ShieldAlert, Ticket, Layers, Sun, Moon } from 'lucide-react';
+import { Film, Search, Heart, User, LogOut, ShieldAlert, Ticket, Layers, Sun, Moon, Star, X } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import API from '../services/api';
 
 export default function Navbar({ onSearchChange }) {
   const { user, logout, isAdmin } = useAuth();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [searchInput, setSearchInput] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
+  const searchRef = useRef(null);
+
+  // Live Instant Search as user types single letter
+  useEffect(() => {
+    if (searchInput.trim().length > 0) {
+      setIsSearching(true);
+      setShowDropdown(true);
+      const timer = setTimeout(() => {
+        API.get('/movies', { params: { search: searchInput.trim(), limit: 6 } })
+          .then((res) => {
+            setSearchResults(res.data.items || []);
+          })
+          .catch(() => setSearchResults([]))
+          .finally(() => setIsSearching(false));
+      }, 150); // Fast debounce
+
+      return () => clearTimeout(timer);
+    } else {
+      setSearchResults([]);
+      setShowDropdown(false);
+    }
+
+    if (onSearchChange) {
+      onSearchChange(searchInput);
+    }
+  }, [searchInput]);
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (searchRef.current && !searchRef.current.contains(e.target)) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const toggleTheme = () => {
     setIsDarkMode((prev) => !prev);
     document.documentElement.classList.toggle('dark');
   };
 
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
-    if (onSearchChange) {
-      onSearchChange(searchInput);
-    } else {
-      navigate(`/?search=${encodeURIComponent(searchInput)}`);
-    }
+  const handleMovieSelect = (movieId) => {
+    setShowDropdown(false);
+    setSearchInput('');
+    navigate(`/movie/${movieId}`);
   };
 
   return (
@@ -44,20 +82,64 @@ export default function Navbar({ onSearchChange }) {
           </div>
         </Link>
 
-        {/* Live Movie Search Bar */}
-        <form onSubmit={handleSearchSubmit} className="hidden md:flex flex-1 max-w-md relative">
-          <input
-            type="text"
-            placeholder="Search movies, genres, actors..."
-            value={searchInput}
-            onChange={(e) => {
-              setSearchInput(e.target.value);
-              if (onSearchChange) onSearchChange(e.target.value);
-            }}
-            className="w-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-full py-2.5 pl-11 pr-4 text-sm text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:bg-white dark:focus:bg-slate-900 focus:border-red-600 focus:ring-1 focus:ring-red-600 transition-all"
-          />
-          <Search className="w-4 h-4 text-slate-400 absolute left-4 top-3.5" />
-        </form>
+        {/* Live Instant Search Bar with Dropdown */}
+        <div ref={searchRef} className="hidden md:block flex-1 max-w-md relative">
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Type movie name, genre, actor..."
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              onFocus={() => {
+                if (searchInput.trim().length > 0) setShowDropdown(true);
+              }}
+              className="w-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-full py-2.5 pl-11 pr-10 text-sm text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:bg-white dark:focus:bg-slate-900 focus:border-red-600 focus:ring-1 focus:ring-red-600 transition-all"
+            />
+            <Search className="w-4 h-4 text-slate-400 absolute left-4 top-3.5" />
+            {searchInput && (
+              <button
+                onClick={() => setSearchInput('')}
+                className="absolute right-3.5 top-3.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+
+          {/* Instant Search Results Dropdown */}
+          {showDropdown && (
+            <div className="absolute top-14 left-0 right-0 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden z-50 animate-slide-up">
+              {isSearching ? (
+                <div className="p-4 text-center text-xs text-slate-500">Searching movies...</div>
+              ) : searchResults.length === 0 ? (
+                <div className="p-4 text-center text-xs text-slate-500">No movies found matching "{searchInput}"</div>
+              ) : (
+                <div className="divide-y divide-slate-100 dark:divide-slate-800 max-h-80 overflow-y-auto">
+                  <div className="px-4 py-2 bg-slate-50 dark:bg-slate-800/50 text-[10px] uppercase font-bold text-slate-500">
+                    Live Search Results ({searchResults.length})
+                  </div>
+                  {searchResults.map((m) => (
+                    <div
+                      key={m.id}
+                      onClick={() => handleMovieSelect(m.id)}
+                      className="p-3 hover:bg-slate-50 dark:hover:bg-slate-800/80 cursor-pointer flex items-center gap-3 transition-colors"
+                    >
+                      <img src={m.poster_url} alt={m.title} className="w-10 h-14 object-cover rounded-lg shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <h4 className="text-xs font-bold text-slate-900 dark:text-white truncate">{m.title}</h4>
+                        <p className="text-[11px] text-slate-500 dark:text-slate-400 truncate">{m.genre.join(', ')}</p>
+                        <span className="text-[10px] font-bold text-amber-500 flex items-center gap-1 mt-0.5">
+                          <Star className="w-3 h-3 fill-amber-500" />
+                          {m.rating.toFixed(1)} Rating
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
 
         {/* Navigation Actions */}
         <nav className="flex items-center gap-2 sm:gap-4">
