@@ -1,8 +1,12 @@
 @import "tailwindcss";
 
 @layer base {
+  * {
+    transition: background-color 0.35s ease, border-color 0.35s ease, color 0.25s ease, box-shadow 0.3s ease;
+  }
+
   body {
-    @apply bg-slate-50 text-slate-900 font-sans antialiased transition-colors duration-300 min-h-screen selection:bg-red-600 selection:text-white;
+    @apply bg-slate-50 text-slate-900 font-sans antialiased min-h-screen selection:bg-red-600 selection:text-white;
   }
   
   html.dark body {
@@ -10,9 +14,9 @@
   }
 }
 
-/* Premium Dual-Theme System */
+/* Premium Dual-Theme & Smooth Animation System */
 .panel-card {
-  @apply bg-white border border-slate-200 shadow-sm transition-all duration-200;
+  @apply bg-white border border-slate-200 shadow-sm transition-all duration-300 ease-out;
 }
 
 html.dark .panel-card {
@@ -30,19 +34,35 @@ html.dark .curved-screen {
   box-shadow: 0 12px 25px -5px rgba(225, 29, 72, 0.4);
 }
 
-@keyframes slideUp {
+/* Keyframe Animations */
+@keyframes slideUpFade {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(16px) scale(0.98);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.03);
   }
 }
 
 .animate-slide-up {
-  animation: slideUp 0.25s ease-out forwards;
+  animation: slideUpFade 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-glow {
+  animation: pulseGlow 2.5s infinite ease-in-out;
 }
 
 /* Custom Scrollbar */
