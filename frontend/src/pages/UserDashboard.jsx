@@ -1,6 +1,32 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Ticket, Heart, User, Calendar, Clock, MapPin, XCircle, QrCode, CheckCircle2, ShieldCheck, Film, Sparkles, Crown, ArrowRight, X, Wallet, Settings, Camera, Save, Lock, Eye, EyeOff, Mail, Phone, Award } from 'lucide-react';
+import { Ticket, Heart, User, Calendar, Clock, MapPin, XCircle, QrCode, CheckCircle2, ShieldCheck, Film, Sparkles, Crown, ArrowRight, X, Wallet, Settings, Camera, Save, Lock, Eye, EyeOff, Mail, Phone, Award, Upload, Image } from 'lucide-react';
+
+// inside UserDashboard component:
+  const fileInputRef = useRef(null);
+
+  const handleDeviceFileUpload = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      addToast('Please select a valid image file (PNG, JPG, WEBP)', 'warning');
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      addToast('Image size should be less than 5MB', 'warning');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const dataUrl = event.target.result;
+      setAvatarUrl(dataUrl);
+      addToast(`🎉 Uploaded "${file.name}" from your device!`, 'success');
+    };
+    reader.readAsDataURL(file);
+  };
 import API from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
@@ -395,30 +421,53 @@ export default function UserDashboard() {
                 <span className="text-[11px] font-black text-rose-600 dark:text-rose-400">Active Profile Picture</span>
               </div>
 
-              <div className="md:col-span-2 space-y-3">
-                <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block">
-                  Custom Profile Image URL
-                </label>
-                <div className="flex gap-2">
+              <div className="md:col-span-2 space-y-4">
+                {/* Device Upload Button & URL Input */}
+                <div className="space-y-2">
+                  <span className="text-xs font-bold text-slate-700 dark:text-slate-300 block">
+                    Upload Photo from Device or Enter Image URL
+                  </span>
+                  
+                  {/* Hidden File Input */}
                   <input
-                    type="url"
-                    placeholder="https://example.com/my-photo.jpg"
-                    value={customAvatarInput}
-                    onChange={(e) => setCustomAvatarInput(e.target.value)}
-                    className="flex-1 px-4 py-2.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-rose-500"
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleDeviceFileUpload}
+                    accept="image/*"
+                    className="hidden"
                   />
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (customAvatarInput.trim()) {
-                        setAvatarUrl(customAvatarInput.trim());
-                        addToast('Custom image URL applied as profile picture!', 'success');
-                      }
-                    }}
-                    className="px-5 py-2.5 rounded-2xl bg-rose-600 text-white font-extrabold text-xs shadow-md shadow-rose-600/30 hover:scale-105 transition-all"
-                  >
-                    Apply URL
-                  </button>
+
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      className="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-extrabold text-xs shadow-md shadow-emerald-600/30 flex items-center gap-2 hover:scale-105 transition-all cursor-pointer"
+                    >
+                      <Upload className="w-4 h-4" /> Upload from Device
+                    </button>
+
+                    <div className="flex-1 min-w-[200px] flex gap-2">
+                      <input
+                        type="url"
+                        placeholder="Or paste image URL (https://...)"
+                        value={customAvatarInput}
+                        onChange={(e) => setCustomAvatarInput(e.target.value)}
+                        className="flex-1 px-4 py-2.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-rose-500"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (customAvatarInput.trim()) {
+                            setAvatarUrl(customAvatarInput.trim());
+                            addToast('Custom image URL applied as profile picture!', 'success');
+                          }
+                        }}
+                        className="px-4 py-2.5 rounded-2xl bg-rose-600 text-white font-extrabold text-xs shadow-md shadow-rose-600/30 hover:scale-105 transition-all cursor-pointer"
+                      >
+                        Apply URL
+                      </button>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Preset Avatar Selection Grid */}
