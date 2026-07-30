@@ -1,8 +1,26 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Ticket, Heart, User, Calendar, Clock, MapPin, XCircle, QrCode, CheckCircle2, ShieldCheck, Film, Sparkles, Crown, ArrowRight, X, Wallet, Settings, Camera, Save, Lock, Eye, EyeOff, Mail, Phone, Award, Upload, Image } from 'lucide-react';
+import API from '../services/api';
+import { useAuth } from '../context/AuthContext';
+import { useNotification } from '../context/NotificationContext';
+import TicketPass from '../components/TicketPass';
+import WalletModal from '../components/WalletModal';
 
-// inside UserDashboard component:
+const AVATAR_PRESETS = [
+  { id: 1, icon: '🍿', name: 'Popcorn Lover', url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80' },
+  { id: 2, icon: '👑', name: 'VIP Crown', url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80' },
+  { id: 3, icon: '🎬', name: 'Cinema Director', url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=300&q=80' },
+  { id: 4, icon: '🦸', name: 'Superhero', url: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80' },
+  { id: 5, icon: '🤖', name: 'Sci-Fi Neon', url: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=300&q=80' },
+  { id: 6, icon: '🔥', name: 'Star Cinephile', url: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=300&q=80' }
+];
+
+export default function UserDashboard() {
+  const { user, refreshUser } = useAuth();
+  const { addToast } = useNotification();
+  const location = useLocation();
+
   const fileInputRef = useRef(null);
 
   const handleDeviceFileUpload = (e) => {
@@ -27,25 +45,6 @@ import { Ticket, Heart, User, Calendar, Clock, MapPin, XCircle, QrCode, CheckCir
     };
     reader.readAsDataURL(file);
   };
-import API from '../services/api';
-import { useAuth } from '../context/AuthContext';
-import { useNotification } from '../context/NotificationContext';
-import TicketPass from '../components/TicketPass';
-import WalletModal from '../components/WalletModal';
-
-const AVATAR_PRESETS = [
-  { id: 1, icon: '🍿', name: 'Popcorn Lover', url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80' },
-  { id: 2, icon: '👑', name: 'VIP Crown', url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80' },
-  { id: 3, icon: '🎬', name: 'Cinema Director', url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=300&q=80' },
-  { id: 4, icon: '🦸', name: 'Superhero', url: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80' },
-  { id: 5, icon: '🤖', name: 'Sci-Fi Neon', url: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=300&q=80' },
-  { id: 6, icon: '🔥', name: 'Star Cinephile', url: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=300&q=80' }
-];
-
-export default function UserDashboard() {
-  const { user, refreshUser } = useAuth();
-  const { addToast } = useNotification();
-  const location = useLocation();
 
   const [bookings, setBookings] = useState([]);
   const [favoriteMovies, setFavoriteMovies] = useState([]);
