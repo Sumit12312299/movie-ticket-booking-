@@ -355,14 +355,14 @@ export default function Navbar({ onSearchChange }) {
                     <button
                       onClick={() => {
                         setShowProfileMenu(false);
-                        setIsSettingsOpen(true);
+                        navigate('/dashboard', { state: { tab: 'settings' } });
                       }}
                       className="w-full text-left px-3.5 py-2.5 rounded-2xl text-xs text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-2.5 transition-colors font-bold group cursor-pointer"
                     >
                       <div className="w-7 h-7 rounded-xl bg-sky-500/10 text-sky-500 flex items-center justify-center group-hover:scale-110 transition-transform">
                         <Settings className="w-4 h-4" />
                       </div>
-                      <span>Account Settings</span>
+                      <span>Account Settings & Profile</span>
                     </button>
 
                     {/* Option 8: Customer Support & Help */}
