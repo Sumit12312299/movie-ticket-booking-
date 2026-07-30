@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Ticket, Heart, User, Calendar, Clock, MapPin, XCircle, QrCode, CheckCircle2, ShieldCheck, Film, Sparkles, Crown, ArrowRight, X, Wallet } from 'lucide-react';
 import API from '../services/api';
 import { useAuth } from '../context/AuthContext';
@@ -10,14 +10,21 @@ import WalletModal from '../components/WalletModal';
 export default function UserDashboard() {
   const { user } = useAuth();
   const { addToast } = useNotification();
+  const location = useLocation();
 
   const [bookings, setBookings] = useState([]);
   const [favoriteMovies, setFavoriteMovies] = useState([]);
   const [moviesMap, setMoviesMap] = useState({});
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('bookings');
+  const [activeTab, setActiveTab] = useState(location.state?.tab || 'bookings');
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [isWalletOpen, setIsWalletOpen] = useState(false);
+
+  useEffect(() => {
+    if (location.state?.tab) {
+      setActiveTab(location.state.tab);
+    }
+  }, [location.state]);
 
   useEffect(() => {
     fetchUserData();

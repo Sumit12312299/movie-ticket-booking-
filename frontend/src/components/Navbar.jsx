@@ -4,11 +4,19 @@ import { Film, Search, Heart, User, LogOut, ShieldAlert, Ticket, Sun, Moon, Star
 import { useAuth } from '../context/AuthContext';
 import API from '../services/api';
 import WalletModal from './WalletModal';
+import FoodSnacksModal from './FoodSnacksModal';
+import VouchersModal from './VouchersModal';
+import AccountSettingsModal from './AccountSettingsModal';
+import SupportModal from './SupportModal';
 
 export default function Navbar({ onSearchChange }) {
   const { user, logout, isAdmin } = useAuth();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [isWalletOpen, setIsWalletOpen] = useState(false);
+  const [isSnacksOpen, setIsSnacksOpen] = useState(false);
+  const [isVouchersOpen, setIsVouchersOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isSupportOpen, setIsSupportOpen] = useState(false);
   const [searchInput, setSearchInput] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -254,7 +262,7 @@ export default function Navbar({ onSearchChange }) {
                         setShowProfileMenu(false);
                         setIsWalletOpen(true);
                       }}
-                      className="w-full text-left px-3.5 py-2.5 rounded-2xl text-xs text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-between transition-colors font-bold group"
+                      className="w-full text-left px-3.5 py-2.5 rounded-2xl text-xs text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-between transition-colors font-bold group cursor-pointer"
                     >
                       <div className="flex items-center gap-2.5">
                         <div className="w-7 h-7 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -268,34 +276,40 @@ export default function Navbar({ onSearchChange }) {
                     </button>
 
                     {/* Option 2: My Bookings & Tickets */}
-                    <Link
-                      to="/dashboard"
-                      onClick={() => setShowProfileMenu(false)}
-                      className="w-full text-left px-3.5 py-2.5 rounded-2xl text-xs text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-2.5 transition-colors font-bold group"
+                    <button
+                      onClick={() => {
+                        setShowProfileMenu(false);
+                        navigate('/dashboard', { state: { tab: 'bookings' } });
+                      }}
+                      className="w-full text-left px-3.5 py-2.5 rounded-2xl text-xs text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-2.5 transition-colors font-bold group cursor-pointer"
                     >
                       <div className="w-7 h-7 rounded-xl bg-rose-500/10 text-rose-500 flex items-center justify-center group-hover:scale-110 transition-transform">
                         <Ticket className="w-4 h-4" />
                       </div>
                       <span>My Bookings & Passes</span>
-                    </Link>
+                    </button>
 
                     {/* Option 3: Saved Wishlist */}
-                    <Link
-                      to="/dashboard"
-                      onClick={() => setShowProfileMenu(false)}
-                      className="w-full text-left px-3.5 py-2.5 rounded-2xl text-xs text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-2.5 transition-colors font-bold group"
+                    <button
+                      onClick={() => {
+                        setShowProfileMenu(false);
+                        navigate('/dashboard', { state: { tab: 'wishlist' } });
+                      }}
+                      className="w-full text-left px-3.5 py-2.5 rounded-2xl text-xs text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-2.5 transition-colors font-bold group cursor-pointer"
                     >
                       <div className="w-7 h-7 rounded-xl bg-red-500/10 text-red-500 flex items-center justify-center group-hover:scale-110 transition-transform">
                         <Heart className="w-4 h-4" />
                       </div>
                       <span>Saved Wishlist Movies</span>
-                    </Link>
+                    </button>
 
                     {/* Option 4: Food & Beverages Snacks */}
-                    <Link
-                      to="/dashboard"
-                      onClick={() => setShowProfileMenu(false)}
-                      className="w-full text-left px-3.5 py-2.5 rounded-2xl text-xs text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-between transition-colors font-bold group"
+                    <button
+                      onClick={() => {
+                        setShowProfileMenu(false);
+                        setIsSnacksOpen(true);
+                      }}
+                      className="w-full text-left px-3.5 py-2.5 rounded-2xl text-xs text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-between transition-colors font-bold group cursor-pointer"
                     >
                       <div className="flex items-center gap-2.5">
                         <div className="w-7 h-7 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -304,12 +318,15 @@ export default function Navbar({ onSearchChange }) {
                         <span>Food & Cinema Snacks</span>
                       </div>
                       <span className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-extrabold">NEW</span>
-                    </Link>
+                    </button>
 
                     {/* Option 5: VIP Rewards & Vouchers */}
                     <button
-                      onClick={() => setShowProfileMenu(false)}
-                      className="w-full text-left px-3.5 py-2.5 rounded-2xl text-xs text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-between transition-colors font-bold group"
+                      onClick={() => {
+                        setShowProfileMenu(false);
+                        setIsVouchersOpen(true);
+                      }}
+                      className="w-full text-left px-3.5 py-2.5 rounded-2xl text-xs text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-between transition-colors font-bold group cursor-pointer"
                     >
                       <div className="flex items-center gap-2.5">
                         <div className="w-7 h-7 rounded-xl bg-purple-500/10 text-purple-500 flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -317,7 +334,7 @@ export default function Navbar({ onSearchChange }) {
                         </div>
                         <span>VIP Offers & Vouchers</span>
                       </div>
-                      <span className="text-[10px] font-mono text-purple-500 font-extrabold">2 active</span>
+                      <span className="text-[10px] font-mono text-purple-500 font-extrabold">3 active</span>
                     </button>
 
                     {/* Option 6: Admin Portal Link (If Admin User) */}
@@ -335,21 +352,26 @@ export default function Navbar({ onSearchChange }) {
                     )}
 
                     {/* Option 7: Account Settings */}
-                    <Link
-                      to="/dashboard"
-                      onClick={() => setShowProfileMenu(false)}
-                      className="w-full text-left px-3.5 py-2.5 rounded-2xl text-xs text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-2.5 transition-colors font-bold group"
+                    <button
+                      onClick={() => {
+                        setShowProfileMenu(false);
+                        setIsSettingsOpen(true);
+                      }}
+                      className="w-full text-left px-3.5 py-2.5 rounded-2xl text-xs text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-2.5 transition-colors font-bold group cursor-pointer"
                     >
                       <div className="w-7 h-7 rounded-xl bg-sky-500/10 text-sky-500 flex items-center justify-center group-hover:scale-110 transition-transform">
                         <Settings className="w-4 h-4" />
                       </div>
                       <span>Account Settings</span>
-                    </Link>
+                    </button>
 
                     {/* Option 8: Customer Support & Help */}
                     <button
-                      onClick={() => setShowProfileMenu(false)}
-                      className="w-full text-left px-3.5 py-2.5 rounded-2xl text-xs text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-2.5 transition-colors font-bold group"
+                      onClick={() => {
+                        setShowProfileMenu(false);
+                        setIsSupportOpen(true);
+                      }}
+                      className="w-full text-left px-3.5 py-2.5 rounded-2xl text-xs text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-2.5 transition-colors font-bold group cursor-pointer"
                     >
                       <div className="w-7 h-7 rounded-xl bg-indigo-500/10 text-indigo-500 flex items-center justify-center group-hover:scale-110 transition-transform">
                         <HelpCircle className="w-4 h-4" />
@@ -364,7 +386,7 @@ export default function Navbar({ onSearchChange }) {
                           logout();
                           setShowProfileMenu(false);
                         }}
-                        className="w-full text-left px-3.5 py-2.5 rounded-2xl text-xs text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/30 flex items-center gap-2.5 transition-colors font-bold group"
+                        className="w-full text-left px-3.5 py-2.5 rounded-2xl text-xs text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/30 flex items-center gap-2.5 transition-colors font-bold group cursor-pointer"
                       >
                         <div className="w-7 h-7 rounded-xl bg-rose-500/10 text-rose-600 flex items-center justify-center group-hover:scale-110 transition-transform">
                           <LogOut className="w-4 h-4" />
@@ -388,8 +410,12 @@ export default function Navbar({ onSearchChange }) {
         </div>
       </header>
 
-      {/* Wallet Modal */}
+      {/* Interactive Modals */}
       <WalletModal isOpen={isWalletOpen} onClose={() => setIsWalletOpen(false)} />
+      <FoodSnacksModal isOpen={isSnacksOpen} onClose={() => setIsSnacksOpen(false)} />
+      <VouchersModal isOpen={isVouchersOpen} onClose={() => setIsVouchersOpen(false)} />
+      <AccountSettingsModal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
+      <SupportModal isOpen={isSupportOpen} onClose={() => setIsSupportOpen(false)} />
     </>
   );
 }
