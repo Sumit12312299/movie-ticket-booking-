@@ -25,6 +25,43 @@ export default function SeatSelectionPage() {
     fetchShowtime();
   }, [showtimeId]);
 
+  // Real-time seat availability background sync polling (every 2.5 seconds)
+  useEffect(() => {
+    if (!showtimeId) return;
+
+    const pollInterval = setInterval(async () => {
+      try {
+        const res = await API.get(`/showtimes/${showtimeId}`);
+        const newShowtime = res.data;
+
+        setShowtime((prev) => {
+          if (!prev) return newShowtime;
+
+          // Check if any seat currently selected by this user got locked or booked by someone else
+          const latestBooked = newShowtime.booked_seats || [];
+          const latestLocked = newShowtime.locked_seats || [];
+
+          setSelectedSeats((currentSelected) => {
+            const conflictSeats = currentSelected.filter(
+              (s) => latestBooked.includes(s) || latestLocked.includes(s)
+            );
+            if (conflictSeats.length > 0) {
+              addToast(`Seat(s) ${conflictSeats.join(', ')} were just reserved by another user!`, 'warning');
+              return currentSelected.filter((s) => !conflictSeats.includes(s));
+            }
+            return currentSelected;
+          });
+
+          return newShowtime;
+        });
+      } catch (err) {
+        // Silent error handling for background polling
+      }
+    }, 2500);
+
+    return () => clearInterval(pollInterval);
+  }, [showtimeId]);
+
   useEffect(() => {
     if (timerSeconds <= 0) return;
     const interval = setInterval(() => {
@@ -112,21 +149,64 @@ export default function SeatSelectionPage() {
   return (
     <div className="space-y-8 pb-16">
       {/* Header & Movie Brief */}
-      <div className="glass-panel p-6 rounded-3xl border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="glass-panel p-6 rounded-3xl border border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div>
-          <span className="text-xs uppercase font-bold text-rose-500 tracking-wider">Step 1 of 3 • Seat Map</span>
-          <h1 className="text-2xl font-extrabold text-white mt-1">{showtime.movie_title}</h1>
-          <p className="text-xs text-slate-400 mt-1">
-            {showtime.theater_name} • <span className="text-amber-400">{showtime.screen_type}</span> • {showtime.show_date} at {showtime.show_time}
+          <div className="flex items-center gap-2">
+            <span className="text-xs uppercase font-bold text-rose-500 tracking-wider">Step 1 of 3 • Seat Map</span>
+            <span className="flex items-center gap-1.5 bg-emerald-500/10 px-3 py-0.5 rounded-full border border-emerald-500/30 text-[10px] font-extrabold text-emerald-600 dark:text-emerald-400">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
+              Live Seat Sync
+            </span>
+          </div>
+          <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white mt-1">{showtime.movie_title}</h1>
+          <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
+            {showtime.theater_name} • <span className="text-amber-600 dark:text-amber-400 font-semibold">{showtime.screen_type}</span> • {showtime.show_date} at {showtime.show_time}
           </p>
         </div>
 
-        {/* Locking Timer Badge */}
-        <div className="flex items-center gap-2 bg-slate-900/90 px-4 py-2.5 rounded-2xl border border-amber-500/30">
-          <Clock className="w-4 h-4 text-amber-400 animate-pulse" />
-          <span className="text-xs font-mono font-bold text-amber-300">
-            Seat Lock Timer: {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
-          </span>
+        {/* Radial Circular Seat Lock Timer */}
+        <div className="flex items-center gap-3 bg-gradient-to-r from-slate-900 to-slate-950 text-white px-4 py-2.5 rounded-2xl border border-slate-800 shadow-lg">
+          <div className="relative w-8 h-8 flex items-center justify-center">
+            <svg className="w-8 h-8 transform -rotate-90">
+              <circle
+                cx="16"
+                cy="16"
+                r="12"
+                stroke="currentColor"
+                strokeWidth="3"
+                className="text-slate-800"
+                fill="transparent"
+              />
+              <circle
+                cx="16"
+                cy="16"
+                r="12"
+                stroke="currentColor"
+                strokeWidth="3"
+                strokeDasharray={2 * Math.PI * 12}
+                strokeDashoffset={((300 - timerSeconds) / 300) * (2 * Math.PI * 12)}
+                className={`transition-all duration-1000 ${
+                  timerSeconds > 120
+                    ? 'text-emerald-500'
+                    : timerSeconds > 60
+                    ? 'text-amber-500'
+                    : 'text-rose-500 animate-pulse'
+                }`}
+                fill="transparent"
+                strokeLinecap="round"
+              />
+            </svg>
+            <Clock className="w-3.5 h-3.5 absolute text-white" />
+          </div>
+          <div>
+            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Lock Expires In</span>
+            <span className="text-xs font-mono font-black text-amber-400">
+              {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
+            </span>
+          </div>
         </div>
       </div>
 
@@ -143,13 +223,13 @@ export default function SeatSelectionPage() {
       {/* Booking Summary Footer Bar */}
       <div className="glass-panel p-6 rounded-3xl border border-rose-500/30 sticky bottom-4 z-30 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="space-y-1 text-center sm:text-left">
-          <span className="text-xs text-slate-400 block">Selected Seats ({selectedSeats.length})</span>
+          <span className="text-xs text-slate-600 dark:text-slate-400 block">Selected Seats ({selectedSeats.length})</span>
           <div className="flex flex-wrap items-center gap-1.5 justify-center sm:justify-start">
             {selectedSeats.length === 0 ? (
               <span className="text-xs text-slate-500 italic">No seats selected yet</span>
             ) : (
               selectedSeats.map((s) => (
-                <span key={s} className="px-2.5 py-0.5 rounded-md bg-rose-600/20 text-rose-300 text-xs font-bold border border-rose-500/40">
+                <span key={s} className="px-2.5 py-0.5 rounded-md bg-rose-600/20 text-rose-600 dark:text-rose-300 text-xs font-bold border border-rose-500/40">
                   {s}
                 </span>
               ))
@@ -159,9 +239,9 @@ export default function SeatSelectionPage() {
 
         <div className="flex items-center gap-6">
           <div className="text-right">
-            <span className="text-xs text-slate-400 block">Total Amount</span>
-            <span className="text-2xl font-black text-emerald-400 font-mono">
-              ${totalPrice.toFixed(2)}
+            <span className="text-xs text-slate-600 dark:text-slate-400 block">Total Amount</span>
+            <span className="text-2xl font-black text-emerald-600 dark:text-emerald-400 font-mono">
+              ₹{totalPrice.toFixed(2)}
             </span>
           </div>
 
@@ -171,7 +251,7 @@ export default function SeatSelectionPage() {
             className={`px-8 py-3.5 rounded-2xl font-bold text-sm flex items-center gap-2 shadow-xl transition-all ${
               selectedSeats.length > 0 && !locking
                 ? 'bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-400 text-white shadow-rose-600/30 hover:scale-105'
-                : 'bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700'
+                : 'bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-500 cursor-not-allowed border border-slate-300 dark:border-slate-700'
             }`}
           >
             {locking ? 'Locking Seats...' : 'Proceed to Checkout'}

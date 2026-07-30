@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Star, Clock, Calendar, Film, Play, User, Send, Heart, Ticket } from 'lucide-react';
+import { Star, Clock, Calendar, Film, Play, User, Send, Heart, Ticket, Tv, Lightbulb, Sparkles } from 'lucide-react';
 import API from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
@@ -15,6 +15,7 @@ export default function MovieDetailsPage() {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showTrailer, setShowTrailer] = useState(false);
+  const [isTheaterDimmed, setIsTheaterDimmed] = useState(false);
 
   // Review Form state
   const [newRating, setNewRating] = useState(5);
@@ -82,10 +83,30 @@ export default function MovieDetailsPage() {
   if (!movie) return null;
 
   return (
-    <div className="space-y-12 pb-16">
+    <div className={`space-y-12 pb-16 transition-all duration-700 ${isTheaterDimmed ? 'bg-slate-950 p-6 rounded-3xl ring-4 ring-rose-500/20 shadow-2xl' : ''}`}>
+      {/* Dimmed Theater Lights Overlay */}
+      {isTheaterDimmed && (
+        <div className="fixed inset-0 bg-slate-950/90 z-30 pointer-events-none transition-opacity animate-fade-in backdrop-blur-md"></div>
+      )}
+
       {/* Movie Hero Showcase */}
-      <div className="relative rounded-3xl overflow-hidden glass-card border border-slate-800 shadow-2xl p-6 sm:p-10">
+      <div className="relative z-40 rounded-3xl overflow-hidden glass-card border border-slate-800 shadow-2xl p-6 sm:p-10">
+        <div className="flex justify-end mb-4">
+          <button
+            onClick={() => setIsTheaterDimmed(!isTheaterDimmed)}
+            className={`px-4 py-2 rounded-2xl text-xs font-black flex items-center gap-2 transition-all border shadow-md ${
+              isTheaterDimmed
+                ? 'bg-amber-400 text-slate-950 border-amber-300 scale-105'
+                : 'bg-slate-800 text-slate-200 border-slate-700 hover:bg-slate-700'
+            }`}
+          >
+            <Lightbulb className={`w-4 h-4 ${isTheaterDimmed ? 'fill-slate-950 text-slate-950' : 'text-amber-400'}`} />
+            {isTheaterDimmed ? 'Lights On' : 'Dim Theater Lights'}
+          </button>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+
           {/* Poster Card */}
           <div className="relative aspect-[2/3] rounded-2xl overflow-hidden shadow-2xl border border-slate-700">
             <img src={movie.poster_url} alt={movie.title} className="w-full h-full object-cover" />
@@ -139,17 +160,17 @@ export default function MovieDetailsPage() {
             </div>
 
             <div className="space-y-2">
-              <h3 className="text-sm font-bold uppercase tracking-wider text-slate-400">Synopsis</h3>
-              <p className="text-sm text-slate-300 leading-relaxed">{movie.synopsis}</p>
+              <h3 className="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Synopsis</h3>
+              <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">{movie.synopsis}</p>
             </div>
 
             {/* Cast List */}
             {movie.cast && movie.cast.length > 0 && (
               <div className="space-y-2">
-                <h3 className="text-sm font-bold uppercase tracking-wider text-slate-400">Starring Cast</h3>
+                <h3 className="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Starring Cast</h3>
                 <div className="flex flex-wrap gap-2">
                   {movie.cast.map((actor) => (
-                    <span key={actor} className="px-3 py-1 rounded-full bg-slate-900 text-xs font-medium text-slate-200 border border-slate-800">
+                    <span key={actor} className="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-900 text-xs font-medium text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-800">
                       {actor}
                     </span>
                   ))}
@@ -174,19 +195,19 @@ export default function MovieDetailsPage() {
       {/* Reviews & Ratings Section */}
       <section className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* Submit Review Form */}
-        <div className="glass-card rounded-3xl p-6 space-y-4 border border-slate-800">
-          <h3 className="text-lg font-bold text-white flex items-center gap-2">
+        <div className="glass-card rounded-3xl p-6 space-y-4 border border-slate-200 dark:border-slate-800">
+          <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
             <Star className="w-5 h-5 text-amber-400 fill-amber-400" />
             Write a Review
           </h3>
 
           <form onSubmit={handleReviewSubmit} className="space-y-4">
             <div>
-              <label className="text-xs font-semibold text-slate-400 block mb-1">Your Rating</label>
+              <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 block mb-1">Your Rating</label>
               <select
                 value={newRating}
                 onChange={(e) => setNewRating(e.target.value)}
-                className="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-rose-500"
+                className="w-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-rose-500"
               >
                 <option value={5}>⭐⭐⭐⭐⭐ (5.0 - Exceptional)</option>
                 <option value={4}>⭐⭐⭐⭐ (4.0 - Great)</option>
@@ -197,13 +218,13 @@ export default function MovieDetailsPage() {
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-slate-400 block mb-1">Comment</label>
+              <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 block mb-1">Comment</label>
               <textarea
                 rows={4}
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
                 placeholder="Share your thoughts on the cinematography, plot, or score..."
-                className="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-rose-500"
+                className="w-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-rose-500"
               ></textarea>
             </div>
 
@@ -219,24 +240,24 @@ export default function MovieDetailsPage() {
         </div>
 
         {/* Existing Reviews List */}
-        <div className="md:col-span-2 glass-card rounded-3xl p-6 space-y-4 border border-slate-800">
-          <h3 className="text-lg font-bold text-white">Audience Reviews ({reviews.length})</h3>
+        <div className="md:col-span-2 glass-card rounded-3xl p-6 space-y-4 border border-slate-200 dark:border-slate-800">
+          <h3 className="text-lg font-bold text-slate-900 dark:text-white">Audience Reviews ({reviews.length})</h3>
           {reviews.length === 0 ? (
             <p className="text-xs text-slate-500 py-8 text-center">No reviews yet. Be the first to rate this movie!</p>
           ) : (
             <div className="space-y-4 max-h-[380px] overflow-y-auto pr-2">
               {reviews.map((rev) => (
-                <div key={rev.id} className="p-4 rounded-2xl bg-slate-900/70 border border-slate-800 space-y-2">
+                <div key={rev.id} className="p-4 rounded-2xl bg-slate-100 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800 space-y-2">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-full bg-rose-600/30 text-rose-400 flex items-center justify-center font-bold text-xs">
+                      <div className="w-7 h-7 rounded-full bg-rose-600/30 text-rose-600 dark:text-rose-400 flex items-center justify-center font-bold text-xs">
                         {rev.user_name.charAt(0)}
                       </div>
-                      <span className="text-xs font-bold text-white">{rev.user_name}</span>
+                      <span className="text-xs font-bold text-slate-900 dark:text-white">{rev.user_name}</span>
                     </div>
                     <div className="flex items-center gap-1">
                       <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
-                      <span className="text-xs font-bold text-amber-300">{rev.rating.toFixed(1)}</span>
+                      <span className="text-xs font-bold text-amber-600 dark:text-amber-300">{rev.rating.toFixed(1)}</span>
                     </div>
                   </div>
                   <p className="text-xs text-slate-300 leading-relaxed">{rev.comment}</p>

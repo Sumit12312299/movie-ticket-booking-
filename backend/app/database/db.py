@@ -11,15 +11,23 @@ class FallbackCollection:
         self._data = []
         self._id_counter = 1000
 
+    def _matches(self, doc, filter_dict):
+        if not filter_dict:
+            return True
+        for k, v in filter_dict.items():
+            if isinstance(v, dict):
+                if "$lt" in v and not (doc.get(k, "") < v["$lt"]):
+                    return False
+                if "$gt" in v and not (doc.get(k, "") > v["$gt"]):
+                    return False
+            elif doc.get(k) != v:
+                return False
+        return True
+
     async def find_one(self, filter_dict=None):
         filter_dict = filter_dict or {}
         for doc in self._data:
-            match = True
-            for k, v in filter_dict.items():
-                if doc.get(k) != v:
-                    match = False
-                    break
-            if match:
+            if self._matches(doc, filter_dict):
                 return dict(doc)
         return None
 
@@ -27,12 +35,7 @@ class FallbackCollection:
         filter_dict = filter_dict or {}
         results = []
         for doc in self._data:
-            match = True
-            for k, v in filter_dict.items():
-                if doc.get(k) != v:
-                    match = False
-                    break
-            if match:
+            if self._matches(doc, filter_dict):
                 results.append(dict(doc))
         
         class AsyncCursor:
@@ -74,7 +77,7 @@ class FallbackCollection:
             inserted_id = doc_copy["_id"]
         return InsertResult()
 
-    async def update_one(self, filter_dict, update_dict):
+    async def update_one(self, filter_dict, update_dict, upsert=False):
         doc = await self.find_one(filter_dict)
         if doc:
             for item in self._data:
@@ -90,6 +93,19 @@ class FallbackCollection:
                     class UpdateResult:
                         modified_count = 1
                     return UpdateResult()
+        elif upsert:
+            new_doc = {}
+            if "_id" in filter_dict:
+                new_doc["_id"] = filter_dict["_id"]
+            if "$set" in update_dict:
+                new_doc.update(update_dict["$set"])
+            if "$setOnInsert" in update_dict:
+                new_doc.update(update_dict["$setOnInsert"])
+            await self.insert_one(new_doc)
+            class UpdateResult:
+                modified_count = 1
+            return UpdateResult()
+
         class UpdateResult:
             modified_count = 0
         return UpdateResult()
@@ -105,16 +121,26 @@ class FallbackCollection:
             deleted_count = 0
         return DeleteResult()
 
+    async def delete_many(self, filter_dict=None):
+        filter_dict = filter_dict or {}
+        to_keep = []
+        deleted_count = 0
+        for doc in self._data:
+            if self._matches(doc, filter_dict):
+                deleted_count += 1
+            else:
+                to_keep.append(doc)
+        self._data = to_keep
+        class DeleteResult:
+            def __init__(self, c):
+                self.deleted_count = c
+        return DeleteResult(deleted_count)
+
     async def count_documents(self, filter_dict=None):
         filter_dict = filter_dict or {}
         count = 0
         for doc in self._data:
-            match = True
-            for k, v in filter_dict.items():
-                if doc.get(k) != v:
-                    match = False
-                    break
-            if match:
+            if self._matches(doc, filter_dict):
                 count += 1
         return count
 

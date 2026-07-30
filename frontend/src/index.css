@@ -1,20 +1,39 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
+html {
+  scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.glass-card {
+  @apply bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 shadow-md transition-colors;
+}
+
+.glass-panel {
+  @apply bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 shadow-md;
+}
+
 @layer base {
   * {
-    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.2s ease, box-shadow 0.25s ease;
+    transition: background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+                border-color 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+                color 0.2s ease, 
+                opacity 0.25s ease;
+    will-change: auto;
   }
 
   body {
-    @apply bg-[#f5f5f5] text-[#222222] font-sans antialiased min-h-screen selection:bg-[#f84464] selection:text-white;
+    @apply bg-slate-100 text-slate-900 font-sans antialiased min-h-screen selection:bg-[#f84464] selection:text-white;
   }
   
   html.dark body {
-    @apply bg-[#14141d] text-[#f2f2f2];
+    @apply bg-[#0f172a] text-[#f8fafc];
   }
 }
 
-/* BookMyShow Iconic Palette & Design Tokens */
+/* BookMyShow Iconic Ultra-Smooth Theme */
 :root {
   --bms-red: #f84464;
   --bms-red-hover: #e03352;
@@ -25,16 +44,23 @@
 .bms-btn-red {
   background-color: #f84464;
   color: #ffffff;
-  transition: all 0.2s ease-in-out;
+  transition: transform 0.15s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+  transform: translateZ(0);
 }
 
 .bms-btn-red:hover {
   background-color: #e03352;
   box-shadow: 0 4px 14px 0 rgba(248, 68, 100, 0.39);
+  transform: translateY(-1px) translateZ(0);
+}
+
+.bms-btn-red:active {
+  transform: scale(0.97) translateZ(0);
 }
 
 .panel-card {
-  @apply bg-white border border-[#e5e5e5] shadow-sm transition-all duration-200;
+  @apply bg-white border border-[#e5e5e5] shadow-sm transition-all duration-250 ease-out;
+  transform: translateZ(0);
 }
 
 html.dark .panel-card {
@@ -50,16 +76,34 @@ html.dark .panel-card {
 @keyframes slideUpFade {
   from {
     opacity: 0;
-    transform: translateY(12px);
+    transform: translateY(10px) scale(0.99) translateZ(0);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1) translateZ(0);
   }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleUp {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
 }
 
 .animate-slide-up {
   animation: slideUpFade 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.animate-scale-up {
+  animation: scaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 /* Custom Scrollbar */

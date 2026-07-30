@@ -28,7 +28,8 @@ async def get_current_user(token: str = Depends(oauth2_scheme)) -> UserProfile:
         email=user_doc["email"],
         role=user_doc.get("role", "user"),
         created_at=user_doc.get("created_at"),
-        favorites=user_doc.get("favorites", [])
+        favorites=user_doc.get("favorites", []),
+        wallet_balance=float(user_doc.get("wallet_balance", 1500.00))
     )
 
 async def get_current_admin(current_user: UserProfile = Depends(get_current_user)) -> UserProfile:

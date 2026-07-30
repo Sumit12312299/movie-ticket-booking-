@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { DollarSign, Ticket, Film, Users, Plus, Trash2, Edit3, ShieldAlert, BarChart3, TrendingUp, Calendar, MapPin } from 'lucide-react';
+import { IndianRupee, Ticket, Film, Users, Plus, Trash2, Edit3, ShieldAlert, BarChart3, TrendingUp, Calendar, MapPin } from 'lucide-react';
 import API from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
@@ -131,16 +131,11 @@ export default function AdminDashboard() {
 
   return (
     <div className="space-y-8 pb-16">
-      {/* Admin Title */}
-      <div className="glass-panel p-6 rounded-3xl border border-amber-500/30 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 to-rose-600 flex items-center justify-center text-white shadow-lg">
-            <ShieldAlert className="w-6 h-6" />
-          </div>
-          <div>
-            <h1 className="text-2xl font-black text-white">Admin Management Portal</h1>
-            <p className="text-xs text-slate-400">Real-time revenue metrics, catalog CRUD, & system operations</p>
-          </div>
+      {/* Header */}
+      <div className="glass-panel p-6 rounded-3xl border border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div>
+          <span className="text-xs uppercase font-bold text-amber-600 dark:text-amber-400 tracking-wider">Management Console</span>
+          <h1 className="text-2xl font-black text-slate-900 dark:text-white mt-1">Admin Analytics & Catalog Control</h1>
         </div>
 
         <div className="flex items-center gap-3">
@@ -149,14 +144,15 @@ export default function AdminDashboard() {
             className="px-4 py-2.5 rounded-2xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs flex items-center gap-2 shadow-lg shadow-rose-600/30 transition-all"
           >
             <Plus className="w-4 h-4" />
-            Add New Movie
+            Add Movie
           </button>
+
           <button
             onClick={() => setShowAddShowtime(true)}
-            className="px-4 py-2.5 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center gap-2 shadow-lg transition-all"
+            className="px-4 py-2.5 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center gap-2 shadow-lg shadow-amber-500/30 transition-all"
           >
-            <Calendar className="w-4 h-4" />
-            Add Showtime
+            <Plus className="w-4 h-4" />
+            Schedule Showtime
           </button>
         </div>
       </div>
@@ -164,46 +160,46 @@ export default function AdminDashboard() {
       {/* Analytics KPI Stat Cards */}
       {stats && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="glass-card p-6 rounded-3xl border border-slate-800 space-y-2">
-            <div className="flex items-center justify-between text-emerald-400">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Total Revenue</span>
-              <DollarSign className="w-5 h-5" />
+          <div className="glass-card p-6 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-2">
+            <div className="flex items-center justify-between text-emerald-600 dark:text-emerald-400">
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Total Revenue</span>
+              <IndianRupee className="w-5 h-5" />
             </div>
-            <p className="text-3xl font-black text-white font-mono">${stats.total_revenue.toFixed(2)}</p>
-            <span className="text-[10px] text-emerald-400 font-semibold">+18.5% this month</span>
+            <p className="text-3xl font-black text-slate-900 dark:text-white font-mono">₹{stats.total_revenue.toFixed(2)}</p>
+            <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold">+18.5% this month</span>
           </div>
 
-          <div className="glass-card p-6 rounded-3xl border border-slate-800 space-y-2">
+          <div className="glass-card p-6 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-2">
             <div className="flex items-center justify-between text-rose-500">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Tickets Sold</span>
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Tickets Sold</span>
               <Ticket className="w-5 h-5" />
             </div>
-            <p className="text-3xl font-black text-white font-mono">{stats.total_tickets_sold}</p>
-            <span className="text-[10px] text-slate-400 font-semibold">Across all screens</span>
+            <p className="text-3xl font-black text-slate-900 dark:text-white font-mono">{stats.total_tickets_sold}</p>
+            <span className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold">Across all screens</span>
           </div>
 
-          <div className="glass-card p-6 rounded-3xl border border-slate-800 space-y-2">
-            <div className="flex items-center justify-between text-amber-400">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Active Movies</span>
+          <div className="glass-card p-6 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-2">
+            <div className="flex items-center justify-between text-amber-500">
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Active Movies</span>
               <Film className="w-5 h-5" />
             </div>
-            <p className="text-3xl font-black text-white font-mono">{stats.total_movies}</p>
-            <span className="text-[10px] text-amber-300 font-semibold">Now Showing & Upcoming</span>
+            <p className="text-3xl font-black text-slate-900 dark:text-white font-mono">{stats.total_movies}</p>
+            <span className="text-[10px] text-amber-600 dark:text-amber-300 font-semibold">Now Showing & Upcoming</span>
           </div>
 
-          <div className="glass-card p-6 rounded-3xl border border-slate-800 space-y-2">
-            <div className="flex items-center justify-between text-sky-400">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Registered Users</span>
+          <div className="glass-card p-6 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-2">
+            <div className="flex items-center justify-between text-sky-500">
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Registered Users</span>
               <Users className="w-5 h-5" />
             </div>
-            <p className="text-3xl font-black text-white font-mono">{stats.total_users}</p>
-            <span className="text-[10px] text-slate-400 font-semibold">Customer Accounts</span>
+            <p className="text-3xl font-black text-slate-900 dark:text-white font-mono">{stats.total_users}</p>
+            <span className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold">Customer Accounts</span>
           </div>
         </div>
       )}
 
       {/* Tab Controls */}
-      <div className="flex items-center gap-3 border-b border-slate-800 pb-4">
+      <div className="flex items-center gap-3 border-b border-slate-200 dark:border-slate-800 pb-4">
         {['analytics', 'movies', 'bookings'].map((tab) => (
           <button
             key={tab}
@@ -211,7 +207,7 @@ export default function AdminDashboard() {
             className={`px-5 py-2.5 rounded-2xl text-xs font-bold uppercase tracking-wider transition-all ${
               activeTab === tab
                 ? 'bg-amber-500 text-slate-950 shadow-md font-extrabold'
-                : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'
+                : 'bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-slate-800'
             }`}
           >
             {tab}
@@ -222,9 +218,9 @@ export default function AdminDashboard() {
       {/* Tab 1: Analytics Charts */}
       {activeTab === 'analytics' && stats && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="glass-card rounded-3xl p-6 border border-slate-800 space-y-4">
-            <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-              <BarChart3 className="w-4 h-4 text-amber-400" />
+          <div className="glass-card rounded-3xl p-6 border border-slate-200 dark:border-slate-800 space-y-4">
+            <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
+              <BarChart3 className="w-4 h-4 text-amber-500" />
               Revenue Distribution by Genre
             </h3>
             <div className="space-y-4 pt-2">
@@ -233,10 +229,10 @@ export default function AdminDashboard() {
                 return (
                   <div key={genre} className="space-y-1">
                     <div className="flex justify-between text-xs font-semibold">
-                      <span className="text-slate-300">{genre}</span>
-                      <span className="text-amber-400 font-mono">${amount.toFixed(2)} ({pct.toFixed(0)}%)</span>
+                      <span className="text-slate-700 dark:text-slate-300">{genre}</span>
+                      <span className="text-amber-600 dark:text-amber-400 font-mono">₹{amount.toFixed(2)} ({pct.toFixed(0)}%)</span>
                     </div>
-                    <div className="w-full h-3 rounded-full bg-slate-900 overflow-hidden">
+                    <div className="w-full h-3 rounded-full bg-slate-200 dark:bg-slate-900 overflow-hidden">
                       <div className="h-full bg-gradient-to-r from-amber-500 to-rose-600 rounded-full" style={{ width: `${pct}%` }}></div>
                     </div>
                   </div>
@@ -245,19 +241,19 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          <div className="glass-card rounded-3xl p-6 border border-slate-800 space-y-4">
-            <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-              <TrendingUp className="w-4 h-4 text-emerald-400" />
+          <div className="glass-card rounded-3xl p-6 border border-slate-200 dark:border-slate-800 space-y-4">
+            <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
+              <TrendingUp className="w-4 h-4 text-emerald-500" />
               Recent System Activity Log
             </h3>
             <div className="space-y-3 max-h-72 overflow-y-auto">
               {stats.recent_bookings?.map((b) => (
-                <div key={b.id} className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 flex items-center justify-between text-xs">
+                <div key={b.id} className="p-3 rounded-xl bg-slate-100 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs">
                   <div>
-                    <span className="font-bold text-white block">{b.user_name}</span>
-                    <span className="text-slate-400 text-[10px]">{b.movie_title} • {b.seats.join(', ')}</span>
+                    <span className="font-bold text-slate-900 dark:text-white block">{b.user_name}</span>
+                    <span className="text-slate-500 dark:text-slate-400 text-[10px]">{b.movie_title} • {b.seats.join(', ')}</span>
                   </div>
-                  <span className="font-mono font-bold text-emerald-400">${b.total_amount.toFixed(2)}</span>
+                  <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">₹{b.total_amount.toFixed(2)}</span>
                 </div>
               ))}
             </div>
@@ -267,11 +263,11 @@ export default function AdminDashboard() {
 
       {/* Tab 2: Movies Catalog CRUD */}
       {activeTab === 'movies' && (
-        <div className="glass-card rounded-3xl p-6 border border-slate-800 space-y-4">
-          <h3 className="text-sm font-bold text-white uppercase tracking-wider">Movie Inventory</h3>
+        <div className="glass-card rounded-3xl p-6 border border-slate-200 dark:border-slate-800 space-y-4">
+          <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">Movie Inventory</h3>
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs text-slate-300">
-              <thead className="bg-slate-900 uppercase text-[10px] font-bold text-slate-400">
+            <table className="w-full text-left text-xs text-slate-700 dark:text-slate-300">
+              <thead className="bg-slate-100 dark:bg-slate-900 uppercase text-[10px] font-bold text-slate-600 dark:text-slate-400">
                 <tr>
                   <th className="p-3">Poster</th>
                   <th className="p-3">Title</th>
@@ -281,24 +277,24 @@ export default function AdminDashboard() {
                   <th className="p-3 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800/80">
+              <tbody className="divide-y divide-slate-200 dark:divide-slate-800/80">
                 {movies.map((m) => (
-                  <tr key={m.id} className="hover:bg-slate-900/40">
+                  <tr key={m.id} className="hover:bg-slate-100/60 dark:hover:bg-slate-900/40">
                     <td className="p-3">
                       <img src={m.poster_url} alt={m.title} className="w-10 h-14 object-cover rounded-md" />
                     </td>
-                    <td className="p-3 font-bold text-white">{m.title}</td>
+                    <td className="p-3 font-bold text-slate-900 dark:text-white">{m.title}</td>
                     <td className="p-3">{m.genre.join(', ')}</td>
-                    <td className="p-3 font-mono font-bold text-amber-400">★ {m.rating.toFixed(1)}</td>
+                    <td className="p-3 font-mono font-bold text-amber-500">★ {m.rating.toFixed(1)}</td>
                     <td className="p-3">
-                      <span className="px-2 py-0.5 rounded text-[10px] uppercase font-bold bg-slate-800 text-slate-300">
+                      <span className="px-2 py-0.5 rounded text-[10px] uppercase font-bold bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-slate-300">
                         {m.status}
                       </span>
                     </td>
                     <td className="p-3 text-right">
                       <button
                         onClick={() => handleDeleteMovie(m.id)}
-                        className="p-2 rounded-lg bg-rose-500/10 text-rose-400 hover:bg-rose-500/20"
+                        className="p-2 rounded-lg bg-rose-500/10 text-rose-600 dark:text-rose-400 hover:bg-rose-500/20"
                         title="Delete movie"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -314,63 +310,63 @@ export default function AdminDashboard() {
 
       {/* Add Movie Modal */}
       {showAddMovie && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-xl animate-slide-up">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xl animate-slide-up">
           <div className="relative max-w-xl w-full glass-card p-6 rounded-3xl border border-rose-500/40 max-h-[90vh] overflow-y-auto space-y-4">
-            <div className="flex justify-between items-center border-b border-slate-800 pb-3">
-              <h3 className="text-lg font-bold text-white">Create New Movie Record</h3>
-              <button onClick={() => setShowAddMovie(false)} className="text-slate-400 hover:text-white">✕</button>
+            <div className="flex justify-between items-center border-b border-slate-200 dark:border-slate-800 pb-3">
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white">Create New Movie Record</h3>
+              <button onClick={() => setShowAddMovie(false)} className="text-slate-500 hover:text-slate-900 dark:hover:text-white">✕</button>
             </div>
 
             <form onSubmit={handleCreateMovie} className="space-y-3 text-xs">
               <div>
-                <label className="font-semibold text-slate-400 block mb-1">Movie Title</label>
+                <label className="font-semibold text-slate-600 dark:text-slate-400 block mb-1">Movie Title</label>
                 <input
                   type="text"
                   required
                   value={newMovie.title}
                   onChange={(e) => setNewMovie({ ...newMovie, title: e.target.value })}
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl p-2.5 text-white"
+                  className="w-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-2.5 text-slate-900 dark:text-white"
                 />
               </div>
 
               <div>
-                <label className="font-semibold text-slate-400 block mb-1">Synopsis</label>
+                <label className="font-semibold text-slate-600 dark:text-slate-400 block mb-1">Synopsis</label>
                 <textarea
                   rows={2}
                   value={newMovie.synopsis}
                   onChange={(e) => setNewMovie({ ...newMovie, synopsis: e.target.value })}
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl p-2.5 text-white"
+                  className="w-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-2.5 text-slate-900 dark:text-white"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="font-semibold text-slate-400 block mb-1">Genre (Comma separated)</label>
+                  <label className="font-semibold text-slate-600 dark:text-slate-400 block mb-1">Genre (Comma separated)</label>
                   <input
                     type="text"
                     value={newMovie.genre}
                     onChange={(e) => setNewMovie({ ...newMovie, genre: e.target.value })}
-                    className="w-full bg-slate-900 border border-slate-800 rounded-xl p-2.5 text-white"
+                    className="w-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-2.5 text-slate-900 dark:text-white"
                   />
                 </div>
                 <div>
-                  <label className="font-semibold text-slate-400 block mb-1">Duration (Mins)</label>
+                  <label className="font-semibold text-slate-600 dark:text-slate-400 block mb-1">Duration (Mins)</label>
                   <input
                     type="number"
                     value={newMovie.duration_mins}
                     onChange={(e) => setNewMovie({ ...newMovie, duration_mins: e.target.value })}
-                    className="w-full bg-slate-900 border border-slate-800 rounded-xl p-2.5 text-white"
+                    className="w-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-2.5 text-slate-900 dark:text-white"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="font-semibold text-slate-400 block mb-1">Poster URL</label>
+                <label className="font-semibold text-slate-600 dark:text-slate-400 block mb-1">Poster URL</label>
                 <input
                   type="text"
                   value={newMovie.poster_url}
                   onChange={(e) => setNewMovie({ ...newMovie, poster_url: e.target.value })}
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl p-2.5 text-white"
+                  className="w-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-2.5 text-slate-900 dark:text-white"
                 />
               </div>
 
@@ -384,20 +380,20 @@ export default function AdminDashboard() {
 
       {/* Add Showtime Modal */}
       {showAddShowtime && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-xl animate-slide-up">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xl animate-slide-up">
           <div className="relative max-w-md w-full glass-card p-6 rounded-3xl border border-amber-500/40 space-y-4">
-            <div className="flex justify-between items-center border-b border-slate-800 pb-3">
-              <h3 className="text-lg font-bold text-white">Schedule Showtime Slot</h3>
-              <button onClick={() => setShowAddShowtime(false)} className="text-slate-400 hover:text-white">✕</button>
+            <div className="flex justify-between items-center border-b border-slate-200 dark:border-slate-800 pb-3">
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white">Schedule Showtime Slot</h3>
+              <button onClick={() => setShowAddShowtime(false)} className="text-slate-500 hover:text-slate-900 dark:hover:text-white">✕</button>
             </div>
 
             <form onSubmit={handleCreateShowtime} className="space-y-3 text-xs">
               <div>
-                <label className="font-semibold text-slate-400 block mb-1">Select Movie</label>
+                <label className="font-semibold text-slate-600 dark:text-slate-400 block mb-1">Select Movie</label>
                 <select
                   value={newShowtime.movie_id}
                   onChange={(e) => setNewShowtime({ ...newShowtime, movie_id: e.target.value })}
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl p-2.5 text-white"
+                  className="w-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-2.5 text-slate-900 dark:text-white"
                 >
                   {movies.map((m) => (
                     <option key={m.id} value={m.id}>{m.title}</option>
@@ -406,32 +402,32 @@ export default function AdminDashboard() {
               </div>
 
               <div>
-                <label className="font-semibold text-slate-400 block mb-1">Theater Venue</label>
+                <label className="font-semibold text-slate-600 dark:text-slate-400 block mb-1">Theater Venue</label>
                 <input
                   type="text"
                   value={newShowtime.theater_name}
                   onChange={(e) => setNewShowtime({ ...newShowtime, theater_name: e.target.value })}
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl p-2.5 text-white"
+                  className="w-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-2.5 text-slate-900 dark:text-white"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="font-semibold text-slate-400 block mb-1">Date</label>
+                  <label className="font-semibold text-slate-600 dark:text-slate-400 block mb-1">Date</label>
                   <input
                     type="date"
                     value={newShowtime.show_date}
                     onChange={(e) => setNewShowtime({ ...newShowtime, show_date: e.target.value })}
-                    className="w-full bg-slate-900 border border-slate-800 rounded-xl p-2.5 text-white"
+                    className="w-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-2.5 text-slate-900 dark:text-white"
                   />
                 </div>
                 <div>
-                  <label className="font-semibold text-slate-400 block mb-1">Time Slot</label>
+                  <label className="font-semibold text-slate-600 dark:text-slate-400 block mb-1">Time Slot</label>
                   <input
                     type="text"
                     value={newShowtime.show_time}
                     onChange={(e) => setNewShowtime({ ...newShowtime, show_time: e.target.value })}
-                    className="w-full bg-slate-900 border border-slate-800 rounded-xl p-2.5 text-white"
+                    className="w-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-2.5 text-slate-900 dark:text-white"
                   />
                 </div>
               </div>

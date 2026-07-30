@@ -26,6 +26,38 @@ async def get_showtimes(
     cursor = showtimes_col.find(filter_dict)
     showtimes = await cursor.to_list(length=200)
 
+    # If no showtimes exist for movie & date, generate showtimes on-the-fly
+    if not showtimes and movie_id:
+        movie = await movies_col.find_one({"_id": movie_id})
+        if movie:
+            from datetime import datetime
+            target_date = show_date or datetime.now().strftime("%Y-%m-%d")
+            theaters = [
+                {"name": "CinePlex Grand IMAX", "screen": "IMAX 3D Laser", "reg": 16.50, "vip": 24.00},
+                {"name": "Starlight Cinema 9", "screen": "VIP Dolby Atmos", "reg": 14.00, "vip": 20.00},
+                {"name": "Downtown MoviePlex", "screen": "Standard 2D", "reg": 12.00, "vip": 16.00}
+            ]
+            times = ["10:30 AM", "02:15 PM", "06:00 PM", "09:30 PM"]
+
+            for t_idx, th in enumerate(theaters):
+                st_id = f"st_{movie_id}_{target_date}_{t_idx}"
+                st_doc = {
+                    "_id": st_id,
+                    "movie_id": movie_id,
+                    "movie_title": movie.get("title", "Unknown"),
+                    "theater_name": th["name"],
+                    "screen_type": th["screen"],
+                    "show_date": target_date,
+                    "show_time": times[t_idx % len(times)],
+                    "regular_price": th["reg"],
+                    "vip_price": th["vip"],
+                    "booked_seats": ["C5", "C6"] if t_idx == 0 else []
+                }
+                await showtimes_col.update_one({"_id": st_id}, {"$setOnInsert": st_doc}, upsert=True)
+
+            cursor = showtimes_col.find(filter_dict)
+            showtimes = await cursor.to_list(length=200)
+
     result = []
     for st in showtimes:
         st_dict = dict(st)

@@ -4,12 +4,21 @@ import API from '../services/api';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(() => {
-    const saved = localStorage.getItem('cineticket_user');
-    return saved ? JSON.parse(saved) : null;
-  });
-  const [token, setToken] = useState(() => localStorage.getItem('cineticket_token') || null);
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    try {
+      const savedUser = localStorage.getItem('cineticket_user');
+      const savedToken = localStorage.getItem('cineticket_token');
+      if (savedUser) setUser(JSON.parse(savedUser));
+      if (savedToken) setToken(savedToken);
+    } catch {
+      localStorage.removeItem('cineticket_user');
+      localStorage.removeItem('cineticket_token');
+    }
+  }, []);
 
   useEffect(() => {
     if (token) {
@@ -70,6 +79,26 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const refreshUser = async () => {
+    if (!token) return null;
+    try {
+      const res = await API.get('/auth/me');
+      setUser(res.data);
+      localStorage.setItem('cineticket_user', JSON.stringify(res.data));
+      return res.data;
+    } catch (err) {
+      console.error(err);
+      return null;
+    }
+  };
+
+  const topUpWallet = async (amount) => {
+    if (!token) return null;
+    const res = await API.post('/auth/wallet/topup', { amount: Number(amount) });
+    await refreshUser();
+    return res.data;
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -80,6 +109,8 @@ export const AuthProvider = ({ children }) => {
         register,
         logout,
         toggleFavorite,
+        refreshUser,
+        topUpWallet,
         isAdmin: user?.role === 'admin'
       }}
     >

@@ -62,6 +62,7 @@ async def create_booking(
     db = get_database()
     showtimes_col = db["showtimes"]
     bookings_col = db["bookings"]
+    users_col = db["users"]
 
     st = await showtimes_col.find_one({"_id": booking_data.showtime_id})
     if not st:
@@ -71,6 +72,19 @@ async def create_booking(
     for seat in booking_data.seats:
         if seat in booked_seats:
             raise HTTPException(status_code=400, detail=f"Seat {seat} is no longer available")
+
+    # If paying by Digital Wallet, check & deduct wallet balance
+    is_wallet_payment = booking_data.payment_method in ["Digital Wallet", "Wallet", "Cineticket Wallet"]
+    if is_wallet_payment:
+        user_doc = await users_col.find_one({"_id": current_user.id})
+        current_wallet = float(user_doc.get("wallet_balance", 1500.0)) if user_doc else current_user.wallet_balance
+        if current_wallet < booking_data.total_amount:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Insufficient wallet balance (₹{current_wallet:,.2f}). Total amount is ₹{booking_data.total_amount:,.2f}. Please top up your wallet."
+            )
+        new_wallet = round(current_wallet - booking_data.total_amount, 2)
+        await users_col.update_one({"_id": current_user.id}, {"$set": {"wallet_balance": new_wallet}})
 
     # Generate reference code and QR code
     ref_code = generate_booking_ref()
@@ -137,6 +151,7 @@ async def cancel_booking(
     db = get_database()
     bookings_col = db["bookings"]
     showtimes_col = db["showtimes"]
+    users_col = db["users"]
 
     b = await bookings_col.find_one({"_id": booking_id})
     if not b:
@@ -158,4 +173,14 @@ async def cancel_booking(
         new_booked = [s for s in current_booked if s not in b["seats"]]
         await showtimes_col.update_one({"_id": b["showtime_id"]}, {"$set": {"booked_seats": new_booked}})
 
-    return {"message": "Booking cancelled successfully and seats released", "booking_id": booking_id}
+    # Refund ticket amount to user's wallet
+    refund_amount = b.get("total_amount", 0.0)
+    if refund_amount > 0:
+        target_user_id = b["user_id"]
+        user_doc = await users_col.find_one({"_id": target_user_id})
+        if user_doc:
+            curr_bal = float(user_doc.get("wallet_balance", 1500.0))
+            new_bal = round(curr_bal + refund_amount, 2)
+            await users_col.update_one({"_id": target_user_id}, {"$set": {"wallet_balance": new_bal}})
+
+    return {"message": f"Booking cancelled successfully. ₹{refund_amount:,.2f} refunded to your wallet!", "booking_id": booking_id}

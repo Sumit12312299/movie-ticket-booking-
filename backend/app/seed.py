@@ -200,24 +200,27 @@ async def seed_data():
     day_after = (datetime.now() + timedelta(days=2)).strftime("%Y-%m-%d")
 
     theaters = [
-        {"name": "CinePlex Grand IMAX", "screen": "IMAX 3D Laser", "reg": 16.50, "vip": 24.00},
-        {"name": "Starlight Cinema 9", "screen": "VIP Dolby Atmos", "reg": 14.00, "vip": 20.00},
-        {"name": "Downtown MoviePlex", "screen": "Standard 2D", "reg": 12.00, "vip": 16.00}
+        {"name": "CinePlex Grand IMAX", "screen": "IMAX 3D Laser", "reg": 350.00, "vip": 550.00},
+        {"name": "Starlight Cinema 9", "screen": "VIP Dolby Atmos", "reg": 280.00, "vip": 450.00},
+        {"name": "Downtown MoviePlex", "screen": "Standard 2D", "reg": 220.00, "vip": 350.00}
     ]
 
     times = ["10:30 AM", "02:15 PM", "06:00 PM", "09:30 PM"]
 
-    st_id = 500
+    # Purge past showtimes
+    await showtimes_col.delete_many({"show_date": {"$lt": today}})
+
+    st_counter = 500
     for m in movies_data:
         for d in [today, tomorrow, day_after]:
-            for t_idx, th in enumerate(theaters):
-                st_id += 1
-                time_slot = times[t_idx % len(times)]
-                pre_booked = ["C5", "C6", "D7"] if st_id % 3 == 0 else []
-                existing_st = await showtimes_col.find_one({"_id": f"st_{st_id}"})
-                if not existing_st:
+            existing_for_date = await showtimes_col.find_one({"movie_id": m["_id"], "show_date": d})
+            if not existing_for_date:
+                for t_idx, th in enumerate(theaters):
+                    st_counter += 1
+                    time_slot = times[t_idx % len(times)]
+                    pre_booked = ["C5", "C6", "D7"] if st_counter % 3 == 0 else []
                     await showtimes_col.insert_one({
-                        "_id": f"st_{st_id}",
+                        "_id": f"st_{m['_id']}_{d}_{t_idx}",
                         "movie_id": m["_id"],
                         "movie_title": m["title"],
                         "theater_name": th["name"],

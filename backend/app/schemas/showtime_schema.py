@@ -21,4 +21,4 @@ class ShowtimeResponse(BaseModel):
     regular_price: float
     vip_price: float
     booked_seats: List[str] = []
-    locked_seats: Optional[dict] = {}  # { seat_id: locked_until_timestamp }
+    locked_seats: List[str] = []

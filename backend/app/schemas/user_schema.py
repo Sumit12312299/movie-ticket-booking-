@@ -18,8 +18,13 @@ class UserProfile(BaseModel):
     role: str
     created_at: Optional[str] = None
     favorites: Optional[List[str]] = []
+    wallet_balance: float = 1500.00
+
+class WalletTopupRequest(BaseModel):
+    amount: float = Field(..., gt=0, example=500.0)
 
 class Token(BaseModel):
     access_token: str
     token_type: str = "bearer"
     user: UserProfile
+

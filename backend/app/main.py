@@ -1,6 +1,7 @@
 import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
 from app.config.config import settings
 from app.database.db import connect_to_mongo, close_mongo_connection
 from app.routes.auth_routes import router as auth_router
@@ -18,6 +19,9 @@ app = FastAPI(
     docs_url="/docs",
     redoc_url="/redoc"
 )
+
+# Compression Middleware for ultra-fast API payloads
+app.add_middleware(GZipMiddleware, minimum_size=1000)
 
 # CORS Configuration
 origins = [

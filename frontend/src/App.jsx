@@ -12,7 +12,6 @@ import BookingConfirmationPage from './pages/BookingConfirmationPage';
 import UserDashboard from './pages/UserDashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import AuthPage from './pages/AuthPage';
-import SystemDesignPage from './pages/SystemDesignPage';
 
 export default function App() {
   return (
@@ -30,7 +29,6 @@ export default function App() {
               <Route path="/dashboard" element={<UserDashboard />} />
               <Route path="/admin" element={<AdminDashboard />} />
               <Route path="/auth" element={<AuthPage />} />
-              <Route path="/system-design" element={<SystemDesignPage />} />
             </Routes>
           </MainLayout>
         </Router>
