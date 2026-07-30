@@ -41,11 +41,17 @@ export default function SeatMap({
         </p>
 
         {/* Live Hover Tooltip Display */}
-        {hoveredSeat && (
-          <div className="mt-2 px-3 py-1 rounded-full bg-slate-900 text-white text-[11px] font-mono font-bold shadow-md border border-slate-700 animate-fade-in">
-            {hoveredSeat.id} • {hoveredSeat.tier} • ₹{hoveredSeat.price.toFixed(2)}
-          </div>
-        )}
+        <div className="h-8 mt-2 flex items-center justify-center">
+          {hoveredSeat ? (
+            <div className="px-3 py-1 rounded-full bg-slate-900 text-white text-[11px] font-mono font-bold shadow-md border border-slate-700 animate-fade-in">
+              {hoveredSeat.id} • {hoveredSeat.tier} • ₹{hoveredSeat.price.toFixed(2)}
+            </div>
+          ) : (
+            <div className="text-[11px] font-medium text-slate-400 dark:text-slate-500 italic">
+              Hover over a seat to view details
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Seat Grid Container */}

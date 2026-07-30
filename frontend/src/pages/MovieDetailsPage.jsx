@@ -73,9 +73,47 @@ export default function MovieDetailsPage() {
 
   if (loading) {
     return (
-      <div className="py-20 text-center">
-        <div className="w-12 h-12 border-4 border-rose-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
-        <p className="mt-4 text-xs text-slate-400">Loading movie details...</p>
+      <div className="space-y-12 pb-16 animate-fade-in">
+        {/* Banner/Hero area skeleton */}
+        <div className="relative rounded-3xl overflow-hidden bg-slate-200/50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 sm:p-10 min-h-[400px] flex items-center">
+          <div className="flex flex-col md:flex-row items-center gap-8 w-full z-10">
+            {/* Poster card skeleton */}
+            <div className="w-48 h-72 rounded-2xl shimmer-bg shrink-0 shadow-lg border border-slate-300 dark:border-slate-800"></div>
+            {/* Info details skeleton */}
+            <div className="flex-1 space-y-4 w-full">
+              <div className="h-4 w-28 rounded-full shimmer-bg"></div>
+              <div className="h-8 w-3/4 rounded-lg shimmer-bg"></div>
+              <div className="flex flex-wrap gap-2 pt-2">
+                <div className="h-6 w-20 rounded-full shimmer-bg"></div>
+                <div className="h-6 w-24 rounded-full shimmer-bg"></div>
+                <div className="h-6 w-28 rounded-full shimmer-bg"></div>
+              </div>
+              <div className="space-y-2 pt-2">
+                <div className="h-3 w-full rounded shimmer-bg"></div>
+                <div className="h-3 w-11/12 rounded shimmer-bg"></div>
+                <div className="h-3 w-4/5 rounded shimmer-bg"></div>
+              </div>
+              <div className="flex flex-wrap gap-4 pt-4">
+                <div className="h-12 w-44 rounded-2xl shimmer-bg"></div>
+                <div className="h-12 w-36 rounded-2xl shimmer-bg"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Cast & Crew skeleton */}
+        <div className="glass-card p-6 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-4">
+          <div className="h-5 w-32 rounded shimmer-bg"></div>
+          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-4 pt-2">
+            {[1, 2, 3, 4, 5, 6].map((n) => (
+              <div key={n} className="flex flex-col items-center space-y-2">
+                <div className="w-16 h-16 rounded-full shimmer-bg"></div>
+                <div className="h-3 w-12 rounded shimmer-bg"></div>
+                <div className="h-2 w-8 rounded shimmer-bg"></div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     );
   }

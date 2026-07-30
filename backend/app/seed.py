@@ -49,8 +49,93 @@ async def seed_data():
     await movies_col.delete_one({"_id": "dummy"}) # trigger fallback init if needed
     movie_count = await movies_col.count_documents()
     
-    # We always re-insert these 8 blockbuster movies
+    # We insert/update blockbuster movies catalog (including July & August 2026 releases)
     movies_data = [
+        {
+            "_id": "m_deadpool3",
+            "title": "Deadpool & Wolverine",
+            "synopsis": "Wolverine is recovering from his injuries when he crosses paths with the loudmouth Deadpool to defeat a common enemy.",
+            "genre": ["Action", "Sci-Fi", "Comedy"],
+            "language": "English",
+            "duration_mins": 128,
+            "rating": 4.8,
+            "reviews_count": 210,
+            "release_date": "2026-07-26",
+            "poster_url": "https://images.unsplash.com/photo-1563089145-599997674d42?w=600&auto=format&fit=crop&q=80",
+            "banner_url": "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=1200&auto=format&fit=crop&q=80",
+            "trailer_url": "https://www.youtube.com/embed/73_1biulk6s",
+            "status": "now_showing",
+            "cast": ["Ryan Reynolds", "Hugh Jackman", "Emma Corrin"],
+            "director": "Shawn Levy"
+        },
+        {
+            "_id": "m_superman",
+            "title": "Superman: Legacy 4K IMAX",
+            "synopsis": "Superman reconciles his Kryptonian heritage with his human upbringing as Clark Kent in Smallville.",
+            "genre": ["Sci-Fi", "Action", "Fantasy"],
+            "language": "English",
+            "duration_mins": 155,
+            "rating": 4.9,
+            "reviews_count": 178,
+            "release_date": "2026-07-11",
+            "poster_url": "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=600&auto=format&fit=crop&q=80",
+            "banner_url": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=1200&auto=format&fit=crop&q=80",
+            "trailer_url": "https://www.youtube.com/embed/Way9Dexny3w",
+            "status": "now_showing",
+            "cast": ["David Corenswet", "Rachel Brosnahan", "Nicholas Hoult"],
+            "director": "James Gunn"
+        },
+        {
+            "_id": "m_venom3",
+            "title": "Venom: The Last Dance",
+            "synopsis": "Eddie and Venom are on the run. Hunted by both of their worlds, the duo is forced into a devastating decision.",
+            "genre": ["Sci-Fi", "Action", "Adventure"],
+            "language": "English",
+            "duration_mins": 140,
+            "rating": 4.7,
+            "reviews_count": 135,
+            "release_date": "2026-07-18",
+            "poster_url": "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=600&auto=format&fit=crop&q=80",
+            "banner_url": "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=1200&auto=format&fit=crop&q=80",
+            "trailer_url": "https://www.youtube.com/embed/Way9Dexny3w",
+            "status": "now_showing",
+            "cast": ["Tom Hardy", "Chiwetel Ejiofor", "Juno Temple"],
+            "director": "Kelly Marcel"
+        },
+        {
+            "_id": "m_alien_romulus",
+            "title": "Alien: Romulus",
+            "synopsis": "While scavenging the deep ends of a derelict space station, a group of young space colonizers come face to face with the most terrifying life form in the universe.",
+            "genre": ["Sci-Fi", "Horror", "Thriller"],
+            "language": "English",
+            "duration_mins": 119,
+            "rating": 4.8,
+            "reviews_count": 94,
+            "release_date": "2026-08-16",
+            "poster_url": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=600&auto=format&fit=crop&q=80",
+            "banner_url": "https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?w=1200&auto=format&fit=crop&q=80",
+            "trailer_url": "https://www.youtube.com/embed/zSWdZVtXT7E",
+            "status": "coming_soon",
+            "cast": ["Cailee Spaeny", "David Jonsson", "Archie Renaux"],
+            "director": "Fede Alvarez"
+        },
+        {
+            "_id": "m_f1_apex",
+            "title": "F1: Apex Championship",
+            "synopsis": "A Formula One driver comes out of retirement to mentor and team up with a promising young driver on the APXGP team.",
+            "genre": ["Action", "Drama", "Sport"],
+            "language": "English",
+            "duration_mins": 148,
+            "rating": 4.9,
+            "reviews_count": 160,
+            "release_date": "2026-08-28",
+            "poster_url": "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=600&auto=format&fit=crop&q=80",
+            "banner_url": "https://images.unsplash.com/photo-1511919884226-fd3cad34687c?w=1200&auto=format&fit=crop&q=80",
+            "trailer_url": "https://www.youtube.com/embed/Way9Dexny3w",
+            "status": "coming_soon",
+            "cast": ["Brad Pitt", "Damson Idris", "Javier Bardem", "Kerry Condon"],
+            "director": "Joseph Kosinski"
+        },
         {
             "_id": "m_dune2",
             "title": "Dune: Part Two",
@@ -67,23 +152,6 @@ async def seed_data():
             "status": "now_showing",
             "cast": ["Timothée Chalamet", "Zendaya", "Rebecca Ferguson", "Javier Bardem"],
             "director": "Denis Villeneuve"
-        },
-        {
-            "_id": "m_deadpool3",
-            "title": "Deadpool & Wolverine",
-            "synopsis": "Wolverine is recovering from his injuries when he crosses paths with the loudmouth Deadpool to defeat a common enemy.",
-            "genre": ["Action", "Sci-Fi"],
-            "language": "English",
-            "duration_mins": 128,
-            "rating": 4.8,
-            "reviews_count": 210,
-            "release_date": "2026-07-26",
-            "poster_url": "https://images.unsplash.com/photo-1563089145-599997674d42?w=600&auto=format&fit=crop&q=80",
-            "banner_url": "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=1200&auto=format&fit=crop&q=80",
-            "trailer_url": "https://www.youtube.com/embed/73_1biulk6s",
-            "status": "now_showing",
-            "cast": ["Ryan Reynolds", "Hugh Jackman", "Emma Corrin"],
-            "director": "Shawn Levy"
         },
         {
             "_id": "m_oppenheimer",
@@ -103,23 +171,6 @@ async def seed_data():
             "director": "Christopher Nolan"
         },
         {
-            "_id": "m_cyberpulse",
-            "title": "CyberPulse: 2099",
-            "synopsis": "In a neon-drenched dystopian metropolis, a rogue hacker uncovers a sinister artificial intelligence takeover conspiracy.",
-            "genre": ["Cyberpunk", "Sci-Fi", "Action"],
-            "language": "English",
-            "duration_mins": 142,
-            "rating": 4.7,
-            "reviews_count": 65,
-            "release_date": "2026-06-20",
-            "poster_url": "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=600&auto=format&fit=crop&q=80",
-            "banner_url": "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=1200&auto=format&fit=crop&q=80",
-            "trailer_url": "https://www.youtube.com/embed/Way9Dexny3w",
-            "status": "now_showing",
-            "cast": ["Keanu Reeves", "Ana de Armas", "Hiroyuki Sanada"],
-            "director": "Lana Wachowski"
-        },
-        {
             "_id": "m_interstellar",
             "title": "Interstellar: Remastered",
             "synopsis": "When Earth becomes uninhabitable, a team of ex-NASA pilots travel through a wormhole near Saturn in search of a new home.",
@@ -135,64 +186,11 @@ async def seed_data():
             "status": "now_showing",
             "cast": ["Matthew McConaughey", "Anne Hathaway", "Jessica Chastain"],
             "director": "Christopher Nolan"
-        },
-        {
-            "_id": "m_gladiator2",
-            "title": "Gladiator II",
-            "synopsis": "Years after witnessing the death of Maximus at the hands of his uncle, Lucius must enter the Colosseum to restore glory to Rome.",
-            "genre": ["Action", "Adventure", "Drama"],
-            "language": "English",
-            "duration_mins": 150,
-            "rating": 4.6,
-            "reviews_count": 88,
-            "release_date": "2026-11-22",
-            "poster_url": "https://images.unsplash.com/photo-1461151304267-38535e780c79?w=600&auto=format&fit=crop&q=80",
-            "banner_url": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=1200&auto=format&fit=crop&q=80",
-            "trailer_url": "https://www.youtube.com/embed/4rgYUipGJNo",
-            "status": "coming_soon",
-            "cast": ["Paul Mescal", "Pedro Pascal", "Denzel Washington"],
-            "director": "Ridley Scott"
-        },
-        {
-            "_id": "m_avatar3",
-            "title": "Avatar: Fire & Ash",
-            "synopsis": "Jake Sully and Neytiri encounter an aggressive volcanic clan of Na'vi on the uncharted continents of Pandora.",
-            "genre": ["Fantasy", "Action", "Adventure"],
-            "language": "English",
-            "duration_mins": 190,
-            "rating": 4.9,
-            "reviews_count": 150,
-            "release_date": "2026-12-18",
-            "poster_url": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600&auto=format&fit=crop&q=80",
-            "banner_url": "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=1200&auto=format&fit=crop&q=80",
-            "trailer_url": "https://www.youtube.com/embed/d9MyW72ELq0",
-            "status": "coming_soon",
-            "cast": ["Sam Worthington", "Zoe Saldana", "Sigourney Weaver"],
-            "director": "James Cameron"
-        },
-        {
-            "_id": "m_joker2",
-            "title": "Joker: Folie à Deux",
-            "synopsis": "Failed comedian Arthur Fleck meets the love of his life, Harley Quinn, while incarcerated at Arkham State Hospital.",
-            "genre": ["Drama", "Fantasy"],
-            "language": "English",
-            "duration_mins": 138,
-            "rating": 4.5,
-            "reviews_count": 92,
-            "release_date": "2026-10-04",
-            "poster_url": "https://images.unsplash.com/photo-1514533450685-4493e01d1fdc?w=600&auto=format&fit=crop&q=80",
-            "banner_url": "https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?w=1200&auto=format&fit=crop&q=80",
-            "trailer_url": "https://www.youtube.com/embed/_OKAwz22n_s",
-            "status": "coming_soon",
-            "cast": ["Joaquin Phoenix", "Lady Gaga", "Brendan Gleeson"],
-            "director": "Todd Phillips"
         }
     ]
 
     for m in movies_data:
-        existing = await movies_col.find_one({"_id": m["_id"]})
-        if not existing:
-            await movies_col.insert_one(m)
+        await movies_col.update_one({"_id": m["_id"]}, {"$set": m}, upsert=True)
 
     # 3. Seed Showtimes
     today = datetime.now().strftime("%Y-%m-%d")

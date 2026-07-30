@@ -106,6 +106,7 @@ async def create_booking(
         "show_time": booking_data.show_time,
         "screen_type": booking_data.screen_type,
         "seats": booking_data.seats,
+        "snacks": booking_data.snacks or [],
         "total_amount": booking_data.total_amount,
         "payment_method": booking_data.payment_method,
         "status": "CONFIRMED",

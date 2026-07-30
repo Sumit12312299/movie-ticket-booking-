@@ -1,10 +1,41 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Armchair, Clock, ArrowRight, ShieldAlert, Sparkles, CheckCircle2 } from 'lucide-react';
+import { Armchair, Clock, ArrowRight, ShieldAlert, Sparkles, CheckCircle2, Utensils } from 'lucide-react';
 import API from '../services/api';
 import SeatMap from '../components/SeatMap';
 import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
+
+const SNACK_ITEMS = [
+  {
+    id: 1,
+    name: 'Jumbo Salted Popcorn & Pepsi Combo',
+    price: 350,
+    image: '🍿',
+    desc: 'Large Salted Popcorn + 2x Chilled Pepsi'
+  },
+  {
+    id: 2,
+    name: 'Cheesy Loaded Nachos Deluxe',
+    price: 260,
+    image: '🧀',
+    desc: 'Tortilla Chips with Warm Mexican Cheese'
+  },
+  {
+    id: 3,
+    name: 'Caramel Gold Popcorn Tub',
+    price: 290,
+    image: '🍯',
+    desc: 'Handcrafted Caramel Glazed Popcorn'
+  },
+  {
+    id: 4,
+    name: 'Cold Coffee & Belgian Waffle',
+    price: 280,
+    image: '☕',
+    desc: 'Thick Cold Brew + Fresh Hot Waffle'
+  }
+];
 
 export default function SeatSelectionPage() {
   const { showtimeId } = useParams();
@@ -20,6 +51,28 @@ export default function SeatSelectionPage() {
 
   // 5-minute countdown timer state
   const [timerSeconds, setTimerSeconds] = useState(300);
+  const [isExpired, setIsExpired] = useState(false);
+  const [showSnackStep, setShowSnackStep] = useState(false);
+  const [selectedSnacks, setSelectedSnacks] = useState({});
+
+  const updateSnackQty = (id, delta) => {
+    setSelectedSnacks((prev) => {
+      const current = prev[id] || 0;
+      const next = Math.max(0, current + delta);
+      if (next === 0) {
+        const copy = { ...prev };
+        delete copy[id];
+        return copy;
+      }
+      return { ...prev, [id]: next };
+    });
+  };
+
+  const snacksTotal = Object.entries(selectedSnacks).reduce((sum, [id, qty]) => {
+    const item = SNACK_ITEMS.find((s) => s.id === Number(id));
+    return sum + (item ? item.price * qty : 0);
+  }, 0);
+
 
   useEffect(() => {
     fetchShowtime();
@@ -63,7 +116,10 @@ export default function SeatSelectionPage() {
   }, [showtimeId]);
 
   useEffect(() => {
-    if (timerSeconds <= 0) return;
+    if (timerSeconds <= 0) {
+      setIsExpired(true);
+      return;
+    }
     const interval = setInterval(() => {
       setTimerSeconds((prev) => prev - 1);
     }, 1000);
@@ -114,16 +170,8 @@ export default function SeatSelectionPage() {
         showtime_id: showtimeId,
         seats: selectedSeats
       });
-      addToast('Seats locked for 5 minutes! Proceeding to checkout', 'success');
-
-      // Navigate to checkout with booking payload state
-      navigate('/checkout', {
-        state: {
-          showtime,
-          selectedSeats,
-          totalPrice
-        }
-      });
+      addToast('Seats locked! Customize your experience (Step 1.5)', 'success');
+      setShowSnackStep(true);
     } catch (err) {
       addToast(err.response?.data?.detail || 'Failed to lock seats. Please pick another seat.', 'error');
       fetchShowtime(); // Refresh seats map
@@ -132,14 +180,47 @@ export default function SeatSelectionPage() {
     }
   };
 
+  const handleProceedToFinalCheckout = (snacksCart) => {
+    setShowSnackStep(false);
+    navigate('/checkout', {
+      state: {
+        showtime,
+        selectedSeats,
+        totalPrice,
+        preSelectedSnacks: snacksCart,
+        timerSecondsRemaining: timerSeconds
+      }
+    });
+  };
+
   const minutes = Math.floor(timerSeconds / 60);
   const seconds = timerSeconds % 60;
 
   if (loading) {
     return (
-      <div className="py-20 text-center">
-        <div className="w-12 h-12 border-4 border-rose-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
-        <p className="mt-4 text-xs text-slate-400">Loading seat layout...</p>
+      <div className="space-y-8 pb-16 animate-fade-in">
+        {/* Header skeleton */}
+        <div className="glass-panel p-6 rounded-3xl border border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="space-y-2 flex-1">
+            <div className="h-4 w-32 rounded shimmer-bg"></div>
+            <div className="h-6 w-3/4 rounded shimmer-bg"></div>
+            <div className="h-3 w-1/2 rounded shimmer-bg"></div>
+          </div>
+          <div className="h-10 w-32 rounded-2xl shimmer-bg"></div>
+        </div>
+        {/* Seat Map Screen skeleton */}
+        <div className="glass-card p-10 rounded-3xl border border-slate-200 dark:border-slate-800 flex flex-col items-center space-y-8">
+          <div className="w-full max-w-xl h-4 rounded-full bg-slate-300 dark:bg-slate-800 shimmer-bg shadow-lg"></div>
+          <div className="space-y-2 w-full max-w-md pt-6">
+            {[1, 2, 3, 4, 5, 6].map((row) => (
+              <div key={row} className="flex justify-center gap-1.5">
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((seat) => (
+                  <div key={seat} className="w-6 h-6 rounded bg-slate-200 dark:bg-slate-800 shimmer-bg shrink-0"></div>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     );
   }
@@ -193,7 +274,7 @@ export default function SeatSelectionPage() {
                     ? 'text-emerald-500'
                     : timerSeconds > 60
                     ? 'text-amber-500'
-                    : 'text-rose-500 animate-pulse'
+                    : 'text-red-500 timer-glow-red'
                 }`}
                 fill="transparent"
                 strokeLinecap="round"
@@ -259,6 +340,119 @@ export default function SeatSelectionPage() {
           </button>
         </div>
       </div>
+
+      {/* Session Expired Alert Modal */}
+      {isExpired && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md animate-fade-in">
+          <div className="glass-card max-w-sm w-full p-8 rounded-3xl border border-rose-500/30 text-center space-y-4 shadow-2xl">
+            <div className="w-16 h-16 bg-rose-500/10 text-rose-500 border border-rose-500/30 rounded-full flex items-center justify-center mx-auto animate-pulse">
+              <Clock className="w-8 h-8 animate-bounce" />
+            </div>
+            <h3 className="text-lg font-black text-slate-900 dark:text-white">Seat Lock Session Expired</h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed font-medium">
+              You took more than 5 minutes to check out. The seats have been released to ensure fair availability.
+            </p>
+            <button
+              onClick={() => {
+                setIsExpired(false);
+                setSelectedSeats([]);
+                setTotalPrice(0);
+                setTimerSeconds(300);
+                fetchShowtime();
+              }}
+              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-rose-600 to-rose-500 text-white font-extrabold text-xs shadow-lg hover:scale-105 active:scale-95 transition-all"
+            >
+              Pick Seats Again
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Step 1.5 Gourmet Snacks Selection Modal */}
+      {showSnackStep && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md animate-fade-in">
+          <div className="relative w-full max-w-xl bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-scale-up">
+            {/* Header */}
+            <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-gradient-to-r from-emerald-600/10 to-teal-500/10">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-2xl bg-emerald-500 text-white flex items-center justify-center shadow-lg shadow-emerald-500/30">
+                  <Utensils className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
+                    Step 1.5: Customize Your Gourmet Cinema Experience <Sparkles className="w-4 h-4 text-amber-500" />
+                  </h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">Skip counter queues! Pre-order and collect at snacks bar.</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Snack Items list */}
+            <div className="p-6 space-y-4 overflow-y-auto flex-1">
+              {SNACK_ITEMS.map((item) => {
+                const qty = selectedSnacks[item.id] || 0;
+                return (
+                  <div
+                    key={item.id}
+                    className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200/80 dark:border-slate-800 flex items-center justify-between gap-4 hover:border-emerald-500/40 transition-all animate-fade-in"
+                  >
+                    <div className="flex items-center gap-3.5 flex-1 min-w-0">
+                      <span className="text-3xl bg-white dark:bg-slate-950 p-2.5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm shrink-0">{item.image}</span>
+                      <div className="min-w-0">
+                        <span className="font-bold text-sm text-slate-900 dark:text-white block truncate">{item.name}</span>
+                        <span className="text-[10px] text-slate-500 dark:text-slate-400 block truncate">{item.desc}</span>
+                        <span className="text-xs font-mono font-black text-emerald-600 dark:text-emerald-400 mt-1 inline-block">₹{item.price.toFixed(2)}</span>
+                      </div>
+                    </div>
+
+                    {/* Qty controller */}
+                    <div className="flex items-center gap-2 bg-white dark:bg-slate-950 px-2 py-1 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm shrink-0">
+                      <button
+                        onClick={() => updateSnackQty(item.id, -1)}
+                        className="w-6 h-6 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 flex items-center justify-center font-bold text-xs"
+                      >
+                        -
+                      </button>
+                      <span className="w-6 text-center text-xs font-mono font-black text-slate-900 dark:text-white">{qty}</span>
+                      <button
+                        onClick={() => updateSnackQty(item.id, 1)}
+                        className="w-6 h-6 rounded-lg bg-rose-600 text-white flex items-center justify-center font-bold text-xs"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Footer action bar */}
+            <div className="p-6 border-t border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/90 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div>
+                <span className="text-xs text-slate-500 dark:text-slate-400 block font-medium">Snacks Total</span>
+                <span className="text-2xl font-black text-emerald-600 dark:text-emerald-400 font-mono">
+                  ₹{snacksTotal.toFixed(2)}
+                </span>
+              </div>
+
+              <div className="flex gap-3 w-full sm:w-auto">
+                <button
+                  onClick={() => handleProceedToFinalCheckout({})}
+                  className="flex-1 sm:flex-none px-6 py-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 font-bold text-xs text-slate-700 dark:text-slate-300 transition-colors"
+                >
+                  Skip & Proceed
+                </button>
+                <button
+                  onClick={() => handleProceedToFinalCheckout(selectedSnacks)}
+                  className="flex-1 sm:flex-none px-8 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-extrabold text-xs shadow-lg shadow-emerald-500/20 hover:scale-105 active:scale-95 transition-all"
+                >
+                  Add & Proceed
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

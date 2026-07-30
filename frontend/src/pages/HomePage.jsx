@@ -5,6 +5,39 @@ import API from '../services/api';
 import MovieCard from '../components/MovieCard';
 import TrailerModal from '../components/TrailerModal';
 
+const getAutoplayUrl = (url) => {
+  if (!url) return '';
+  if (url.includes('youtube.com/embed/')) {
+    const videoId = url.split('/embed/')[1]?.split('?')[0];
+    if (videoId) {
+      return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&playlist=${videoId}&loop=1&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&playsinline=1&enablejsapi=1`;
+    }
+  }
+  return url;
+};
+
+function MovieCardSkeleton() {
+  return (
+    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-md flex flex-col overflow-hidden">
+      <div className="aspect-[2/3] w-full shimmer-bg"></div>
+      <div className="p-3.5 space-y-3 flex-1 flex flex-col justify-between">
+        <div className="space-y-2">
+          <div className="h-4 w-3/4 rounded shimmer-bg"></div>
+          <div className="h-3 w-1/2 rounded shimmer-bg"></div>
+          <div className="flex gap-1.5 mt-2">
+            <div className="h-4 w-12 rounded shimmer-bg"></div>
+            <div className="h-4 w-14 rounded shimmer-bg"></div>
+          </div>
+        </div>
+        <div className="pt-2.5 border-t border-slate-100 dark:border-slate-800/80 flex items-center gap-2">
+          <div className="h-9 w-9 rounded-xl shimmer-bg shrink-0"></div>
+          <div className="h-9 flex-1 rounded-xl shimmer-bg"></div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function HomePage() {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -15,6 +48,9 @@ export default function HomePage() {
   const [searchParams] = useSearchParams();
 
   const [liveQuery, setLiveQuery] = useState(searchParams.get('search') || '');
+  const [hoveredHeroId, setHoveredHeroId] = useState(null);
+  const [playTrailer, setPlayTrailer] = useState(false);
+
 
   const genres = ['All', 'Sci-Fi', 'Action', 'Drama', 'Adventure', 'Cyberpunk', 'Biography', 'Fantasy'];
 
@@ -37,6 +73,25 @@ export default function HomePage() {
     }, 6000);
     return () => clearInterval(interval);
   }, [movies]);
+
+  // Netflix-style Autoplay hover trailer delay handler
+  useEffect(() => {
+    if (!hoveredHeroId) {
+      setPlayTrailer(false);
+      return;
+    }
+    const timer = setTimeout(() => {
+      setPlayTrailer(true);
+    }, 1200);
+    return () => clearTimeout(timer);
+  }, [hoveredHeroId]);
+
+  // Update hoveredHeroId when the slider changes activeHero while mouse is hovered
+  useEffect(() => {
+    if (hoveredHeroId && activeHero && hoveredHeroId !== activeHero.id) {
+      setHoveredHeroId(activeHero.id);
+    }
+  }, [activeHero, hoveredHeroId]);
 
   const fetchMovies = async () => {
     setLoading(true);
@@ -79,15 +134,36 @@ export default function HomePage() {
 
       {/* Featured Hero Premiere Slider */}
       {activeHero && !liveQuery && selectedGenre === 'All' && (
-        <section className="relative w-full rounded-3xl overflow-hidden bg-slate-950 shadow-2xl border border-slate-200 dark:border-slate-800 min-h-[480px] sm:min-h-[520px] flex items-end p-6 sm:p-12 text-white group animate-fade-in">
+        <section 
+          onMouseEnter={() => setHoveredHeroId(activeHero.id)}
+          onMouseLeave={() => setHoveredHeroId(null)}
+          className="relative w-full rounded-3xl overflow-hidden bg-slate-950 shadow-2xl border border-slate-200 dark:border-slate-800 min-h-[480px] sm:min-h-[520px] flex items-end p-6 sm:p-12 text-white group animate-fade-in"
+        >
           {/* Background Poster Banner */}
           <div className="absolute inset-0 z-0 overflow-hidden">
             <img
               key={activeHero.id}
               src={activeHero.banner_url || activeHero.poster_url}
               alt={activeHero.title}
-              className="w-full h-full object-cover object-center filter brightness-60 contrast-110 scale-105 group-hover:scale-100 transition-all duration-1000 ease-out"
+              className={`w-full h-full object-cover object-center filter brightness-60 contrast-110 scale-105 group-hover:scale-100 transition-all duration-1000 ease-out ${playTrailer && activeHero.trailer_url ? 'opacity-0 scale-95' : 'opacity-100'}`}
             />
+            
+            {/* Netflix-style Auto-play Trailer iframe overlay */}
+            {playTrailer && activeHero.trailer_url && (
+              <div className="absolute inset-0 w-full h-full pointer-events-none transition-all duration-700 ease-in-out opacity-100 scale-105">
+                <iframe
+                  src={getAutoplayUrl(activeHero.trailer_url)}
+                  title={`${activeHero.title} Trailer Preview`}
+                  className="absolute w-full h-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 scale-[1.35] pointer-events-none"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                ></iframe>
+                {/* Overlay to dim the video and blend it cinematically */}
+                <div className="absolute inset-0 bg-slate-950/40 mix-blend-multiply"></div>
+              </div>
+            )}
+
             {/* Cinematic Gradient Overlays */}
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent"></div>
             <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/80 to-transparent"></div>
@@ -259,8 +335,8 @@ export default function HomePage() {
         {/* Movies Grid */}
         {loading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[1, 2, 3, 4].map((n) => (
-              <div key={n} className="h-96 rounded-2xl bg-slate-200/70 dark:bg-slate-900 animate-pulse border border-slate-300 dark:border-slate-800"></div>
+            {[1, 2, 3, 4, 5, 6, 7, 8].map((n) => (
+              <MovieCardSkeleton key={n} />
             ))}
           </div>
         ) : movies.length === 0 ? (

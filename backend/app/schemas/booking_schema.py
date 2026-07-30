@@ -16,6 +16,7 @@ class BookingCreate(BaseModel):
     seats: List[str]
     total_amount: float
     payment_method: str = "Credit Card"  # "Credit Card", "UPI", "Net Banking", "Wallet"
+    snacks: Optional[List[str]] = None
 
 class BookingResponse(BaseModel):
     id: str
@@ -35,3 +36,4 @@ class BookingResponse(BaseModel):
     status: str  # "CONFIRMED", "CANCELLED"
     booking_time: str
     qr_code_data: str
+    snacks: Optional[List[str]] = None

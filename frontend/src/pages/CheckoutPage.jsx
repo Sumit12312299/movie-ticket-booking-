@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { CreditCard, ShieldCheck, Ticket, CheckCircle2, Lock, Tag, DollarSign, Wallet } from 'lucide-react';
+import { CreditCard, ShieldCheck, Ticket, CheckCircle2, Lock, Tag, DollarSign, Wallet, Plus, Minus, Utensils, Sparkles, Clock } from 'lucide-react';
 import API from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
@@ -30,17 +30,83 @@ export default function CheckoutPage() {
     );
   }
 
-  const { showtime, selectedSeats, totalPrice } = checkoutState;
+  const { showtime, selectedSeats, totalPrice, preSelectedSnacks, timerSecondsRemaining } = checkoutState;
 
   const [paymentMethod, setPaymentMethod] = useState('Credit Card');
   const [promoCode, setPromoCode] = useState('');
   const [discount, setDiscount] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
 
+  // Synced Seat Lock countdown state
+  const [timerSeconds, setTimerSeconds] = useState(timerSecondsRemaining || 300);
+  const [isExpired, setIsExpired] = useState(false);
+
+  React.useEffect(() => {
+    if (timerSeconds <= 0) {
+      setIsExpired(true);
+      return;
+    }
+    const interval = setInterval(() => {
+      setTimerSeconds((prev) => prev - 1);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [timerSeconds]);
+
   // Form payment fields
   const [cardNumber, setCardNumber] = useState('4532 •••• •••• 8892');
   const [expiry, setExpiry] = useState('08/28');
   const [cvv, setCvv] = useState('889');
+
+  // Gourmet Snacks state initialized from pre-selected items
+  const [selectedSnacks, setSelectedSnacks] = useState(preSelectedSnacks || {});
+  const updateSnackQty = (id, delta) => {
+    setSelectedSnacks((prev) => {
+      const current = prev[id] || 0;
+      const next = Math.max(0, current + delta);
+      if (next === 0) {
+        const copy = { ...prev };
+        delete copy[id];
+        return copy;
+      }
+      return { ...prev, [id]: next };
+    });
+  };
+
+  const SNACK_ITEMS = [
+    {
+      id: 1,
+      name: 'Jumbo Salted Popcorn & Pepsi Combo',
+      price: 350,
+      image: '🍿',
+      desc: 'Large Salted Popcorn + 2x Chilled Pepsi'
+    },
+    {
+      id: 2,
+      name: 'Cheesy Loaded Nachos Deluxe',
+      price: 260,
+      image: '🧀',
+      desc: 'Tortilla Chips with Warm Mexican Cheese'
+    },
+    {
+      id: 3,
+      name: 'Caramel Gold Popcorn Tub',
+      price: 290,
+      image: '🍯',
+      desc: 'Handcrafted Caramel Glazed Popcorn'
+    },
+    {
+      id: 4,
+      name: 'Cold Coffee & Belgian Waffle',
+      price: 280,
+      image: '☕',
+      desc: 'Thick Cold Brew + Fresh Hot Waffle'
+    }
+  ];
+
+  const snacksTotal = Object.entries(selectedSnacks).reduce((sum, [id, qty]) => {
+    const item = SNACK_ITEMS.find((s) => s.id === Number(id));
+    return sum + (item ? item.price * qty : 0);
+  }, 0);
 
   const handleApplyPromo = (e) => {
     e.preventDefault();
@@ -52,11 +118,17 @@ export default function CheckoutPage() {
     }
   };
 
-  const finalAmount = Math.max(0, totalPrice - discount);
+  const convenienceFee = paymentMethod === 'Digital Wallet' ? 0.00 : 30.00;
+  const finalAmount = Math.max(0, totalPrice - discount + snacksTotal + convenienceFee);
 
   const handleConfirmPayment = async () => {
     setIsProcessing(true);
     try {
+      const snackList = Object.entries(selectedSnacks).flatMap(([id, qty]) => {
+        const item = SNACK_ITEMS.find((s) => s.id === Number(id));
+        return item ? Array(qty).fill(item.name) : [];
+      });
+
       const res = await API.post('/bookings', {
         showtime_id: showtime.id,
         movie_id: showtime.movie_id,
@@ -67,7 +139,8 @@ export default function CheckoutPage() {
         screen_type: showtime.screen_type,
         seats: selectedSeats,
         total_amount: finalAmount,
-        payment_method: paymentMethod
+        payment_method: paymentMethod,
+        snacks: snackList
       });
 
       await refreshUser();
@@ -122,6 +195,57 @@ export default function CheckoutPage() {
             </div>
           </div>
 
+          {/* Add Gourmet Snacks Card */}
+          <div className="glass-card rounded-3xl p-6 border border-slate-200 dark:border-slate-800 space-y-4">
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
+                <Utensils className="w-4 h-4 text-emerald-500" /> Pre-order Gourmet Snacks
+              </h3>
+              <span className="text-[10px] text-emerald-600 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20 font-bold uppercase flex items-center gap-1">
+                <Sparkles className="w-3 h-3 text-amber-500 animate-pulse" />
+                Skip Counter Lines
+              </span>
+            </div>
+            <p className="text-xs text-slate-500 dark:text-slate-400">Pre-order cinema snacks at special prices and collect them at the counter!</p>
+            
+            <div className="space-y-3">
+              {SNACK_ITEMS.map((item) => {
+                const qty = selectedSnacks[item.id] || 0;
+                return (
+                  <div key={item.id} className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 flex items-center justify-between gap-3 text-xs">
+                    <div className="flex items-center gap-2.5 flex-1 min-w-0">
+                      <span className="text-2xl shrink-0">{item.image}</span>
+                      <div className="min-w-0">
+                        <span className="font-bold text-slate-900 dark:text-white block truncate">{item.name}</span>
+                        <span className="text-[10px] text-slate-500 dark:text-slate-400 block truncate">{item.desc}</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3 shrink-0">
+                      <span className="font-bold text-emerald-600 dark:text-emerald-400 font-mono">₹{item.price}</span>
+                      <div className="flex items-center gap-1 bg-white dark:bg-slate-800 px-1 py-0.5 rounded-lg border border-slate-200 dark:border-slate-700">
+                        <button
+                          type="button"
+                          onClick={() => updateSnackQty(item.id, -1)}
+                          className="w-5 h-5 rounded bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-200 flex items-center justify-center font-bold"
+                        >
+                          -
+                        </button>
+                        <span className="w-4 text-center font-mono font-bold">{qty}</span>
+                        <button
+                          type="button"
+                          onClick={() => updateSnackQty(item.id, 1)}
+                          className="w-5 h-5 rounded bg-rose-600 text-white flex items-center justify-center font-bold"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
           {/* Payment Details Section based on method */}
           {paymentMethod === 'Digital Wallet' ? (
             <div className="glass-card rounded-3xl p-6 border border-amber-500/30 bg-gradient-to-br from-amber-500/10 via-rose-500/5 to-slate-900/10 space-y-4">
@@ -143,7 +267,7 @@ export default function CheckoutPage() {
                 </div>
               </div>
 
-              {(user?.wallet_balance ?? 1500.00) < (finalAmount + (paymentMethod === 'Digital Wallet' ? 0 : 30.00)) ? (
+              {user?.wallet_balance < finalAmount ? (
                 <div className="p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-600 dark:text-rose-300 text-xs flex items-center justify-between gap-2 font-semibold">
                   <span>Insufficient balance for this booking.</span>
                   <button
@@ -203,6 +327,53 @@ export default function CheckoutPage() {
 
         {/* Order Summary Column */}
         <div className="glass-card rounded-3xl p-6 border border-slate-200 dark:border-slate-800 space-y-6 h-fit">
+          {/* Synced Seat Lock Countdown */}
+          <div className="flex items-center justify-between bg-gradient-to-r from-slate-900 to-slate-950 text-white px-4 py-3 rounded-2xl border border-slate-800 shadow-md">
+            <div className="flex items-center gap-3">
+              <div className="relative w-8 h-8 flex items-center justify-center">
+                <svg className="w-8 h-8 transform -rotate-90">
+                  <circle
+                    cx="16"
+                    cy="16"
+                    r="12"
+                    stroke="currentColor"
+                    strokeWidth="3"
+                    className="text-slate-800"
+                    fill="transparent"
+                  />
+                  <circle
+                    cx="16"
+                    cy="16"
+                    r="12"
+                    stroke="currentColor"
+                    strokeWidth="3"
+                    strokeDasharray={2 * Math.PI * 12}
+                    strokeDashoffset={((300 - timerSeconds) / 300) * (2 * Math.PI * 12)}
+                    className={`transition-all duration-1000 ${
+                      timerSeconds > 120
+                        ? 'text-emerald-500'
+                        : timerSeconds > 60
+                        ? 'text-amber-500'
+                        : 'text-rose-500 timer-glow-red'
+                    }`}
+                    fill="transparent"
+                    strokeLinecap="round"
+                  />
+                </svg>
+                <Clock className="w-3.5 h-3.5 absolute text-white" />
+              </div>
+              <div>
+                <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Lock Expires In</span>
+                <span className="text-xs font-mono font-black text-amber-400">
+                  {Math.floor(timerSeconds / 60)}:{(timerSeconds % 60) < 10 ? `0${timerSeconds % 60}` : timerSeconds % 60}
+                </span>
+              </div>
+            </div>
+            <span className="flex items-center gap-1 bg-rose-500/10 px-2 py-0.5 rounded-md border border-rose-500/20 text-[10px] font-bold text-rose-400">
+              Lock Active
+            </span>
+          </div>
+
           <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider border-b border-slate-200 dark:border-slate-800 pb-3">
             Order Summary
           </h3>
@@ -267,15 +438,25 @@ export default function CheckoutPage() {
                 <span>-₹{discount.toFixed(2)}</span>
               </div>
             )}
+            {snacksTotal > 0 && (
+              <div className="flex justify-between text-slate-600 dark:text-slate-400">
+                <span>Snacks Add-on</span>
+                <span>₹{snacksTotal.toFixed(2)}</span>
+              </div>
+            )}
             <div className="flex justify-between text-slate-600 dark:text-slate-400">
               <span>Convenience Fee</span>
-              <span>₹30.00</span>
+              {paymentMethod === 'Digital Wallet' ? (
+                <span className="text-emerald-600 dark:text-emerald-400 font-semibold">₹0.00 (Wallet offer)</span>
+              ) : (
+                <span>₹30.00</span>
+              )}
             </div>
 
             <div className="pt-2 border-t border-slate-200 dark:border-slate-800 flex justify-between items-center">
               <span className="text-sm font-bold text-slate-900 dark:text-white">Final Total</span>
               <span className="text-2xl font-black text-emerald-600 dark:text-emerald-400 font-mono">
-                ₹{(finalAmount + 30.00).toFixed(2)}
+                ₹{finalAmount.toFixed(2)}
               </span>
             </div>
           </div>
@@ -291,6 +472,30 @@ export default function CheckoutPage() {
         </div>
       </div>
       <WalletModal isOpen={isWalletModalOpen} onClose={() => setIsWalletModalOpen(false)} />
+
+      {/* Session Expired Alert Modal */}
+      {isExpired && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md animate-fade-in">
+          <div className="glass-card max-w-sm w-full p-8 rounded-3xl border border-rose-500/30 text-center space-y-4 shadow-2xl">
+            <div className="w-16 h-16 bg-rose-500/10 text-rose-500 border border-rose-500/30 rounded-full flex items-center justify-center mx-auto animate-pulse">
+              <Clock className="w-8 h-8 animate-bounce" />
+            </div>
+            <h3 className="text-lg font-black text-slate-900 dark:text-white">Booking Session Expired</h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed font-medium">
+              Your seat lock has expired. Please pick your seats again to complete the booking.
+            </p>
+            <button
+              onClick={() => {
+                setIsExpired(false);
+                navigate(`/seats/${showtime.id}`);
+              }}
+              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-rose-600 to-rose-500 text-white font-extrabold text-xs shadow-lg hover:scale-105 active:scale-95 transition-all"
+            >
+              Return to Seat Map
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
