@@ -61,6 +61,28 @@ export default function HomePage() {
     { title: '4DX Motion Experience', icon: Clapperboard, color: 'text-red-500', desc: 'Environmental Effects' }
   ];
 
+  const fetchMovies = async () => {
+    setLoading(true);
+    try {
+      const res = await API.get('/movies', {
+        params: {
+          search: liveQuery.trim() || undefined,
+          genre: selectedGenre !== 'All' ? selectedGenre : undefined,
+          status: selectedStatus,
+          limit: 20
+        }
+      });
+      setMovies(res.data.items || []);
+    } catch (err) {
+      console.error('Failed to load movies', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const featuredMovies = movies.slice(0, 4);
+  const activeHero = featuredMovies[heroIndex] || movies[0];
+
   useEffect(() => {
     fetchMovies();
   }, [selectedGenre, selectedStatus, liveQuery]);
@@ -92,28 +114,6 @@ export default function HomePage() {
       setHoveredHeroId(activeHero.id);
     }
   }, [activeHero, hoveredHeroId]);
-
-  const fetchMovies = async () => {
-    setLoading(true);
-    try {
-      const res = await API.get('/movies', {
-        params: {
-          search: liveQuery.trim() || undefined,
-          genre: selectedGenre !== 'All' ? selectedGenre : undefined,
-          status: selectedStatus,
-          limit: 20
-        }
-      });
-      setMovies(res.data.items || []);
-    } catch (err) {
-      console.error('Failed to load movies', err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const featuredMovies = movies.slice(0, 4);
-  const activeHero = featuredMovies[heroIndex] || movies[0];
 
   return (
     <div className="space-y-10 pb-20">

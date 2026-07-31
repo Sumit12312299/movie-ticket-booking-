@@ -2,17 +2,43 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+@theme {
+  /* Cinematic midnight slate overrides */
+  --color-slate-50: #f8fafc;
+  --color-slate-100: #f0f3fa;
+  --color-slate-200: #e2e8f5;
+  --color-slate-350: #8ba0c8;
+  --color-slate-700: #252c4b;
+  --color-slate-800: #161b33;
+  --color-slate-900: #0d1021;
+  --color-slate-950: #060812;
+
+  /* Cinema red/rose neon accents */
+  --color-rose-500: #ff2a5f;
+  --color-rose-600: #e11d48;
+  --color-red-600: #ff1c53;
+  --color-amber-400: #fbbf24;
+}
+
 html {
   scroll-behavior: smooth;
   -webkit-tap-highlight-color: transparent;
 }
 
+.ambient-glow-rose {
+  background: radial-gradient(circle at 50% 50%, rgba(255, 42, 95, 0.12) 0%, transparent 60%);
+}
+
+.ambient-glow-indigo {
+  background: radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.12) 0%, transparent 60%);
+}
+
 .glass-card {
-  @apply bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 shadow-md transition-colors;
+  @apply bg-white/80 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800/80 shadow-md backdrop-blur-md transition-colors;
 }
 
 .glass-panel {
-  @apply bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 shadow-md;
+  @apply bg-white/80 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800/80 shadow-md backdrop-blur-md;
 }
 
 @layer base {
@@ -25,32 +51,32 @@ html {
   }
 
   body {
-    @apply bg-slate-100 text-slate-900 font-sans antialiased min-h-screen selection:bg-[#f84464] selection:text-white;
+    @apply bg-slate-100 text-slate-900 font-sans antialiased min-h-screen selection:bg-rose-500 selection:text-white;
   }
   
   html.dark body {
-    @apply bg-[#0f172a] text-[#f8fafc];
+    @apply bg-slate-950 text-slate-100;
   }
 }
 
 /* BookMyShow Iconic Ultra-Smooth Theme */
 :root {
-  --bms-red: #f84464;
-  --bms-red-hover: #e03352;
-  --bms-navy: #333545;
-  --bms-dark-nav: #222531;
+  --bms-red: #ff2a5f;
+  --bms-red-hover: #e6194b;
+  --bms-navy: #161b33;
+  --bms-dark-nav: #0d1021;
 }
 
 .bms-btn-red {
-  background-color: #f84464;
+  background-color: var(--bms-red);
   color: #ffffff;
   transition: transform 0.15s ease, background-color 0.2s ease, box-shadow 0.2s ease;
   transform: translateZ(0);
 }
 
 .bms-btn-red:hover {
-  background-color: #e03352;
-  box-shadow: 0 4px 14px 0 rgba(248, 68, 100, 0.39);
+  background-color: var(--bms-red-hover);
+  box-shadow: 0 4px 14px 0 rgba(255, 42, 95, 0.39);
   transform: translateY(-1px) translateZ(0);
 }
 
@@ -64,13 +90,13 @@ html {
 }
 
 html.dark .panel-card {
-  @apply bg-[#1f2533] border-[#2d3748] shadow-xl;
+  @apply bg-slate-900 border-slate-800/80 shadow-xl;
 }
 
 .curved-screen {
-  background: linear-gradient(180deg, #f84464 0%, rgba(248, 68, 100, 0.1) 80%, transparent 100%);
+  background: linear-gradient(180deg, var(--bms-red) 0%, rgba(255, 42, 95, 0.15) 80%, transparent 100%);
   border-radius: 50% / 15px;
-  box-shadow: 0 10px 20px -5px rgba(248, 68, 100, 0.25);
+  box-shadow: 0 10px 20px -5px rgba(255, 42, 95, 0.25);
 }
 
 @keyframes slideUpFade {
