@@ -38,7 +38,7 @@ export default function TrailerModal({ movie, onClose }) {
         {/* Video iFrame */}
         <div className="relative aspect-video w-full bg-black">
           <iframe
-            src={embedUrl.includes('autoplay') ? embedUrl : `${embedUrl}?autoplay=1`}
+            src={embedUrl.includes('autoplay') ? embedUrl : `${embedUrl}?autoplay=1&mute=1`}
             title={`${movie.title} Trailer`}
             className="w-full h-full border-0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
