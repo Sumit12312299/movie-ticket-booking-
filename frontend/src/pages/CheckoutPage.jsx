@@ -46,6 +46,36 @@ export default function CheckoutPage() {
   const [timerSeconds, setTimerSeconds] = useState(timerSecondsRemaining || 300);
   const [isExpired, setIsExpired] = useState(false);
 
+  const getTimerStyles = () => {
+    if (timerSeconds > 120) {
+      return {
+        bg: 'bg-emerald-500/5 dark:bg-emerald-950/20 border-emerald-500/25 dark:border-emerald-500/20',
+        text: 'text-emerald-600 dark:text-emerald-400',
+        badge: 'bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400',
+        progress: 'text-emerald-550 dark:text-emerald-500',
+        glow: 'shadow-emerald-500/5'
+      };
+    } else if (timerSeconds > 60) {
+      return {
+        bg: 'bg-amber-500/5 dark:bg-amber-950/20 border-amber-500/25 dark:border-amber-500/20',
+        text: 'text-amber-600 dark:text-amber-400',
+        badge: 'bg-amber-500/10 border-amber-500/20 text-amber-650 dark:text-amber-400',
+        progress: 'text-amber-550 dark:text-amber-500',
+        glow: 'shadow-amber-500/5'
+      };
+    } else {
+      return {
+        bg: 'bg-rose-500/10 dark:bg-rose-950/30 border-rose-500/30 dark:border-rose-550/30 animate-pulse',
+        text: 'text-rose-600 dark:text-rose-400 font-extrabold',
+        badge: 'bg-rose-500/20 border-rose-500/30 text-rose-600 dark:text-rose-400 animate-pulse',
+        progress: 'text-rose-600 dark:text-rose-500',
+        glow: 'shadow-rose-500/15'
+      };
+    }
+  };
+
+  const timerStyles = getTimerStyles();
+
   React.useEffect(() => {
     if (timerSeconds <= 0) {
       if (!isExpired) {
@@ -347,49 +377,43 @@ export default function CheckoutPage() {
         {/* Order Summary Column */}
         <div className="glass-card rounded-3xl p-6 border border-slate-200 dark:border-slate-800 space-y-6 h-fit">
           {/* Synced Seat Lock Countdown */}
-          <div className="flex items-center justify-between bg-gradient-to-r from-slate-900 to-slate-950 text-white px-4 py-3 rounded-2xl border border-slate-800 shadow-md">
+          <div className={`flex items-center justify-between p-4.5 rounded-3xl border shadow-lg transition-all duration-500 ${timerStyles.bg} ${timerStyles.glow}`}>
             <div className="flex items-center gap-3">
-              <div className="relative w-8 h-8 flex items-center justify-center">
-                <svg className="w-8 h-8 transform -rotate-90">
+              <div className="relative w-10 h-10 flex items-center justify-center">
+                <svg className="w-10 h-10 transform -rotate-90">
                   <circle
-                    cx="16"
-                    cy="16"
-                    r="12"
+                    cx="20"
+                    cy="20"
+                    r="16"
                     stroke="currentColor"
-                    strokeWidth="3"
-                    className="text-slate-800"
+                    strokeWidth="3.5"
+                    className="text-slate-205 dark:text-slate-800"
                     fill="transparent"
                   />
                   <circle
-                    cx="16"
-                    cy="16"
-                    r="12"
+                    cx="20"
+                    cy="20"
+                    r="16"
                     stroke="currentColor"
-                    strokeWidth="3"
-                    strokeDasharray={2 * Math.PI * 12}
-                    strokeDashoffset={((300 - timerSeconds) / 300) * (2 * Math.PI * 12)}
-                    className={`transition-all duration-1000 ${
-                      timerSeconds > 120
-                        ? 'text-emerald-500'
-                        : timerSeconds > 60
-                        ? 'text-amber-500'
-                        : 'text-rose-500 timer-glow-red'
-                    }`}
+                    strokeWidth="3.5"
+                    strokeDasharray={2 * Math.PI * 16}
+                    strokeDashoffset={((300 - timerSeconds) / 300) * (2 * Math.PI * 16)}
+                    className={`transition-all duration-1000 ${timerStyles.progress}`}
                     fill="transparent"
                     strokeLinecap="round"
                   />
                 </svg>
-                <Clock className="w-3.5 h-3.5 absolute text-white" />
+                <Clock className={`w-4 h-4 absolute ${timerStyles.text} ${timerSeconds <= 60 ? 'animate-bounce' : ''}`} />
               </div>
               <div className="text-left">
-                <span className="text-xs text-slate-400 font-black uppercase tracking-wider block">Lock Expires In</span>
-                <span className="text-sm font-mono font-black text-amber-400">
+                <span className="text-[10px] text-slate-450 dark:text-slate-450 font-black uppercase tracking-wider block">Lock Expires In</span>
+                <span className={`text-base font-mono font-black ${timerStyles.text}`}>
                   {Math.floor(timerSeconds / 60)}:{(timerSeconds % 60) < 10 ? `0${timerSeconds % 60}` : timerSeconds % 60}
                 </span>
               </div>
             </div>
-            <span className="flex items-center gap-1 bg-rose-500/10 px-2 py-0.5 rounded-md border border-rose-500/20 text-xs font-black text-rose-400">
-              Lock Active
+            <span className={`flex items-center gap-1 px-3 py-1 rounded-full border text-[10px] font-black uppercase tracking-wide transition-all duration-550 ${timerStyles.badge}`}>
+              {timerSeconds <= 60 ? '⚡ Hurry Up' : '🎟️ Lock Active'}
             </span>
           </div>
 
