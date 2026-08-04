@@ -5,15 +5,15 @@ import { useNotification } from '../context/NotificationContext';
 const FAQS = [
   {
     q: 'How do I cancel my booking and get a refund?',
-    a: 'Go to My Bookings in your profile, click "Cancel Booking" up to 20 minutes before showtime. 100% of the ticket amount is instantly refunded to your Cineticket VIP Wallet!'
+    a: 'Go to My Bookings in your profile, click "Cancel Booking" up to 20 minutes before showtime. 100% of the ticket amount is instantly refunded to your BookTicket VIP Wallet!'
   },
   {
     q: 'Do I need a physical printout of the E-ticket?',
     a: 'No! Show the Digital E-Ticket Pass or QR Code directly on your phone screen at the cinema security gate.'
   },
   {
-    q: 'How does Cineticket VIP Wallet work?',
-    a: 'Cineticket VIP Wallet gives 0 convenience fees, 1-click instant ticket locks, and immediate cancellation refunds without waiting for bank gateways.'
+    q: 'How does BookTicket VIP Wallet work?',
+    a: 'BookTicket VIP Wallet gives 0 convenience fees, 1-click instant ticket locks, and immediate cancellation refunds without waiting for bank gateways.'
   }
 ];
 
@@ -28,7 +28,7 @@ export default function SupportModal({ isOpen, onClose }) {
   };
 
   const handleCallSupport = () => {
-    addToast('Dialing Cineticket VIP Helpline: +91 1800-889-CINE (Toll Free)', 'success');
+    addToast('Dialing BookTicket VIP Helpline: +91 1800-889-CINE (Toll Free)', 'success');
   };
 
   return (

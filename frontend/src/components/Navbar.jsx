@@ -22,9 +22,19 @@ export default function Navbar({ onSearchChange }) {
   const [isSearching, setIsSearching] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
 
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   // Theme toggle state with localStorage persistence
   const [isDarkMode, setIsDarkMode] = useState(() => {
-    return localStorage.getItem('cineticket_theme') === 'dark';
+    return localStorage.getItem('bookticket_theme') === 'dark';
   });
 
   const navigate = useNavigate();
@@ -35,10 +45,10 @@ export default function Navbar({ onSearchChange }) {
   useEffect(() => {
     if (isDarkMode) {
       document.documentElement.classList.add('dark');
-      localStorage.setItem('cineticket_theme', 'dark');
+      localStorage.setItem('bookticket_theme', 'dark');
     } else {
       document.documentElement.classList.remove('dark');
-      localStorage.setItem('cineticket_theme', 'light');
+      localStorage.setItem('bookticket_theme', 'light');
     }
   }, [isDarkMode]);
 
@@ -91,8 +101,14 @@ export default function Navbar({ onSearchChange }) {
 
   return (
     <>
-      <header className="sticky top-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-sm transition-colors">
-        <div className="w-full px-4 sm:px-8 lg:px-12 h-20 flex items-center justify-between gap-4">
+      <header className={`sticky top-0 z-40 transition-all duration-300 border-b ${
+        isScrolled
+          ? 'bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg border-slate-200 dark:border-slate-800/85 shadow-lg'
+          : 'bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-transparent shadow-none'
+      }`}>
+        <div className={`w-full px-4 sm:px-8 lg:px-12 flex items-center justify-between gap-4 transition-all duration-300 ${
+          isScrolled ? 'h-16' : 'h-20'
+        }`}>
           {/* Brand Logo */}
           <Link to="/" className="flex items-center gap-3 group">
             <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-red-600 to-rose-500 flex items-center justify-center shadow-lg shadow-rose-600/30 group-hover:scale-105 transition-all duration-300">
@@ -100,7 +116,7 @@ export default function Navbar({ onSearchChange }) {
             </div>
             <div>
               <span className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">
-                CINE<span className="text-rose-600 dark:text-rose-500">TICKET</span>
+                BOOK<span className="text-rose-600 dark:text-rose-500">TICKET</span>
               </span>
               <span className="text-[10px] block font-bold text-slate-400 dark:text-slate-500 tracking-wider uppercase -mt-1">
                 Cinema & Multiplex Booking
@@ -203,7 +219,7 @@ export default function Navbar({ onSearchChange }) {
               <button
                 onClick={() => setIsWalletOpen(true)}
                 className="px-3.5 py-2.5 rounded-2xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-600 dark:text-amber-400 font-extrabold text-xs flex items-center gap-2 transition-all shadow-sm group hover:scale-105 active:scale-95 cursor-pointer"
-                title="Cineticket Wallet"
+                title="BookTicket Wallet"
               >
                 <div className="w-5 h-5 rounded-full bg-amber-500 text-white flex items-center justify-center shadow-xs group-hover:rotate-12 transition-transform">
                   <Wallet className="w-3.5 h-3.5" />
@@ -268,7 +284,7 @@ export default function Navbar({ onSearchChange }) {
                         <div className="w-7 h-7 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center group-hover:scale-110 transition-transform">
                           <Wallet className="w-4 h-4" />
                         </div>
-                        <span>Cineticket Wallet</span>
+                        <span>BookTicket Wallet</span>
                       </div>
                       <span className="font-mono text-amber-600 dark:text-amber-400 font-black">
                         ₹{(user.wallet_balance ?? 1500.00).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}

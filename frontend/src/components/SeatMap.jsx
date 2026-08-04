@@ -28,27 +28,40 @@ export default function SeatMap({
     <div className="w-full flex flex-col items-center py-8 px-4 sm:px-8 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xl transition-colors">
       {/* 🎬 3D Curved Screen & Projection Light Rays */}
       <div className="relative w-full max-w-2xl mb-12 flex flex-col items-center">
-        {/* Light Beam Cone Projection Gradient */}
-        <div className="absolute -top-4 w-3/4 h-24 bg-gradient-to-b from-rose-500/20 via-sky-500/10 to-transparent blur-xl pointer-events-none rounded-t-full"></div>
+        {/* Projector Light Beam Cone */}
+        <div 
+          className="absolute -top-10 left-1/2 w-4/5 h-36 pointer-events-none z-0 mix-blend-screen animate-projector opacity-25"
+          style={{
+            clipPath: 'polygon(45% 0%, 55% 0%, 100% 100%, 0% 100%)',
+            background: 'linear-gradient(to bottom, rgba(244, 63, 94, 0.4) 0%, rgba(99, 102, 241, 0.1) 60%, transparent 100%)',
+            filter: 'blur(10px)',
+          }}
+        />
 
-        {/* Curved Screen Curve */}
-        <div className="relative w-full h-6 rounded-b-[100px] bg-gradient-to-b from-rose-500 via-rose-400 to-amber-200 shadow-2xl shadow-rose-500/50 border-b-2 border-white/60 dark:border-amber-300/40 flex items-center justify-center overflow-hidden">
-          <div className="w-full h-full bg-gradient-to-r from-transparent via-white/50 to-transparent animate-pulse"></div>
+        {/* Cinematic Screen Reflection shadow glow */}
+        <div className="absolute top-2 w-3/4 h-20 bg-rose-500/10 dark:bg-rose-500/15 blur-2xl pointer-events-none rounded-b-full"></div>
+
+        {/* Curved IMAX Screen */}
+        <div className="relative w-full h-8 rounded-b-[120px] bg-slate-900 via-rose-600 to-amber-300 shadow-[0_12px_28px_rgba(244,63,94,0.35)] border-b-4 border-slate-100 dark:border-amber-300/60 flex items-center justify-center overflow-hidden transition-all duration-500 z-10">
+          {/* Moving highlight reflection on screen */}
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/35 to-transparent animate-[shimmer_4s_infinite_linear] bg-[length:200%_100%]"></div>
+          {/* Laser screen border glow line */}
+          <div className="w-full h-[2px] bg-rose-500/80 shadow-[0_0_8px_#ff2a5f] mt-auto"></div>
         </div>
 
-        <p className="text-[10px] font-black tracking-widest text-slate-500 dark:text-slate-400 uppercase mt-3 flex items-center gap-1.5">
-          <Sparkles className="w-3.5 h-3.5 text-rose-500" /> CINEMA 4K SCREEN THIS WAY <Sparkles className="w-3.5 h-3.5 text-rose-500" />
+        <p className="text-[10px] font-black tracking-widest text-slate-500 dark:text-slate-400 uppercase mt-4 flex items-center gap-1.5 z-10">
+          <Sparkles className="w-3.5 h-3.5 text-rose-500 animate-pulse" /> IMAX 3D LASER SCREEN <Sparkles className="w-3.5 h-3.5 text-rose-500 animate-pulse" />
         </p>
 
         {/* Live Hover Tooltip Display */}
-        <div className="h-8 mt-2 flex items-center justify-center">
+        <div className="h-8 mt-2 flex items-center justify-center z-10">
           {hoveredSeat ? (
-            <div className="px-3 py-1 rounded-full bg-slate-900 text-white text-[11px] font-mono font-bold shadow-md border border-slate-700 animate-fade-in">
-              {hoveredSeat.id} • {hoveredSeat.tier} • ₹{hoveredSeat.price.toFixed(2)}
+            <div className="px-4 py-1.5 rounded-full bg-slate-950 text-white text-[11px] font-mono font-black shadow-lg border border-rose-500/30 animate-scale-up">
+              {hoveredSeat.id} • <span className="text-amber-400">{hoveredSeat.tier}</span> • <span className="text-rose-400">₹{hoveredSeat.price.toFixed(2)}</span>
             </div>
           ) : (
-            <div className="text-[11px] font-medium text-slate-400 dark:text-slate-500 italic">
-              Hover over a seat to view details
+            <div className="text-[11px] font-bold text-slate-400 dark:text-slate-500 italic">
+              Select your seats below
             </div>
           )}
         </div>

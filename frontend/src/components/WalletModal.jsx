@@ -81,7 +81,7 @@ export default function WalletModal({ isOpen, onClose }) {
             </div>
             <div>
               <h2 className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
-                CineTicket Pay
+                BookTicket Pay
                 <span className="px-2 py-0.5 text-[9px] font-black uppercase tracking-wider rounded-full bg-gradient-to-r from-amber-500 via-rose-500 to-indigo-500 text-white shadow-md shadow-rose-500/20 animate-pulse">
                   VIP Club
                 </span>
@@ -114,7 +114,7 @@ export default function WalletModal({ isOpen, onClose }) {
               <div className="flex justify-between items-start">
                 <div className="space-y-0.5">
                   <span className="text-[9px] uppercase font-mono tracking-widest text-slate-400 block">
-                    CineTicket Pay
+                    BookTicket Pay
                   </span>
                   <span className="text-[9px] font-black uppercase tracking-wider text-amber-300 bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/20">
                     VIP Platinum
@@ -283,7 +283,7 @@ export default function WalletModal({ isOpen, onClose }) {
           {/* Perks Section */}
           <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200/60 dark:border-slate-800 space-y-2.5">
             <h4 className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
-              <Zap className="w-4 h-4 text-amber-500 animate-bounce" /> Cineticket Pay Privileges
+              <Zap className="w-4 h-4 text-amber-500 animate-bounce" /> BookTicket Pay Privileges
             </h4>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-[10px] font-bold text-slate-600 dark:text-slate-300">
               <div className="flex items-center gap-2 bg-white dark:bg-slate-800 p-2.5 rounded-xl border border-slate-200/50 dark:border-slate-700/50">

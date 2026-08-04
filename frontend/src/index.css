@@ -192,3 +192,21 @@ html.dark .shimmer-bg {
 .timer-glow-red {
   animation: pulseGlow 1.2s infinite ease-in-out;
 }
+
+@keyframes projectorFlicker {
+  0%, 100% {
+    opacity: 0.18;
+    transform: scaleX(1) translateX(-50%);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scaleX(1.08) translateX(-48%);
+  }
+  25%, 75% {
+    opacity: 0.25;
+  }
+}
+
+.animate-projector {
+  animation: projectorFlicker 4s infinite alternate ease-in-out;
+}

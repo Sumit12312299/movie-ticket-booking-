@@ -117,14 +117,24 @@ export default function SeatSelectionPage() {
 
   useEffect(() => {
     if (timerSeconds <= 0) {
-      setIsExpired(true);
+      if (!isExpired) {
+        setIsExpired(true);
+        if (selectedSeats.length > 0) {
+          API.post('/bookings/unlock-seats', {
+            showtime_id: showtimeId,
+            seats: selectedSeats
+          }).catch((err) => {
+            console.error('Error unlocking seats on seat selection page timer expiration:', err);
+          });
+        }
+      }
       return;
     }
     const interval = setInterval(() => {
       setTimerSeconds((prev) => prev - 1);
     }, 1000);
     return () => clearInterval(interval);
-  }, [timerSeconds]);
+  }, [timerSeconds, isExpired, showtimeId, selectedSeats]);
 
   const fetchShowtime = async () => {
     setLoading(true);

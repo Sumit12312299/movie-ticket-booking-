@@ -13,14 +13,14 @@ const ACTIVE_PROMOS = [
   {
     code: 'VIPWALLETPASS',
     title: '0 Convenience Fee',
-    desc: 'Pay using Cineticket VIP Wallet to waive off 100% internet handling charges.',
+    desc: 'Pay using BookTicket VIP Wallet to waive off 100% internet handling charges.',
     validTill: 'Unlimited VIP perk',
     discount: 'FREE FEE'
   },
   {
     code: 'SNACK50',
     title: '₹50 Popcorn Cashback',
-    desc: 'Get ₹50 cashback in Cineticket wallet on any pre-ordered gourmet snack combo.',
+    desc: 'Get ₹50 cashback in BookTicket wallet on any pre-ordered gourmet snack combo.',
     validTill: 'Valid on 2+ tickets',
     discount: '₹50 CASH'
   }

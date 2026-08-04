@@ -2,7 +2,7 @@ import logging
 import sys
 
 def setup_logger():
-    logger = logging.getLogger("cineticket")
+    logger = logging.getLogger("bookticket")
     logger.setLevel(logging.INFO)
     
     formatter = logging.Formatter(

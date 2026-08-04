@@ -27,17 +27,22 @@ export default function ShowtimeSelectionPage() {
 
   const [selectedDate, setSelectedDate] = useState(today);
   const [selectedScreen, setSelectedScreen] = useState('All');
+  const [selectedTheater, setSelectedTheater] = useState('All');
 
   useEffect(() => {
     fetchData();
-  }, [movieId, selectedDate]);
+  }, [movieId, selectedDate, selectedTheater]);
 
   const fetchData = async () => {
     setLoading(true);
     try {
+      const params = { movie_id: movieId, show_date: selectedDate };
+      if (selectedTheater !== 'All') {
+        params.theater_name = selectedTheater;
+      }
       const [mRes, stRes] = await Promise.all([
         API.get(`/movies/${movieId}`),
-        API.get('/showtimes', { params: { movie_id: movieId, show_date: selectedDate } })
+        API.get('/showtimes', { params })
       ]);
       setMovie(mRes.data);
       setShowtimes(stRes.data || []);
@@ -82,13 +87,13 @@ export default function ShowtimeSelectionPage() {
       )}
 
       {/* Date Navigation Bar */}
-      <div className="glass-card p-4 rounded-3xl border border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-4">
+      <div className="glass-card p-4 rounded-3xl border border-slate-200 dark:border-slate-800 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <Calendar className="w-5 h-5 text-rose-500" />
           <span className="text-sm font-bold text-slate-900 dark:text-white">Select Date:</span>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-3">
           {[
             { label: 'Today', date: today },
             { label: 'Tomorrow', date: tomorrow },
@@ -106,25 +111,53 @@ export default function ShowtimeSelectionPage() {
               {item.label} ({item.date.slice(5)})
             </button>
           ))}
+
+          {/* Calendar Picker Wrapper */}
+          <div className="flex items-center bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl px-3.5 py-2">
+            <input
+              type="date"
+              value={selectedDate}
+              min={today}
+              onChange={(e) => e.target.value && setSelectedDate(e.target.value)}
+              className="bg-transparent text-xs font-bold text-slate-700 dark:text-slate-300 focus:outline-none cursor-pointer"
+            />
+          </div>
         </div>
       </div>
 
-      {/* Screen Format Filters */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-2">
-        <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 shrink-0">Screen Format:</span>
-        {['All', 'IMAX', 'Dolby', 'Standard 2D'].map((fmt) => (
-          <button
-            key={fmt}
-            onClick={() => setSelectedScreen(fmt)}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-medium shrink-0 transition-colors ${
-              selectedScreen === fmt
-                ? 'bg-amber-500/20 text-amber-600 dark:text-amber-300 border border-amber-500/40'
-                : 'bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-slate-800'
-            }`}
+      {/* Screen Format & Theater Filters Grid */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white/40 dark:bg-slate-900/40 p-4 rounded-3xl border border-slate-200 dark:border-slate-800">
+        <div className="flex items-center gap-2 overflow-x-auto">
+          <span className="text-xs font-extrabold text-slate-500 dark:text-slate-400 shrink-0">Screen Format:</span>
+          {['All', 'IMAX', 'Dolby', 'Standard 2D'].map((fmt) => (
+            <button
+              key={fmt}
+              onClick={() => setSelectedScreen(fmt)}
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold shrink-0 transition-all ${
+                selectedScreen === fmt
+                  ? 'bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/40 scale-105'
+                  : 'bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-slate-800'
+              }`}
+            >
+              {fmt}
+            </button>
+          ))}
+        </div>
+
+        {/* Theater Location Dropdown */}
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-extrabold text-slate-500 dark:text-slate-400 shrink-0">Multiplex:</span>
+          <select
+            value={selectedTheater}
+            onChange={(e) => setSelectedTheater(e.target.value)}
+            className="bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl px-4 py-2 text-xs font-bold text-slate-750 dark:text-slate-300 focus:outline-none"
           >
-            {fmt}
-          </button>
-        ))}
+            <option value="All">All Multiplexes</option>
+            <option value="CinePlex Grand IMAX">CinePlex Grand IMAX</option>
+            <option value="Starlight Cinema 9">Starlight Cinema 9</option>
+            <option value="Downtown MoviePlex">Downtown MoviePlex</option>
+          </select>
+        </div>
       </div>
 
       {/* Theaters & Showtimes Grid */}

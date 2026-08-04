@@ -2,7 +2,7 @@ import os
 from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
-    PROJECT_NAME: str = "CineTicket API"
+    PROJECT_NAME: str = "BookTicket API"
     VERSION: str = "1.0.0"
     API_V1_STR: str = "/api"
     SECRET_KEY: str = "c1n3m4_s3cr3t_jwt_k3y_998877665544332211"

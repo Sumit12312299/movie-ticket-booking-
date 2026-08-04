@@ -75,7 +75,7 @@ export default function FoodSnacksModal({ isOpen, onClose }) {
     setIsOrdering(true);
     setTimeout(() => {
       setIsOrdering(false);
-      addToast(`🎉 Snack order confirmed! Total ₹${totalAmount.toFixed(2)} charged to Cineticket Wallet. Collect at Counter #3!`, 'success');
+      addToast(`🎉 Snack order confirmed! Total ₹${totalAmount.toFixed(2)} charged to BookTicket Wallet. Collect at Counter #3!`, 'success');
       setCart({});
       onClose();
     }, 1200);

@@ -11,7 +11,8 @@ router = APIRouter(prefix="/showtimes", tags=["Showtimes"])
 @router.get("", response_model=List[ShowtimeResponse])
 async def get_showtimes(
     movie_id: Optional[str] = None,
-    show_date: Optional[str] = None
+    show_date: Optional[str] = None,
+    theater_name: Optional[str] = None
 ):
     db = get_database()
     showtimes_col = db["showtimes"]
@@ -22,6 +23,8 @@ async def get_showtimes(
         filter_dict["movie_id"] = movie_id
     if show_date:
         filter_dict["show_date"] = show_date
+    if theater_name:
+        filter_dict["theater_name"] = theater_name
 
     cursor = showtimes_col.find(filter_dict)
     showtimes = await cursor.to_list(length=200)

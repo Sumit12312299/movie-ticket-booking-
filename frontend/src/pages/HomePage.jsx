@@ -124,7 +124,7 @@ export default function HomePage() {
             <Zap className="w-4 h-4 text-amber-200 fill-amber-200" />
           </div>
           <span>
-            Special Offer: Use promo code <code className="bg-black/30 px-2.5 py-0.5 rounded-md font-mono text-amber-200 font-extrabold">CINEMA10</code> for 10% OFF + 0 Convenience Fee on Cineticket VIP Wallet!
+            Special Offer: Use promo code <code className="bg-black/30 px-2.5 py-0.5 rounded-md font-mono text-amber-200 font-extrabold">CINEMA10</code> for 10% OFF + 0 Convenience Fee on BookTicket VIP Wallet!
           </span>
         </div>
         <span className="text-[10px] uppercase tracking-wider bg-white/25 px-3 py-1 rounded-full font-black shrink-0 border border-white/30 backdrop-blur-md">

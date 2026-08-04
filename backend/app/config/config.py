@@ -2,10 +2,10 @@ import os
 from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
-    PROJECT_NAME: str = "CineTicket Movie Booking API"
+    PROJECT_NAME: str = "BookTicket Movie Booking API"
     VERSION: str = "1.0.0"
     API_V1_STR: str = "/api"
-    SECRET_KEY: str = os.getenv("SECRET_KEY", "cineticket_jwt_super_secret_key_2026_x99")
+    SECRET_KEY: str = os.getenv("SECRET_KEY", "bookticket_jwt_super_secret_key_2026_x99")
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7  # 7 days
     

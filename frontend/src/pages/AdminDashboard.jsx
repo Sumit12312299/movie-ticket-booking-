@@ -411,6 +411,19 @@ export default function AdminDashboard() {
                 />
               </div>
 
+              <div>
+                <label className="font-semibold text-slate-600 dark:text-slate-400 block mb-1">Screen Format</label>
+                <select
+                  value={newShowtime.screen_type}
+                  onChange={(e) => setNewShowtime({ ...newShowtime, screen_type: e.target.value })}
+                  className="w-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-2.5 text-slate-900 dark:text-white"
+                >
+                  <option value="IMAX 3D Laser">IMAX 3D Laser</option>
+                  <option value="VIP Dolby Atmos">VIP Dolby Atmos</option>
+                  <option value="Standard 2D">Standard 2D</option>
+                </select>
+              </div>
+
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="font-semibold text-slate-600 dark:text-slate-400 block mb-1">Date</label>
@@ -427,6 +440,29 @@ export default function AdminDashboard() {
                     type="text"
                     value={newShowtime.show_time}
                     onChange={(e) => setNewShowtime({ ...newShowtime, show_time: e.target.value })}
+                    className="w-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-2.5 text-slate-900 dark:text-white"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="font-semibold text-slate-600 dark:text-slate-400 block mb-1">Regular Price (₹)</label>
+                  <input
+                    type="number"
+                    min="1"
+                    value={newShowtime.regular_price}
+                    onChange={(e) => setNewShowtime({ ...newShowtime, regular_price: Number(e.target.value) })}
+                    className="w-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-2.5 text-slate-900 dark:text-white"
+                  />
+                </div>
+                <div>
+                  <label className="font-semibold text-slate-600 dark:text-slate-400 block mb-1">VIP Price (₹)</label>
+                  <input
+                    type="number"
+                    min="1"
+                    value={newShowtime.vip_price}
+                    onChange={(e) => setNewShowtime({ ...newShowtime, vip_price: Number(e.target.value) })}
                     className="w-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-2.5 text-slate-900 dark:text-white"
                   />
                 </div>

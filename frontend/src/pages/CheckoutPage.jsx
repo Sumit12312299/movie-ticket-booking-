@@ -6,6 +6,11 @@ import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
 import WalletModal from '../components/WalletModal';
 
+const AVAILABLE_COUPONS = [
+  { code: 'CINEMA10', discount: '10%', desc: '10% Off Subtotal', value: 0.1 },
+  { code: 'VIPWALLETPASS', discount: '15%', desc: '15% Off Subtotal', value: 0.15 }
+];
+
 export default function CheckoutPage() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -43,14 +48,22 @@ export default function CheckoutPage() {
 
   React.useEffect(() => {
     if (timerSeconds <= 0) {
-      setIsExpired(true);
+      if (!isExpired) {
+        setIsExpired(true);
+        API.post('/bookings/unlock-seats', {
+          showtime_id: showtime.id,
+          seats: selectedSeats
+        }).catch((err) => {
+          console.error('Error unlocking seats on checkout page timer expiration:', err);
+        });
+      }
       return;
     }
     const interval = setInterval(() => {
       setTimerSeconds((prev) => prev - 1);
     }, 1000);
     return () => clearInterval(interval);
-  }, [timerSeconds]);
+  }, [timerSeconds, isExpired, showtime.id, selectedSeats]);
 
   // Form payment fields
   const [cardNumber, setCardNumber] = useState('4532 •••• •••• 8892');
@@ -109,12 +122,18 @@ export default function CheckoutPage() {
   }, 0);
 
   const handleApplyPromo = (e) => {
-    e.preventDefault();
-    if (promoCode.toUpperCase() === 'CINEMA10') {
-      setDiscount(totalPrice * 0.1);
-      addToast('Promo code CINEMA10 applied! 10% Discount', 'success');
+    if (e) e.preventDefault();
+    const cleanCode = promoCode.trim().toUpperCase();
+    if (!cleanCode) {
+      addToast('Please enter a promo code first.', 'warning');
+      return;
+    }
+    const coupon = AVAILABLE_COUPONS.find(c => c.code === cleanCode);
+    if (coupon) {
+      setDiscount(totalPrice * coupon.value);
+      addToast(`Promo code ${coupon.code} applied! ${coupon.discount} Discount`, 'success');
     } else {
-      addToast('Invalid promo code. Try "CINEMA10"', 'error');
+      addToast('Invalid promo code. Try "CINEMA10" or "VIPWALLETPASS"', 'error');
     }
   };
 
@@ -255,7 +274,7 @@ export default function CheckoutPage() {
                     <Wallet className="w-5 h-5" />
                   </div>
                   <div>
-                    <h4 className="text-sm font-extrabold text-slate-900 dark:text-white">Cineticket VIP Wallet</h4>
+                    <h4 className="text-sm font-extrabold text-slate-900 dark:text-white">BookTicket VIP Wallet</h4>
                     <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">Instant 1-Click Payment</p>
                   </div>
                 </div>
@@ -425,6 +444,31 @@ export default function CheckoutPage() {
               </button>
             </div>
           </form>
+
+          {/* Quick-Apply Coupon Section */}
+          <div className="pt-3 border-t border-slate-200 dark:border-slate-800 space-y-2">
+            <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 block">Available Coupons</span>
+            <div className="grid grid-cols-2 gap-2">
+              {AVAILABLE_COUPONS.map((coupon) => (
+                <button
+                  key={coupon.code}
+                  type="button"
+                  onClick={() => {
+                    setPromoCode(coupon.code);
+                    setDiscount(totalPrice * coupon.value);
+                    addToast(`Promo code ${coupon.code} applied! ${coupon.discount} Discount`, 'success');
+                  }}
+                  className="p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 hover:bg-rose-500/10 hover:border-rose-500/30 text-left transition-all group duration-300 cursor-pointer"
+                >
+                  <div className="flex items-center gap-1.5">
+                    <Tag className="w-3.5 h-3.5 text-rose-500 group-hover:rotate-12 transition-transform" />
+                    <span className="font-extrabold text-[11px] text-slate-800 dark:text-slate-200 tracking-wider font-mono">{coupon.code}</span>
+                  </div>
+                  <span className="text-[9px] text-emerald-600 dark:text-emerald-400 font-bold block mt-1">{coupon.discount} Off ({coupon.desc})</span>
+                </button>
+              ))}
+            </div>
+          </div>
 
           {/* Pricing Total Calculation */}
           <div className="pt-4 border-t border-slate-200 dark:border-slate-800 space-y-2 text-xs">

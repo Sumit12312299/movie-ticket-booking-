@@ -10,13 +10,13 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     try {
-      const savedUser = localStorage.getItem('cineticket_user');
-      const savedToken = localStorage.getItem('cineticket_token');
+      const savedUser = localStorage.getItem('bookticket_user');
+      const savedToken = localStorage.getItem('bookticket_token');
       if (savedUser) setUser(JSON.parse(savedUser));
       if (savedToken) setToken(savedToken);
     } catch {
-      localStorage.removeItem('cineticket_user');
-      localStorage.removeItem('cineticket_token');
+      localStorage.removeItem('bookticket_user');
+      localStorage.removeItem('bookticket_token');
     }
   }, []);
 
@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }) => {
       API.get('/auth/me')
         .then((res) => {
           setUser(res.data);
-          localStorage.setItem('cineticket_user', JSON.stringify(res.data));
+          localStorage.setItem('bookticket_user', JSON.stringify(res.data));
         })
         .catch(() => {
           logout();
@@ -41,8 +41,8 @@ export const AuthProvider = ({ children }) => {
     const { access_token, user: userData } = res.data;
     setToken(access_token);
     setUser(userData);
-    localStorage.setItem('cineticket_token', access_token);
-    localStorage.setItem('cineticket_user', JSON.stringify(userData));
+    localStorage.setItem('bookticket_token', access_token);
+    localStorage.setItem('bookticket_user', JSON.stringify(userData));
     return userData;
   };
 
@@ -51,16 +51,16 @@ export const AuthProvider = ({ children }) => {
     const { access_token, user: userData } = res.data;
     setToken(access_token);
     setUser(userData);
-    localStorage.setItem('cineticket_token', access_token);
-    localStorage.setItem('cineticket_user', JSON.stringify(userData));
+    localStorage.setItem('bookticket_token', access_token);
+    localStorage.setItem('bookticket_user', JSON.stringify(userData));
     return userData;
   };
 
   const logout = () => {
     setToken(null);
     setUser(null);
-    localStorage.removeItem('cineticket_token');
-    localStorage.removeItem('cineticket_user');
+    localStorage.removeItem('bookticket_token');
+    localStorage.removeItem('bookticket_user');
   };
 
   const toggleFavorite = async (movieId) => {
@@ -70,7 +70,7 @@ export const AuthProvider = ({ children }) => {
       if (user) {
         const updatedUser = { ...user, favorites: res.data.favorites };
         setUser(updatedUser);
-        localStorage.setItem('cineticket_user', JSON.stringify(updatedUser));
+        localStorage.setItem('bookticket_user', JSON.stringify(updatedUser));
       }
       return res.data.action;
     } catch (err) {
@@ -84,7 +84,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const res = await API.get('/auth/me');
       setUser(res.data);
-      localStorage.setItem('cineticket_user', JSON.stringify(res.data));
+      localStorage.setItem('bookticket_user', JSON.stringify(res.data));
       return res.data;
     } catch (err) {
       console.error(err);

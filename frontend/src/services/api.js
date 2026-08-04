@@ -10,7 +10,7 @@ const API = axios.create({
 // Request interceptor to attach JWT token
 API.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('cineticket_token');
+    const token = localStorage.getItem('bookticket_token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -24,8 +24,8 @@ API.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response && error.response.status === 401) {
-      localStorage.removeItem('cineticket_token');
-      localStorage.removeItem('cineticket_user');
+      localStorage.removeItem('bookticket_token');
+      localStorage.removeItem('bookticket_user');
     }
     return Promise.reject(error);
   }

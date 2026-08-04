@@ -42,10 +42,10 @@ app.add_middleware(
 # Startup & Shutdown Lifespan Events
 @app.on_event("startup")
 async def startup_event():
-    logger.info("Initializing CineTicket API server...")
+    logger.info("Initializing BookTicket API server...")
     await connect_to_mongo()
     await seed_data()
-    logger.info("CineTicket API server ready to accept requests!")
+    logger.info("BookTicket API server ready to accept requests!")
 
 @app.on_event("shutdown")
 async def shutdown_event():

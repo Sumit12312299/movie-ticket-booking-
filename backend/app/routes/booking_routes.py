@@ -54,6 +54,14 @@ async def lock_seats(
 
     return {"status": "success", "message": "Seats locked for 5 minutes", "seats": request.seats}
 
+@router.post("/unlock-seats")
+async def unlock_seats(
+    request: SeatLockRequest,
+    current_user: UserProfile = Depends(get_current_user)
+):
+    seat_lock_service.release_seats(request.showtime_id, request.seats, current_user.id)
+    return {"status": "success", "message": "Seats unlocked successfully"}
+
 @router.post("", response_model=BookingResponse, status_code=status.HTTP_201_CREATED)
 async def create_booking(
     booking_data: BookingCreate,
@@ -74,7 +82,7 @@ async def create_booking(
             raise HTTPException(status_code=400, detail=f"Seat {seat} is no longer available")
 
     # If paying by Digital Wallet, check & deduct wallet balance
-    is_wallet_payment = booking_data.payment_method in ["Digital Wallet", "Wallet", "Cineticket Wallet"]
+    is_wallet_payment = booking_data.payment_method in ["Digital Wallet", "Wallet", "Cineticket Wallet", "BookTicket Wallet", "Bookticket Wallet"]
     if is_wallet_payment:
         user_doc = await users_col.find_one({"_id": current_user.id})
         current_wallet = float(user_doc.get("wallet_balance", 1500.0)) if user_doc else current_user.wallet_balance

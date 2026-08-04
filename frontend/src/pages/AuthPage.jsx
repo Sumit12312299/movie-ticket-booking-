@@ -50,7 +50,7 @@ export default function AuthPage() {
     try {
       if (isRegister) {
         await register(fullName, email, password, role);
-        addToast('Account created successfully! Welcome to CineTicket.', 'success');
+        addToast('Account created successfully! Welcome to BookTicket.', 'success');
       } else {
         await login(email, password);
         addToast('Signed in successfully!', 'success');
@@ -64,7 +64,7 @@ export default function AuthPage() {
   };
 
   const fillAndLoginDemo = async (type) => {
-    const demoEmail = type === 'admin' ? 'admin@cineticket.com' : 'user@cineticket.com';
+    const demoEmail = type === 'admin' ? 'admin@bookticket.com' : 'user@bookticket.com';
     const demoPw = type === 'admin' ? 'admin123' : 'user123';
     setEmail(demoEmail);
     setPassword(demoPw);
@@ -116,7 +116,7 @@ export default function AuthPage() {
             <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-red-600 to-rose-500 flex items-center justify-center shadow-lg shadow-rose-600/30">
               <Film className="w-4 h-4 text-white" />
             </div>
-            <span className="font-black text-sm tracking-wider uppercase bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">CineTicket Premiere</span>
+            <span className="font-black text-sm tracking-wider uppercase bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">BookTicket Premiere</span>
           </div>
 
           {/* Dynamic Movie Info Overlay */}
@@ -176,7 +176,7 @@ export default function AuthPage() {
                 {isRegister ? 'Create Your Account' : 'Welcome Back'}
               </h2>
               <p className="text-xs text-slate-500 dark:text-slate-400 font-medium mt-1">
-                {isRegister ? 'Join CineTicket for VIP booking & rewards' : 'Sign in to access tickets, seats & instant payments'}
+                {isRegister ? 'Join BookTicket for VIP booking & rewards' : 'Sign in to access tickets, seats & instant payments'}
               </p>
             </div>
           </div>

@@ -12,7 +12,7 @@ export default function Footer() {
       addToast('Please enter a valid email address', 'warning');
       return;
     }
-    addToast('Subscribed to CineTicket VIP Deals & Discounts!', 'success');
+    addToast('Subscribed to BookTicket VIP Deals & Discounts!', 'success');
     setEmail('');
   };
 
@@ -56,7 +56,7 @@ export default function Footer() {
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-start lg:justify-end gap-4 border-t lg:border-t-0 border-slate-200 dark:border-slate-800 pt-6 lg:pt-0">
               <div className="space-y-1">
                 <span className="text-xs font-bold text-slate-900 dark:text-white block">Book on the Go</span>
-                <span className="text-[11px] text-slate-500">Download CineTicket App</span>
+                <span className="text-[11px] text-slate-500">Download BookTicket App</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="px-4 py-2.5 bg-slate-900 dark:bg-slate-800 text-white rounded-xl border border-slate-800 text-xs font-bold flex items-center gap-2 shadow-sm cursor-pointer hover:bg-slate-800 transition-colors">
@@ -89,7 +89,7 @@ export default function Footer() {
                 <Film className="w-4 h-4 text-white" />
               </div>
               <span className="text-xl font-black tracking-tight text-slate-900 dark:text-white">
-                CINE<span className="text-red-600">TICKET</span>
+                BOOK<span className="text-red-600">TICKET</span>
               </span>
             </div>
             <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
@@ -112,7 +112,7 @@ export default function Footer() {
             <ul className="space-y-2 text-xs font-medium text-slate-600 dark:text-slate-400">
               <li className="flex items-center gap-1.5">
                 <Mail className="w-3.5 h-3.5 text-red-600" />
-                <span>support@cineticket.com</span>
+                <span>support@bookticket.com</span>
               </li>
               <li className="flex items-center gap-1.5">
                 <Phone className="w-3.5 h-3.5 text-red-600" />
@@ -144,7 +144,7 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-slate-100 dark:border-slate-800 text-center text-xs text-slate-500 dark:text-slate-400 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p>© 2026 CineTicket Platform. All rights reserved.</p>
+          <p>© 2026 BookTicket Platform. All rights reserved.</p>
           <div className="flex items-center gap-4 text-xs font-medium text-slate-600 dark:text-slate-400">
             <span>Security: 256-Bit SSL Encrypted</span>
             <span>•</span>

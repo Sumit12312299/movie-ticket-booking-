@@ -3,7 +3,7 @@ import asyncio
 from motor.motor_asyncio import AsyncIOMotorClient
 from app.config.config import settings
 
-logger = logging.getLogger("cineticket")
+logger = logging.getLogger("bookticket")
 
 class FallbackCollection:
     def __init__(self, name: str):

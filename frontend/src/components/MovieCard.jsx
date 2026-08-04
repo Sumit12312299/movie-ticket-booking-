@@ -11,6 +11,42 @@ export default function MovieCard({ movie, onOpenTrailer }) {
 
   const isFavorite = user?.favorites?.includes(movie.id);
 
+  // 3D Tilt Card States
+  const [rotateX, setRotateX] = React.useState(0);
+  const [rotateY, setRotateY] = React.useState(0);
+  const [glarePos, setGlarePos] = React.useState({ x: 50, y: 50 });
+  const [isHovered, setIsHovered] = React.useState(false);
+
+  const handleMouseMove = (e) => {
+    const card = e.currentTarget;
+    const rect = card.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mouseX = e.clientX - rect.left - width / 2;
+    const mouseY = e.clientY - rect.top - height / 2;
+    
+    // Max tilt of 10 degrees
+    const rX = -(mouseY / (height / 2)) * 10;
+    const rY = (mouseX / (width / 2)) * 10;
+    
+    setRotateX(rX);
+    setRotateY(rY);
+
+    const glareX = ((e.clientX - rect.left) / width) * 100;
+    const glareY = ((e.clientY - rect.top) / height) * 100;
+    setGlarePos({ x: glareX, y: glareY });
+  };
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    setRotateX(0);
+    setRotateY(0);
+  };
+
   const handleFavoriteClick = async (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -27,9 +63,35 @@ export default function MovieCard({ movie, onOpenTrailer }) {
   };
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-md hover:shadow-xl hover:border-rose-500/40 hover:-translate-y-1.5 transition-all duration-300 flex flex-col overflow-hidden group">
+    <div
+      onMouseMove={handleMouseMove}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-md hover:shadow-2xl hover:border-rose-500/40 transition-all duration-300 flex flex-col overflow-hidden group"
+      style={{
+        transform: isHovered
+          ? `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`
+          : 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)',
+        transition: isHovered ? 'none' : 'transform 0.4s ease-out, border-color 0.3s, box-shadow 0.3s',
+        transformStyle: 'preserve-3d',
+      }}
+    >
       {/* Poster Image Container - Standard 2:3 Cinema Ratio */}
-      <div className="relative aspect-[2/3] w-full overflow-hidden bg-slate-100 dark:bg-slate-800 cursor-pointer" onClick={() => navigate(`/movie/${movie.id}`)}>
+      <div 
+        className="relative aspect-[2/3] w-full overflow-hidden bg-slate-100 dark:bg-slate-800 cursor-pointer" 
+        onClick={() => navigate(`/movie/${movie.id}`)}
+        style={{ transform: 'translateZ(20px)', transformStyle: 'preserve-3d' }}
+      >
+        {/* Holographic Glare Effect */}
+        {isHovered && (
+          <div
+            className="absolute inset-0 z-30 pointer-events-none mix-blend-color-dodge opacity-25"
+            style={{
+              background: `radial-gradient(circle at ${glarePos.x}% ${glarePos.y}%, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0) 65%)`
+            }}
+          />
+        )}
+
         <img
           src={movie.poster_url}
           alt={movie.title}

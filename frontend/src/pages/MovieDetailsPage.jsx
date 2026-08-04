@@ -6,6 +6,75 @@ import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
 import TrailerModal from '../components/TrailerModal';
 
+function StarryBackground() {
+  const canvasRef = React.useRef(null);
+
+  React.useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let animationFrameId;
+
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    // Create particles
+    const particles = [];
+    const count = 75;
+    for (let i = 0; i < count; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        radius: Math.random() * 1.5 + 0.5,
+        alpha: Math.random() * 0.4 + 0.1,
+        speed: Math.random() * 0.05 + 0.02,
+        phase: Math.random() * Math.PI * 2,
+      });
+    }
+
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#060812';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      particles.forEach((p) => {
+        p.phase += p.speed;
+        const currentAlpha = p.alpha + Math.sin(p.phase) * 0.15;
+        ctx.fillStyle = `rgba(255, 42, 95, ${Math.max(0.02, Math.min(1, currentAlpha))})`; // Rose ambient lights
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Slow drift upwards
+        p.y -= p.speed * 8;
+        if (p.y < 0) {
+          p.y = canvas.height;
+          p.x = Math.random() * canvas.width;
+        }
+      });
+
+      animationFrameId = requestAnimationFrame(animate);
+    };
+    animate();
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+      window.removeEventListener('resize', resizeCanvas);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="fixed inset-0 z-20 pointer-events-none transition-opacity duration-1000 ease-in-out bg-slate-950"
+    />
+  );
+}
+
 export default function MovieDetailsPage() {
   const { id } = useParams();
   const { user } = useAuth();
@@ -121,10 +190,13 @@ export default function MovieDetailsPage() {
   if (!movie) return null;
 
   return (
-    <div className={`space-y-12 pb-16 transition-all duration-700 ${isTheaterDimmed ? 'bg-slate-950 p-6 rounded-3xl ring-4 ring-rose-500/20 shadow-2xl' : ''}`}>
+    <div className={`space-y-12 pb-16 transition-all duration-700 relative ${isTheaterDimmed ? 'bg-slate-950 p-6 rounded-3xl ring-4 ring-rose-500/20 shadow-2xl' : ''}`}>
       {/* Dimmed Theater Lights Overlay */}
       {isTheaterDimmed && (
-        <div className="fixed inset-0 bg-slate-950/90 z-30 pointer-events-none transition-opacity animate-fade-in backdrop-blur-md"></div>
+        <>
+          <StarryBackground />
+          <div className="fixed inset-0 bg-slate-950/60 z-20 pointer-events-none transition-opacity animate-fade-in backdrop-blur-xs"></div>
+        </>
       )}
 
       {/* Movie Hero Showcase */}
@@ -231,7 +303,7 @@ export default function MovieDetailsPage() {
       </div>
 
       {/* Reviews & Ratings Section */}
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <section className="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-40">
         {/* Submit Review Form */}
         <div className="glass-card rounded-3xl p-6 space-y-4 border border-slate-200 dark:border-slate-800">
           <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">

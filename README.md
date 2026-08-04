@@ -1,4 +1,4 @@
-# CineTicket - Full Stack Movie Ticket Booking Platform
+# BookTicket - Full Stack Movie Ticket Booking Platform
 
 [![GitHub Repo](https://img.shields.io/badge/GitHub-Repository-181717.svg?style=flat&logo=github)](https://github.com/Sumit12312299/movie-ticket-booking-.git)
 [![FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688.svg?style=flat&logo=fastapi)](https://fastapi.tiangolo.com/)
@@ -16,7 +16,7 @@ A complete, production-ready Full Stack Web Application designed for online movi
 ## 📄 Project Documentation
 
 ### 1. Problem Statement
-Online ticket booking platforms frequently face challenges regarding concurrent seat reservations, dynamic screening schedules, double-booking prevention, real-time metrics for theater managers, and responsive user experience across devices. **CineTicket** addresses these challenges by implementing an asynchronous backend with temporary seat locking mechanisms, role-based access control, digital E-ticket generation with QR codes, and analytical dashboard metrics.
+Online ticket booking platforms frequently face challenges regarding concurrent seat reservations, dynamic screening schedules, double-booking prevention, real-time metrics for theater managers, and responsive user experience across devices. **BookTicket** addresses these challenges by implementing an asynchronous backend with temporary seat locking mechanisms, role-based access control, digital E-ticket generation with QR codes, and analytical dashboard metrics.
 
 ---
 
@@ -294,11 +294,11 @@ npm run dev
 Pre-seeded out-of-the-box demo accounts for testing:
 
 - **Admin Account**:
-  - Email: `admin@cineticket.com`
+  - Email: `admin@bookticket.com`
   - Password: `admin123`
   - *Access*: Admin Portal, KPI Metrics, Add/Edit Movies, Schedule Showtimes.
 
 - **Standard User Account**:
-  - Email: `user@cineticket.com`
+  - Email: `user@bookticket.com`
   - Password: `user123`
   - *Access*: Movie Browse, Seat Selection, Payment Checkout, Digital E-Tickets.
