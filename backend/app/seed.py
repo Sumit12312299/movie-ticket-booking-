@@ -65,7 +65,7 @@ async def seed_data():
             "release_date": "2026-07-31",
             "poster_url": "https://images.unsplash.com/photo-1635805737707-575885ab0820?w=600&auto=format&fit=crop&q=80",
             "banner_url": "https://images.unsplash.com/photo-1608889175123-8ee362201f81?w=1200&auto=format&fit=crop&q=80",
-            "trailer_url": "https://www.youtube.com/embed/ZzE8N2X5uWw",
+            "trailer_url": "https://youtu.be/62bIsvRcPv0?si=pLuB2j-pu_u5Gm85",
             "status": "now_showing",
             "cast": ["Tom Holland", "Zendaya", "Sadie Sink", "Jacob Batalon"],
             "director": "Destin Daniel Cretton"

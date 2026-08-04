@@ -7,11 +7,11 @@ import TrailerModal from '../components/TrailerModal';
 
 const getAutoplayUrl = (url) => {
   if (!url) return '';
-  if (url.includes('youtube.com/embed/')) {
-    const videoId = url.split('/embed/')[1]?.split('?')[0];
-    if (videoId) {
-      return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&playlist=${videoId}&loop=1&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&playsinline=1&enablejsapi=1`;
-    }
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+  const match = url.match(regExp);
+  const videoId = (match && match[2].length === 11) ? match[2] : null;
+  if (videoId) {
+    return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&playlist=${videoId}&loop=1&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&playsinline=1&enablejsapi=1`;
   }
   return url;
 };

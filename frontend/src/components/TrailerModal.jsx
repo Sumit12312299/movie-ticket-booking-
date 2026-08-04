@@ -1,8 +1,22 @@
 import React from 'react';
 import { X, Play } from 'lucide-react';
 
+const parseYoutubeId = (url) => {
+  if (!url) return null;
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+  const match = url.match(regExp);
+  return (match && match[2].length === 11) ? match[2] : null;
+};
+
+const getEmbedUrl = (url) => {
+  const videoId = parseYoutubeId(url);
+  return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
+};
+
 export default function TrailerModal({ movie, onClose }) {
   if (!movie || !movie.trailer_url) return null;
+
+  const embedUrl = getEmbedUrl(movie.trailer_url);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-xl animate-slide-up">
@@ -24,7 +38,7 @@ export default function TrailerModal({ movie, onClose }) {
         {/* Video iFrame */}
         <div className="relative aspect-video w-full bg-black">
           <iframe
-            src={movie.trailer_url.includes('autoplay') ? movie.trailer_url : `${movie.trailer_url}?autoplay=1`}
+            src={embedUrl.includes('autoplay') ? embedUrl : `${embedUrl}?autoplay=1`}
             title={`${movie.title} Trailer`}
             className="w-full h-full border-0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
