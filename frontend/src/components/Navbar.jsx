@@ -1,6 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Film, Search, Heart, User, LogOut, ShieldAlert, Ticket, Sun, Moon, Star, X, Wallet, Crown, Utensils, Settings, HelpCircle, Gift } from 'lucide-react';
+import { 
+  Film, Search, Heart, User, LogOut, ShieldAlert, Ticket, 
+  Sun, Moon, Star, X, Wallet, Crown, Utensils, Settings, 
+  HelpCircle, Gift
+} from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import API from '../services/api';
 import WalletModal from './WalletModal';
@@ -32,7 +36,6 @@ export default function Navbar({ onSearchChange }) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Theme toggle state with localStorage persistence
   const [isDarkMode, setIsDarkMode] = useState(() => {
     return localStorage.getItem('bookticket_theme') === 'dark';
   });
@@ -40,8 +43,8 @@ export default function Navbar({ onSearchChange }) {
   const navigate = useNavigate();
   const location = useLocation();
   const searchRef = useRef(null);
+  const profileMenuRef = useRef(null);
 
-  // Sync theme class on mount and change
   useEffect(() => {
     if (isDarkMode) {
       document.documentElement.classList.add('dark');
@@ -56,7 +59,6 @@ export default function Navbar({ onSearchChange }) {
     setIsDarkMode((prev) => !prev);
   };
 
-  // Handle live search input debouncing
   useEffect(() => {
     if (!searchInput.trim()) {
       setSearchResults([]);
@@ -82,11 +84,13 @@ export default function Navbar({ onSearchChange }) {
     return () => clearTimeout(timer);
   }, [searchInput]);
 
-  // Close search dropdown on click outside
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (searchRef.current && !searchRef.current.contains(e.target)) {
         setShowDropdown(false);
+      }
+      if (profileMenuRef.current && !profileMenuRef.current.contains(e.target)) {
+        setShowProfileMenu(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -99,47 +103,49 @@ export default function Navbar({ onSearchChange }) {
     navigate(`/movie/${movieId}`);
   };
 
+  const wishlistCount = user?.favorites?.length || 0;
+
   return (
     <>
-      <header className={`sticky top-0 z-40 transition-all duration-300 border-b ${
+      <header className={`sticky top-0 z-40 transition-all duration-500 border-b ${
         isScrolled
-          ? 'bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg border-slate-200 dark:border-slate-800/85 shadow-lg'
-          : 'bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-transparent shadow-none'
+          ? 'bg-white/85 dark:bg-slate-900/85 backdrop-blur-xl border-slate-200/80 dark:border-slate-800/90 shadow-xl shadow-slate-950/5'
+          : 'bg-white/95 dark:bg-slate-900/95 border-transparent'
       }`}>
-        <div className={`w-full px-4 sm:px-8 lg:px-12 flex items-center justify-between gap-4 transition-all duration-300 ${
+        <div className={`w-full px-4 sm:px-8 lg:px-12 flex items-center justify-between gap-4 transition-all duration-500 ${
           isScrolled ? 'h-16' : 'h-20'
         }`}>
-          {/* Brand Logo */}
-          <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-red-600 to-rose-500 flex items-center justify-center shadow-lg shadow-rose-600/30 group-hover:scale-105 transition-all duration-300">
-              <Film className="w-6 h-6 text-white" />
+          {/* Brand Logo with movie tape elements */}
+          <Link to="/" className="flex items-center gap-3 group shrink-0">
+            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-rose-600 via-rose-500 to-amber-500 flex items-center justify-center shadow-lg shadow-rose-600/35 group-hover:scale-105 transition-transform duration-350">
+              <Film className="w-5 h-5 text-white" />
             </div>
-            <div>
-              <span className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">
+            <div className="hidden sm:block text-left">
+              <span className="text-xl font-black tracking-tight text-slate-900 dark:text-white group-hover:text-rose-500 transition-colors">
                 BOOK<span className="text-rose-600 dark:text-rose-500">TICKET</span>
               </span>
-              <span className="text-[10px] block font-bold text-slate-400 dark:text-slate-500 tracking-wider uppercase -mt-1">
-                Cinema & Multiplex Booking
+              <span className="text-[9px] block font-bold text-slate-400 dark:text-slate-550 tracking-wider uppercase -mt-1">
+                Cinema Booking Elite
               </span>
             </div>
           </Link>
 
           {/* Search Bar Container */}
-          <div ref={searchRef} className="relative flex-1 max-w-md hidden md:block">
+          <div ref={searchRef} className="relative flex-1 max-w-sm hidden md:block">
             <div className="relative">
-              <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <Search className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
                 placeholder="Search movies, genre, actors..."
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
                 onFocus={() => searchInput.trim() && setShowDropdown(true)}
-                className="w-full pl-10 pr-10 py-2.5 rounded-2xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:bg-white dark:focus:bg-slate-900 transition-all shadow-inner"
+                className="w-full pl-10 pr-10 py-2.5 rounded-2xl bg-slate-100/80 dark:bg-slate-800/80 border border-slate-200/50 dark:border-slate-700/60 text-xs text-slate-900 dark:text-slate-100 placeholder-slate-450 focus:outline-none focus:border-rose-500 focus:bg-white dark:focus:bg-slate-900 transition-all shadow-inner"
               />
               {searchInput && (
                 <button
                   onClick={() => setSearchInput('')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-655 dark:hover:text-slate-200"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -148,35 +154,35 @@ export default function Navbar({ onSearchChange }) {
 
             {/* Live Search Dropdown */}
             {showDropdown && (
-              <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden z-50 animate-slide-up max-h-96 overflow-y-auto">
+              <div className="absolute top-full left-0 right-0 mt-3 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden z-50 animate-slide-up max-h-96 overflow-y-auto p-1.5 space-y-1">
                 {isSearching ? (
-                  <div className="p-4 text-center text-xs text-slate-400 flex items-center justify-center gap-2">
+                  <div className="p-4 text-center text-xs text-slate-450 flex items-center justify-center gap-2">
                     <div className="w-4 h-4 border-2 border-rose-500 border-t-transparent rounded-full animate-spin"></div>
                     Searching movies...
                   </div>
                 ) : searchResults.length > 0 ? (
-                  <div className="divide-y divide-slate-100 dark:divide-slate-800/80">
+                  <div className="space-y-0.5 text-left">
                     {searchResults.map((m) => (
                       <div
                         key={m.id}
                         onClick={() => handleSelectMovie(m.id)}
-                        className="p-3 hover:bg-slate-50 dark:hover:bg-slate-800/60 flex items-center gap-3 cursor-pointer transition-colors group"
+                        className="p-2 hover:bg-slate-100/60 dark:hover:bg-slate-800/60 rounded-2xl flex items-center gap-3 cursor-pointer transition-all group"
                       >
                         <img
                           src={m.poster_url}
                           alt={m.title}
-                          className="w-10 h-14 object-cover rounded-lg shadow-sm group-hover:scale-105 transition-transform"
+                          className="w-10 h-14 object-cover rounded-xl shadow-md group-hover:scale-103 transition-transform"
                         />
                         <div className="flex-1 min-w-0">
-                          <h4 className="text-xs font-bold text-slate-900 dark:text-white truncate group-hover:text-rose-600 dark:group-hover:text-rose-400">
+                          <h4 className="text-xs font-black text-slate-900 dark:text-white truncate group-hover:text-rose-500 transition-colors">
                             {m.title}
                           </h4>
-                          <p className="text-[10px] text-slate-500 dark:text-slate-400">
+                          <p className="text-[10px] text-slate-450 dark:text-slate-400 font-bold">
                             {m.language} • {m.duration_mins} mins
                           </p>
                           <div className="flex items-center gap-1 mt-1">
                             <Star className="w-3 h-3 text-amber-500 fill-amber-500" />
-                            <span className="text-[10px] font-bold text-amber-600 dark:text-amber-400">
+                            <span className="text-[10px] font-black text-amber-600 dark:text-amber-450">
                               {m.rating?.toFixed(1) || '5.0'}
                             </span>
                           </div>
@@ -185,7 +191,7 @@ export default function Navbar({ onSearchChange }) {
                     ))}
                   </div>
                 ) : (
-                  <div className="p-6 text-center text-xs text-slate-500 dark:text-slate-400">
+                  <div className="p-6 text-center text-xs text-slate-500 dark:text-slate-400 font-bold">
                     No movies found matching "{searchInput}"
                   </div>
                 )}
@@ -195,21 +201,42 @@ export default function Navbar({ onSearchChange }) {
 
           {/* Navigation Controls */}
           <nav className="flex items-center gap-2 sm:gap-3">
-            {/* Dark/Light Mode Toggle */}
+            {/* Theme Toggle Button */}
             <button
               onClick={toggleTheme}
-              className="w-10 h-10 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-amber-400 flex items-center justify-center hover:bg-slate-200 dark:hover:bg-slate-700 transition-all border border-slate-200 dark:border-slate-700 shadow-sm hover:scale-105 active:scale-95"
-              title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+              className="w-10 h-10 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-amber-400 flex items-center justify-center hover:bg-slate-200 dark:hover:bg-slate-700/80 transition-all border border-slate-200 dark:border-slate-750 shadow-xs hover:scale-105 active:scale-95 cursor-pointer"
+              title={isDarkMode ? 'Light Mode' : 'Dark Mode'}
             >
               {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </button>
 
+            {/* Direct Exposed Wishlist (Heart) Link */}
+            {user && (
+              <Link
+                to="/dashboard"
+                state={{ tab: 'wishlist' }}
+                className={`relative w-10 h-10 rounded-2xl flex items-center justify-center border transition-all hover:scale-105 active:scale-95 shadow-xs ${
+                  location.pathname === '/dashboard' && location.state?.tab === 'wishlist'
+                    ? 'bg-rose-500/10 border-rose-500 text-rose-500'
+                    : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-750 hover:text-rose-500 dark:hover:text-rose-500 hover:bg-rose-500/5'
+                }`}
+                title="Saved Wishlist"
+              >
+                <Heart className={`w-4 h-4 ${wishlistCount > 0 ? 'fill-rose-500 text-rose-500' : ''}`} />
+                {wishlistCount > 0 && (
+                  <span className="absolute -top-1.5 -right-1.5 bg-rose-600 text-white text-[9px] font-black w-4.5 h-4.5 rounded-full flex items-center justify-center border border-white dark:border-slate-900 shadow-md animate-pulse">
+                    {wishlistCount}
+                  </span>
+                )}
+              </Link>
+            )}
+
             <Link
               to="/"
-              className={`px-4 py-2.5 rounded-2xl text-xs font-black transition-all ${
+              className={`px-4 py-2.5 rounded-2xl text-xs font-black transition-all shadow-xs ${
                 location.pathname === '/'
-                  ? 'bg-gradient-to-r from-red-600 to-rose-500 text-white shadow-md shadow-rose-600/30'
-                  : 'text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
+                  ? 'bg-gradient-to-r from-rose-600 to-rose-500 text-white shadow-lg shadow-rose-600/20'
+                  : 'text-slate-750 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-805 border border-transparent'
               }`}
             >
               Movies
@@ -218,17 +245,12 @@ export default function Navbar({ onSearchChange }) {
             {user && (
               <button
                 onClick={() => setIsWalletOpen(true)}
-                className="px-3.5 py-2.5 rounded-2xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-600 dark:text-amber-400 font-extrabold text-xs flex items-center gap-2 transition-all shadow-sm group hover:scale-105 active:scale-95 cursor-pointer"
-                title="BookTicket Wallet"
+                className="px-3.5 py-2.5 rounded-2xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-600 dark:text-amber-400 font-black text-xs flex items-center gap-2 transition-all shadow-xs group hover:scale-103 active:scale-95 cursor-pointer"
+                title="Top-Up Wallet"
               >
-                <div className="w-5 h-5 rounded-full bg-amber-500 text-white flex items-center justify-center shadow-xs group-hover:rotate-12 transition-transform">
-                  <Wallet className="w-3.5 h-3.5" />
-                </div>
-                <span className="font-mono font-black text-slate-900 dark:text-amber-300">
+                <Wallet className="w-4 h-4 group-hover:rotate-12 transition-transform text-amber-500 fill-amber-500/10" />
+                <span className="font-mono font-black text-slate-850 dark:text-amber-300">
                   ₹{(user.wallet_balance ?? 1500.00).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                </span>
-                <span className="text-[10px] bg-amber-500/20 px-1.5 py-0.5 rounded-md text-amber-600 dark:text-amber-300 font-black uppercase tracking-wider hidden md:inline">
-                  + Add
                 </span>
               </button>
             )}
@@ -236,23 +258,24 @@ export default function Navbar({ onSearchChange }) {
             {user && (
               <Link
                 to="/dashboard"
-                className={`px-4 py-2.5 rounded-2xl text-xs font-black flex items-center gap-1.5 transition-all ${
-                  location.pathname === '/dashboard'
-                    ? 'bg-gradient-to-r from-red-600 to-rose-500 text-white shadow-md shadow-rose-600/30'
-                    : 'text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
+                state={{ tab: 'bookings' }}
+                className={`px-4 py-2.5 rounded-2xl text-xs font-black flex items-center gap-1.5 transition-all shadow-xs ${
+                  location.pathname === '/dashboard' && (!location.state || location.state?.tab === 'bookings')
+                    ? 'bg-gradient-to-r from-rose-600 to-rose-500 text-white shadow-lg shadow-rose-600/25'
+                    : 'text-slate-755 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
                 }`}
               >
                 <Ticket className="w-4 h-4" />
-                <span className="hidden sm:inline">My Bookings</span>
+                <span className="hidden lg:inline">My Bookings</span>
               </Link>
             )}
 
-            {/* User Auth Profile Menu */}
+            {/* Profile Dropdown Menu */}
             {user ? (
-              <div className="relative">
+              <div className="relative" ref={profileMenuRef}>
                 <button
                   onClick={() => setShowProfileMenu(!showProfileMenu)}
-                  className="p-0.5 rounded-full bg-gradient-to-tr from-red-600 via-rose-500 to-amber-500 hover:scale-105 transition-transform shadow-md cursor-pointer"
+                  className="p-0.5 rounded-full bg-gradient-to-tr from-rose-600 via-rose-500 to-amber-500 hover:scale-105 transition-transform shadow-md cursor-pointer"
                 >
                   <div className="w-9 h-9 rounded-full bg-slate-950 font-black text-white flex items-center justify-center text-sm border-2 border-white dark:border-slate-900">
                     {user.full_name.charAt(0).toUpperCase()}
@@ -260,28 +283,26 @@ export default function Navbar({ onSearchChange }) {
                 </button>
 
                 {showProfileMenu && (
-                  <div className="absolute right-0 mt-3 w-72 bg-white dark:bg-slate-900 rounded-3xl p-2.5 shadow-2xl border border-slate-200 dark:border-slate-800 z-50 animate-slide-up space-y-1">
-                    {/* User Header Profile Summary */}
-                    <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-800/40 rounded-2xl mb-1">
+                  <div className="absolute right-0 mt-3 w-72 bg-white dark:bg-slate-900 rounded-3xl p-2.5 shadow-2xl border border-slate-200 dark:border-slate-800/80 z-50 animate-slide-up space-y-1">
+                    <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-800/40 rounded-2xl mb-1 text-left">
                       <div className="flex items-center justify-between">
                         <p className="text-sm font-black text-slate-900 dark:text-white truncate">{user.full_name}</p>
                         <span className="px-2 py-0.5 rounded-full text-[9px] font-black uppercase bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/30 flex items-center gap-1">
                           <Crown className="w-2.5 h-2.5 fill-amber-400" /> VIP Gold
                         </span>
                       </div>
-                      <p className="text-xs text-slate-500 dark:text-slate-400 font-medium truncate">{user.email}</p>
+                      <p className="text-xs text-slate-450 dark:text-slate-400 font-semibold truncate">{user.email}</p>
                     </div>
 
-                    {/* Option 1: Digital Wallet */}
                     <button
                       onClick={() => {
                         setShowProfileMenu(false);
                         setIsWalletOpen(true);
                       }}
-                      className="w-full text-left px-3.5 py-2.5 rounded-2xl text-xs text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-between transition-colors font-bold group cursor-pointer"
+                      className="w-full text-left px-3.5 py-2.5 rounded-2xl text-xs text-slate-700 dark:text-slate-250 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-between transition-colors font-bold group cursor-pointer"
                     >
                       <div className="flex items-center gap-2.5">
-                        <div className="w-7 h-7 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <div className="w-7 h-7 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center group-hover:scale-115 transition-transform">
                           <Wallet className="w-4 h-4" />
                         </div>
                         <span>BookTicket Wallet</span>
@@ -291,120 +312,119 @@ export default function Navbar({ onSearchChange }) {
                       </span>
                     </button>
 
-                    {/* Option 2: My Bookings & Tickets */}
                     <button
                       onClick={() => {
                         setShowProfileMenu(false);
                         navigate('/dashboard', { state: { tab: 'bookings' } });
                       }}
-                      className="w-full text-left px-3.5 py-2.5 rounded-2xl text-xs text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-2.5 transition-colors font-bold group cursor-pointer"
+                      className="w-full text-left px-3.5 py-2.5 rounded-2xl text-xs text-slate-700 dark:text-slate-250 hover:bg-slate-100 dark:hover:bg-slate-805 flex items-center gap-2.5 transition-colors font-bold group cursor-pointer"
                     >
-                      <div className="w-7 h-7 rounded-xl bg-rose-500/10 text-rose-500 flex items-center justify-center group-hover:scale-110 transition-transform">
+                      <div className="w-7 h-7 rounded-xl bg-rose-500/10 text-rose-500 flex items-center justify-center group-hover:scale-115 transition-transform">
                         <Ticket className="w-4 h-4" />
                       </div>
                       <span>My Bookings & Passes</span>
                     </button>
 
-                    {/* Option 3: Saved Wishlist */}
                     <button
                       onClick={() => {
                         setShowProfileMenu(false);
                         navigate('/dashboard', { state: { tab: 'wishlist' } });
                       }}
-                      className="w-full text-left px-3.5 py-2.5 rounded-2xl text-xs text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-2.5 transition-colors font-bold group cursor-pointer"
+                      className="w-full text-left px-3.5 py-2.5 rounded-2xl text-xs text-slate-700 dark:text-slate-250 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-between transition-colors font-bold group cursor-pointer"
                     >
-                      <div className="w-7 h-7 rounded-xl bg-red-500/10 text-red-500 flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <Heart className="w-4 h-4" />
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-7 h-7 rounded-xl bg-red-500/10 text-red-500 flex items-center justify-center group-hover:scale-115 transition-transform">
+                          <Heart className="w-4 h-4" />
+                        </div>
+                        <span>Saved Wishlist</span>
                       </div>
-                      <span>Saved Wishlist Movies</span>
+                      {wishlistCount > 0 && (
+                        <span className="text-[10px] font-mono text-red-500 font-black bg-red-500/10 px-2 py-0.5 rounded-full">
+                          {wishlistCount}
+                        </span>
+                      )}
                     </button>
 
-                    {/* Option 4: Food & Beverages Snacks */}
                     <button
                       onClick={() => {
                         setShowProfileMenu(false);
                         setIsSnacksOpen(true);
                       }}
-                      className="w-full text-left px-3.5 py-2.5 rounded-2xl text-xs text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-between transition-colors font-bold group cursor-pointer"
+                      className="w-full text-left px-3.5 py-2.5 rounded-2xl text-xs text-slate-700 dark:text-slate-250 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-between transition-colors font-bold group cursor-pointer"
                     >
                       <div className="flex items-center gap-2.5">
-                        <div className="w-7 h-7 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <div className="w-7 h-7 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center group-hover:scale-115 transition-transform">
                           <Utensils className="w-4 h-4" />
                         </div>
                         <span>Food & Cinema Snacks</span>
                       </div>
-                      <span className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-extrabold">NEW</span>
+                      <span className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-black">NEW</span>
                     </button>
 
-                    {/* Option 5: VIP Rewards & Vouchers */}
                     <button
                       onClick={() => {
                         setShowProfileMenu(false);
                         setIsVouchersOpen(true);
                       }}
-                      className="w-full text-left px-3.5 py-2.5 rounded-2xl text-xs text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-between transition-colors font-bold group cursor-pointer"
+                      className="w-full text-left px-3.5 py-2.5 rounded-2xl text-xs text-slate-700 dark:text-slate-250 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-between transition-colors font-bold group cursor-pointer"
                     >
                       <div className="flex items-center gap-2.5">
-                        <div className="w-7 h-7 rounded-xl bg-purple-500/10 text-purple-500 flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <div className="w-7 h-7 rounded-xl bg-purple-500/10 text-purple-500 flex items-center justify-center group-hover:scale-115 transition-transform">
                           <Gift className="w-4 h-4" />
                         </div>
-                        <span>VIP Offers & Vouchers</span>
+                        <span>Offers & Vouchers</span>
                       </div>
                       <span className="text-[10px] font-mono text-purple-500 font-extrabold">3 active</span>
                     </button>
 
-                    {/* Option 6: Admin Portal Link (If Admin User) */}
                     {isAdmin && (
                       <Link
                         to="/admin"
                         onClick={() => setShowProfileMenu(false)}
-                        className="w-full text-left px-3.5 py-2.5 rounded-2xl text-xs text-amber-700 dark:text-amber-300 hover:bg-amber-500/10 flex items-center gap-2.5 transition-colors font-bold group border border-amber-500/20"
+                        className="w-full text-left px-3.5 py-2.5 rounded-2xl text-xs text-amber-700 dark:text-amber-300 hover:bg-amber-500/10 flex items-center gap-2.5 transition-colors font-bold group border border-amber-550/20"
                       >
-                        <div className="w-7 h-7 rounded-xl bg-amber-500/20 text-amber-500 flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <div className="w-7 h-7 rounded-xl bg-amber-500/20 text-amber-500 flex items-center justify-center group-hover:scale-115 transition-transform">
                           <ShieldAlert className="w-4 h-4" />
                         </div>
                         <span>Admin Control Center</span>
                       </Link>
                     )}
 
-                    {/* Option 7: Account Settings */}
                     <button
                       onClick={() => {
                         setShowProfileMenu(false);
                         navigate('/dashboard', { state: { tab: 'settings' } });
                       }}
-                      className="w-full text-left px-3.5 py-2.5 rounded-2xl text-xs text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-2.5 transition-colors font-bold group cursor-pointer"
+                      className="w-full text-left px-3.5 py-2.5 rounded-2xl text-xs text-slate-700 dark:text-slate-250 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-2.5 transition-colors font-bold group cursor-pointer"
                     >
-                      <div className="w-7 h-7 rounded-xl bg-sky-500/10 text-sky-500 flex items-center justify-center group-hover:scale-110 transition-transform">
+                      <div className="w-7 h-7 rounded-xl bg-sky-500/10 text-sky-500 flex items-center justify-center group-hover:scale-115 transition-transform">
                         <Settings className="w-4 h-4" />
                       </div>
-                      <span>Account Settings & Profile</span>
+                      <span>Account Settings</span>
                     </button>
 
-                    {/* Option 8: Customer Support & Help */}
                     <button
                       onClick={() => {
                         setShowProfileMenu(false);
                         setIsSupportOpen(true);
                       }}
-                      className="w-full text-left px-3.5 py-2.5 rounded-2xl text-xs text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-2.5 transition-colors font-bold group cursor-pointer"
+                      className="w-full text-left px-3.5 py-2.5 rounded-2xl text-xs text-slate-700 dark:text-slate-250 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-2.5 transition-colors font-bold group cursor-pointer"
                     >
-                      <div className="w-7 h-7 rounded-xl bg-indigo-500/10 text-indigo-500 flex items-center justify-center group-hover:scale-110 transition-transform">
+                      <div className="w-7 h-7 rounded-xl bg-indigo-500/10 text-indigo-500 flex items-center justify-center group-hover:scale-115 transition-transform">
                         <HelpCircle className="w-4 h-4" />
                       </div>
                       <span>24/7 Help & Support</span>
                     </button>
 
                     <div className="pt-1 border-t border-slate-100 dark:border-slate-800">
-                      {/* Option 9: Sign Out */}
                       <button
                         onClick={() => {
                           logout();
                           setShowProfileMenu(false);
                         }}
-                        className="w-full text-left px-3.5 py-2.5 rounded-2xl text-xs text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/30 flex items-center gap-2.5 transition-colors font-bold group cursor-pointer"
+                        className="w-full text-left px-3.5 py-2.5 rounded-2xl text-xs text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-955/30 flex items-center gap-2.5 transition-colors font-bold group cursor-pointer"
                       >
-                        <div className="w-7 h-7 rounded-xl bg-rose-500/10 text-rose-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <div className="w-7 h-7 rounded-xl bg-rose-500/10 text-rose-600 flex items-center justify-center group-hover:scale-115 transition-transform">
                           <LogOut className="w-4 h-4" />
                         </div>
                         <span>Sign Out</span>
@@ -416,7 +436,7 @@ export default function Navbar({ onSearchChange }) {
             ) : (
               <Link
                 to="/auth"
-                className="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-red-600 to-rose-500 hover:from-red-500 hover:to-rose-400 text-white font-extrabold text-xs shadow-lg shadow-rose-600/30 transition-all hover:scale-105 flex items-center gap-2"
+                className="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-455 text-white font-extrabold text-xs shadow-lg shadow-rose-600/30 transition-all hover:scale-105 flex items-center gap-2"
               >
                 <User className="w-4 h-4" />
                 Sign In
