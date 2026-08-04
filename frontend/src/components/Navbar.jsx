@@ -3,9 +3,10 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { 
   Film, Search, Heart, User, LogOut, ShieldAlert, Ticket, 
   Sun, Moon, Star, X, Wallet, Crown, Utensils, Settings, 
-  HelpCircle, Gift
+  HelpCircle, Gift, MapPin, ChevronDown, Check
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { useNotification } from '../context/NotificationContext';
 import API from '../services/api';
 import WalletModal from './WalletModal';
 import FoodSnacksModal from './FoodSnacksModal';
@@ -15,6 +16,7 @@ import SupportModal from './SupportModal';
 
 export default function Navbar({ onSearchChange }) {
   const { user, logout, isAdmin } = useAuth();
+  const { addToast } = useNotification();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [isWalletOpen, setIsWalletOpen] = useState(false);
   const [isSnacksOpen, setIsSnacksOpen] = useState(false);
@@ -27,6 +29,20 @@ export default function Navbar({ onSearchChange }) {
   const [showDropdown, setShowDropdown] = useState(false);
 
   const [isScrolled, setIsScrolled] = useState(false);
+
+  const [showLocationMenu, setShowLocationMenu] = useState(false);
+  const [selectedCity, setSelectedCity] = useState(() => {
+    return localStorage.getItem('bookticket_city') || 'Mumbai';
+  });
+
+  const CITIES = ['Mumbai', 'Delhi NCR', 'Bengaluru', 'Pune', 'Hyderabad', 'Ahmedabad', 'Kolkata'];
+
+  const handleCityChange = (city) => {
+    setSelectedCity(city);
+    localStorage.setItem('bookticket_city', city);
+    setShowLocationMenu(false);
+    addToast(`📍 Location updated to ${city}`, 'success');
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -44,6 +60,7 @@ export default function Navbar({ onSearchChange }) {
   const location = useLocation();
   const searchRef = useRef(null);
   const profileMenuRef = useRef(null);
+  const locationMenuRef = useRef(null);
 
   useEffect(() => {
     if (isDarkMode) {
@@ -92,6 +109,9 @@ export default function Navbar({ onSearchChange }) {
       if (profileMenuRef.current && !profileMenuRef.current.contains(e.target)) {
         setShowProfileMenu(false);
       }
+      if (locationMenuRef.current && !locationMenuRef.current.contains(e.target)) {
+        setShowLocationMenu(false);
+      }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
@@ -115,20 +135,54 @@ export default function Navbar({ onSearchChange }) {
         <div className={`w-full px-4 sm:px-8 lg:px-12 flex items-center justify-between gap-4 transition-all duration-500 ${
           isScrolled ? 'h-16' : 'h-20'
         }`}>
-          {/* Brand Logo with movie tape elements */}
-          <Link to="/" className="flex items-center gap-3 group shrink-0">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-rose-600 via-rose-500 to-amber-500 flex items-center justify-center shadow-lg shadow-rose-600/35 group-hover:scale-105 transition-transform duration-350">
-              <Film className="w-5 h-5 text-white" />
+          {/* Logo and Location Section */}
+          <div className="flex items-center gap-4 sm:gap-6 shrink-0">
+            {/* Brand Logo with movie tape elements */}
+            <Link to="/" className="flex items-center gap-3 group shrink-0">
+              <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-rose-600 via-rose-500 to-amber-500 flex items-center justify-center shadow-lg shadow-rose-600/35 group-hover:scale-105 transition-transform duration-350">
+                <Film className="w-5 h-5 text-white" />
+              </div>
+              <div className="hidden sm:block text-left">
+                <span className="text-xl font-black tracking-tight text-slate-900 dark:text-white group-hover:text-rose-500 transition-colors">
+                  BOOK<span className="text-rose-600 dark:text-rose-500">TICKET</span>
+                </span>
+                <span className="text-[9px] block font-bold text-slate-400 dark:text-slate-550 tracking-wider uppercase -mt-1">
+                  Cinema Booking Elite
+                </span>
+              </div>
+            </Link>
+
+            {/* Premium Location Selector Dropdown */}
+            <div className="relative shrink-0" ref={locationMenuRef}>
+              <button
+                onClick={() => setShowLocationMenu(!showLocationMenu)}
+                className="flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700/80 transition-all border border-slate-205 dark:border-slate-750 text-xs font-black cursor-pointer shadow-xs hover:scale-102 active:scale-97"
+              >
+                <MapPin className="w-3.5 h-3.5 text-rose-500 fill-rose-500/10" />
+                <span>{selectedCity}</span>
+                <ChevronDown className="w-3 h-3 text-slate-400" />
+              </button>
+
+              {showLocationMenu && (
+                <div className="absolute left-0 mt-3 w-48 bg-white dark:bg-slate-900 rounded-3xl p-1.5 shadow-2xl border border-slate-200 dark:border-slate-800 z-50 animate-slide-up space-y-0.5">
+                  {CITIES.map((city) => (
+                    <button
+                      key={city}
+                      onClick={() => handleCityChange(city)}
+                      className={`w-full text-left px-3.5 py-2.5 rounded-2xl text-xs font-bold transition-colors cursor-pointer flex items-center justify-between ${
+                        selectedCity === city
+                          ? 'bg-rose-500/10 text-rose-600 dark:text-rose-450 font-black'
+                          : 'text-slate-700 dark:text-slate-350 hover:bg-slate-105 dark:hover:bg-slate-800'
+                      }`}
+                    >
+                      <span>{city}</span>
+                      {selectedCity === city && <Check className="w-3.5 h-3.5 text-rose-500" />}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
-            <div className="hidden sm:block text-left">
-              <span className="text-xl font-black tracking-tight text-slate-900 dark:text-white group-hover:text-rose-500 transition-colors">
-                BOOK<span className="text-rose-600 dark:text-rose-500">TICKET</span>
-              </span>
-              <span className="text-[9px] block font-bold text-slate-400 dark:text-slate-550 tracking-wider uppercase -mt-1">
-                Cinema Booking Elite
-              </span>
-            </div>
-          </Link>
+          </div>
 
           {/* Search Bar Container */}
           <div ref={searchRef} className="relative flex-1 max-w-sm hidden md:block">
@@ -140,7 +194,7 @@ export default function Navbar({ onSearchChange }) {
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
                 onFocus={() => searchInput.trim() && setShowDropdown(true)}
-                className="w-full pl-10 pr-10 py-2.5 rounded-2xl bg-slate-100/80 dark:bg-slate-800/80 border border-slate-200/50 dark:border-slate-700/60 text-xs text-slate-900 dark:text-slate-100 placeholder-slate-450 focus:outline-none focus:border-rose-500 focus:bg-white dark:focus:bg-slate-900 transition-all shadow-inner"
+                className="w-full pl-10 pr-10 py-2.5 rounded-2xl bg-slate-100/80 dark:bg-slate-800/80 border border-slate-200/50 dark:border-slate-700/60 text-xs text-slate-900 dark:text-slate-100 placeholder-slate-455 focus:outline-none focus:border-rose-500 focus:bg-white dark:focus:bg-slate-900 transition-all shadow-inner"
               />
               {searchInput && (
                 <button
@@ -182,7 +236,7 @@ export default function Navbar({ onSearchChange }) {
                           </p>
                           <div className="flex items-center gap-1 mt-1">
                             <Star className="w-3 h-3 text-amber-500 fill-amber-500" />
-                            <span className="text-[10px] font-black text-amber-600 dark:text-amber-450">
+                            <span className="text-[10px] font-black text-amber-600 dark:text-amber-455">
                               {m.rating?.toFixed(1) || '5.0'}
                             </span>
                           </div>
