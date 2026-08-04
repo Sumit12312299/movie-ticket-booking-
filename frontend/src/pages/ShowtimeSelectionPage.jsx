@@ -265,61 +265,65 @@ export default function ShowtimeSelectionPage() {
       </div>
 
       {/* Advanced Filters Panel: Search + Screen Format + Time range */}
-      <div className="bg-white/40 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800 p-5 rounded-3xl shadow-lg space-y-4">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-white/40 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800 p-6 rounded-3xl shadow-lg space-y-4">
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-5 items-center">
           {/* Theater Search */}
-          <div className="relative flex-1">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-slate-550" />
+          <div className="relative xl:col-span-4">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-slate-400 dark:text-slate-500" />
             <input
               type="text"
               placeholder="Search by multiplex name..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-slate-100/80 dark:bg-slate-900/80 border border-slate-200/50 dark:border-slate-800 rounded-2xl pl-10 pr-4 py-2.5 text-xs font-bold text-slate-800 dark:text-slate-250 placeholder-slate-400 dark:placeholder-slate-550 focus:outline-none focus:border-rose-500 shadow-inner"
+              className="w-full bg-slate-100/80 dark:bg-slate-900/80 border border-slate-200/50 dark:border-slate-800 rounded-2xl pl-11 pr-4 py-3.5 text-sm font-bold text-slate-800 dark:text-slate-250 placeholder-slate-400 dark:placeholder-slate-550 focus:outline-none focus:border-rose-500 shadow-inner"
             />
           </div>
 
           {/* Time range filters */}
-          <div className="flex flex-wrap items-center gap-1.5">
-            <span className="text-[10px] font-black uppercase text-slate-450 dark:text-slate-500 mr-1 flex items-center gap-1">
-              <Clock className="w-3 h-3" /> Time Range:
+          <div className="flex flex-wrap items-center gap-2.5 xl:col-span-5">
+            <span className="text-xs font-black uppercase text-slate-500 dark:text-slate-400 tracking-wider flex items-center gap-1.5 mr-1.5 shrink-0">
+              <Clock className="w-4 h-4 text-rose-500" /> Time Range:
             </span>
-            {['All', 'Morning', 'Afternoon', 'Evening', 'Night'].map((timeText) => (
-              <button
-                key={timeText}
-                onClick={() => setSelectedTimeOfDay(timeText)}
-                className={`px-3 py-1.5 rounded-xl text-[10px] font-black transition-all ${
-                  selectedTimeOfDay === timeText
-                    ? 'bg-rose-600 text-white shadow-md shadow-rose-600/20'
-                    : 'bg-slate-100 dark:bg-slate-900 text-slate-650 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white border border-slate-200/80 dark:border-slate-800/80'
-                }`}
-              >
-                {timeText}
-              </button>
-            ))}
+            <div className="flex flex-wrap gap-1.5">
+              {['All', 'Morning', 'Afternoon', 'Evening', 'Night'].map((timeText) => (
+                <button
+                  key={timeText}
+                  onClick={() => setSelectedTimeOfDay(timeText)}
+                  className={`px-4 py-2.5 rounded-2xl text-xs font-black transition-all cursor-pointer hover:scale-102 active:scale-97 ${
+                    selectedTimeOfDay === timeText
+                      ? 'bg-rose-600 text-white shadow-lg shadow-rose-600/25 border border-rose-500/20'
+                      : 'bg-slate-100 dark:bg-slate-900 text-slate-650 dark:text-slate-355 hover:text-slate-900 dark:hover:text-white border border-slate-200/85 dark:border-slate-800/85'
+                  }`}
+                >
+                  {timeText}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Screen formats subbar */}
+          <div className="flex flex-wrap items-center gap-2.5 xl:col-span-3">
+            <span className="text-xs font-black uppercase text-slate-500 dark:text-slate-400 tracking-wider flex items-center gap-1.5 mr-1.5 shrink-0">
+              <Tv className="w-4 h-4 text-amber-500" /> Format:
+            </span>
+            <div className="flex flex-wrap gap-1.5">
+              {['All', 'IMAX', 'Dolby', 'Standard 2D'].map((fmt) => (
+                <button
+                  key={fmt}
+                  onClick={() => setSelectedScreen(fmt)}
+                  className={`px-4 py-2.5 rounded-2xl text-xs font-black transition-all cursor-pointer hover:scale-102 active:scale-97 ${
+                    selectedScreen === fmt
+                      ? 'bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/40'
+                      : 'bg-slate-100 dark:bg-slate-900 text-slate-650 dark:text-slate-355 hover:text-slate-900 dark:hover:text-white border border-slate-200/85 dark:border-slate-800/85'
+                  }`}
+                >
+                  {fmt}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
-
-        {/* Screen formats subbar */}
-        <div className="flex flex-wrap items-center gap-1.5 pt-2 border-t border-slate-200/50 dark:border-slate-800/50">
-          <span className="text-[10px] font-black uppercase text-slate-450 dark:text-slate-500 mr-1 flex items-center gap-1">
-            <Tv className="w-3 h-3" /> Format:
-          </span>
-          {['All', 'IMAX', 'Dolby', 'Standard 2D'].map((fmt) => (
-            <button
-              key={fmt}
-              onClick={() => setSelectedScreen(fmt)}
-              className={`px-3.5 py-1.5 rounded-xl text-[10px] font-black transition-all ${
-                selectedScreen === fmt
-                  ? 'bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/40'
-                  : 'bg-slate-100 dark:bg-slate-900 text-slate-650 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white border border-slate-200/80 dark:border-slate-800/80'
-              }`}
-            >
-              {fmt}
-            </button>
-          ))}
-        </div>
-      </div>
+      </div>div>
 
       {/* Theaters & Showtimes Grid with Framer Motion animations */}
       {loading ? (
