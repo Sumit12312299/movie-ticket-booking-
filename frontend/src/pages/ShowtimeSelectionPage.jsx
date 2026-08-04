@@ -323,7 +323,7 @@ export default function ShowtimeSelectionPage() {
             </div>
           </div>
         </div>
-      </div>div>
+      </div>
 
       {/* Theaters & Showtimes Grid with Framer Motion animations */}
       {loading ? (
