@@ -380,53 +380,53 @@ export default function SeatSelectionPage() {
 
       {/* Step 1.5 Gourmet Snacks Selection Modal */}
       {showSnackStep && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md animate-fade-in">
-          <div className="relative w-full max-w-xl bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-scale-up">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-md animate-fade-in">
+          <div className="relative w-full max-w-xl bg-slate-950 rounded-3xl border border-slate-900 shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-scale-up text-slate-200">
             {/* Header */}
-            <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-gradient-to-r from-emerald-600/10 to-teal-500/10">
+            <div className="p-6 border-b border-slate-900 flex items-center justify-between bg-gradient-to-r from-slate-900 via-slate-950 to-slate-900">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-emerald-500 text-white flex items-center justify-center shadow-lg shadow-emerald-500/30">
+                <div className="w-10 h-10 rounded-2xl bg-amber-500/10 text-amber-400 border border-amber-500/30 flex items-center justify-center shadow-lg shadow-amber-500/5">
                   <Utensils className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
-                    Step 1.5: Customize Your Gourmet Cinema Experience <Sparkles className="w-4 h-4 text-amber-500" />
+                  <h3 className="text-base font-black text-white flex items-center gap-2">
+                    Step 1.5: Customize Your Gourmet Experience <Sparkles className="w-4 h-4 text-amber-550 fill-amber-500/10 animate-pulse" />
                   </h3>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">Skip counter queues! Pre-order and collect at snacks bar.</p>
+                  <p className="text-xs text-slate-450 font-medium">Skip counter queues! Pre-order and collect at snacks bar.</p>
                 </div>
               </div>
             </div>
 
             {/* Snack Items list */}
-            <div className="p-6 space-y-4 overflow-y-auto flex-1">
+            <div className="p-6 space-y-4 overflow-y-auto flex-1 bg-slate-950">
               {SNACK_ITEMS.map((item) => {
                 const qty = selectedSnacks[item.id] || 0;
                 return (
                   <div
                     key={item.id}
-                    className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200/80 dark:border-slate-800 flex items-center justify-between gap-4 hover:border-emerald-500/40 transition-all animate-fade-in"
+                    className="p-4 rounded-2xl bg-slate-900/60 border border-slate-850/80 flex items-center justify-between gap-4 hover:border-amber-500/30 transition-all duration-300 animate-fade-in"
                   >
                     <div className="flex items-center gap-3.5 flex-1 min-w-0">
-                      <span className="text-3xl bg-white dark:bg-slate-950 p-2.5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm shrink-0">{item.image}</span>
+                      <span className="text-3xl bg-slate-950 p-3 rounded-2xl border border-slate-850 shadow-sm shrink-0">{item.image}</span>
                       <div className="min-w-0">
-                        <span className="font-bold text-sm text-slate-900 dark:text-white block truncate">{item.name}</span>
-                        <span className="text-[10px] text-slate-500 dark:text-slate-400 block truncate">{item.desc}</span>
-                        <span className="text-xs font-mono font-black text-emerald-600 dark:text-emerald-400 mt-1 inline-block">₹{item.price.toFixed(2)}</span>
+                        <span className="font-black text-sm text-slate-100 block truncate">{item.name}</span>
+                        <span className="text-[10px] text-slate-450 block truncate font-medium">{item.desc}</span>
+                        <span className="text-xs font-mono font-black text-amber-400 mt-1 inline-block">₹{item.price.toFixed(2)}</span>
                       </div>
                     </div>
 
                     {/* Qty controller */}
-                    <div className="flex items-center gap-2 bg-white dark:bg-slate-950 px-2 py-1 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm shrink-0">
+                    <div className="flex items-center gap-2 bg-slate-950 px-2.5 py-1.5 rounded-2xl border border-slate-850 shadow-sm shrink-0">
                       <button
                         onClick={() => updateSnackQty(item.id, -1)}
-                        className="w-6 h-6 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 flex items-center justify-center font-bold text-xs"
+                        className="w-7 h-7 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 flex items-center justify-center font-black text-sm transition-all cursor-pointer select-none"
                       >
                         -
                       </button>
-                      <span className="w-6 text-center text-xs font-mono font-black text-slate-900 dark:text-white">{qty}</span>
+                      <span className="w-6 text-center text-xs font-mono font-black text-white">{qty}</span>
                       <button
                         onClick={() => updateSnackQty(item.id, 1)}
-                        className="w-6 h-6 rounded-lg bg-rose-600 text-white flex items-center justify-center font-bold text-xs"
+                        className="w-7 h-7 rounded-xl bg-rose-600 hover:bg-rose-500 text-white flex items-center justify-center font-black text-sm transition-all cursor-pointer shadow-md shadow-rose-600/20 select-none"
                       >
                         +
                       </button>
@@ -437,10 +437,10 @@ export default function SeatSelectionPage() {
             </div>
 
             {/* Footer action bar */}
-            <div className="p-6 border-t border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/90 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="p-6 border-t border-slate-900 bg-slate-950/95 flex flex-col sm:flex-row items-center justify-between gap-4">
               <div>
-                <span className="text-xs text-slate-500 dark:text-slate-400 block font-medium">Snacks Total</span>
-                <span className="text-2xl font-black text-emerald-600 dark:text-emerald-400 font-mono">
+                <span className="text-[10px] text-slate-500 font-bold uppercase block tracking-wider">Snacks Total</span>
+                <span className="text-2xl font-black text-emerald-400 font-mono">
                   ₹{snacksTotal.toFixed(2)}
                 </span>
               </div>
@@ -448,13 +448,13 @@ export default function SeatSelectionPage() {
               <div className="flex gap-3 w-full sm:w-auto">
                 <button
                   onClick={() => handleProceedToFinalCheckout({})}
-                  className="flex-1 sm:flex-none px-6 py-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 font-bold text-xs text-slate-700 dark:text-slate-300 transition-colors"
+                  className="flex-1 sm:flex-none px-6 py-3.5 rounded-2xl border border-slate-800 hover:bg-slate-900 font-bold text-xs text-slate-300 transition-colors cursor-pointer"
                 >
                   Skip & Proceed
                 </button>
                 <button
                   onClick={() => handleProceedToFinalCheckout(selectedSnacks)}
-                  className="flex-1 sm:flex-none px-8 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-extrabold text-xs shadow-lg shadow-emerald-500/20 hover:scale-105 active:scale-95 transition-all"
+                  className="flex-1 sm:flex-none px-8 py-3.5 rounded-2xl bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-400 text-white font-extrabold text-xs shadow-xl shadow-rose-600/20 hover:scale-105 active:scale-95 transition-all cursor-pointer"
                 >
                   Add & Proceed
                 </button>
