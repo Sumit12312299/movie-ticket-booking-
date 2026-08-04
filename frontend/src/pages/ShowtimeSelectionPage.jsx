@@ -221,7 +221,7 @@ export default function ShowtimeSelectionPage() {
         </div>
 
         {/* Date Selector List */}
-        <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-slate-800">
+        <div className="flex gap-2.5 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-slate-800">
           {dateList.map((dateVal) => {
             const isSelected = selectedDate === dateVal;
             const { weekday, day, month } = getDayDetails(dateVal);
@@ -229,19 +229,19 @@ export default function ShowtimeSelectionPage() {
               <button
                 key={dateVal}
                 onClick={() => setSelectedDate(dateVal)}
-                className={`flex-1 min-w-[76px] py-3.5 rounded-2xl flex flex-col items-center gap-1.5 transition-all duration-300 ${
+                className={`w-20 h-22 shrink-0 rounded-2xl flex flex-col items-center justify-center gap-0.5 transition-all duration-300 cursor-pointer ${
                   isSelected
                     ? 'bg-gradient-to-tr from-rose-600 to-rose-500 text-white shadow-xl shadow-rose-500/35 border border-rose-400/20 scale-[1.03]'
                     : 'bg-slate-100/60 dark:bg-slate-900/60 text-slate-550 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 hover:text-slate-900 dark:hover:text-white border border-slate-200/50 dark:border-slate-800/80'
                 }`}
               >
-                <span className={`text-[10px] font-bold uppercase tracking-wider ${isSelected ? 'text-white/80' : 'text-slate-400'}`}>
+                <span className={`text-[10px] font-black uppercase tracking-wider ${isSelected ? 'text-white/80' : 'text-slate-400'}`}>
                   {weekday}
                 </span>
                 <span className="text-lg font-black leading-none">
                   {day}
                 </span>
-                <span className={`text-[9px] font-extrabold uppercase ${isSelected ? 'text-white/80' : 'text-slate-500'}`}>
+                <span className={`text-[9px] font-black uppercase ${isSelected ? 'text-white/80' : 'text-slate-500'}`}>
                   {month}
                 </span>
               </button>
@@ -252,11 +252,11 @@ export default function ShowtimeSelectionPage() {
           {!dateList.includes(selectedDate) && (
             <button
               onClick={() => setSelectedDate(selectedDate)}
-              className="flex-1 min-w-[90px] py-3.5 rounded-2xl flex flex-col items-center gap-1.5 transition-all duration-300 bg-gradient-to-tr from-rose-600 to-rose-500 text-white shadow-xl shadow-rose-500/35 border border-rose-400/20 scale-[1.03]"
+              className="w-20 h-22 shrink-0 rounded-2xl flex flex-col items-center justify-center gap-0.5 transition-all duration-300 bg-gradient-to-tr from-rose-600 to-rose-500 text-white shadow-xl shadow-rose-500/35 border border-rose-400/20 scale-[1.03] cursor-pointer"
             >
-              <span className="text-[10px] font-bold uppercase tracking-wider text-white/80">Custom</span>
+              <span className="text-[10px] font-black uppercase tracking-wider text-white/80">Custom</span>
               <span className="text-lg font-black leading-none">{selectedDate.split('-')[2]}</span>
-              <span className="text-[9px] font-extrabold uppercase text-white/80">
+              <span className="text-[9px] font-black uppercase text-white/80">
                 {new Date(selectedDate).toLocaleDateString('en-US', { month: 'short' })}
               </span>
             </button>
