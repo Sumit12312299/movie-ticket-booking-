@@ -173,14 +173,14 @@ export default function CheckoutPage() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8 pb-16">
+    <div className="max-w-6xl mx-auto space-y-8 pb-16 px-4 md:px-0">
       <div className="glass-panel p-6 rounded-3xl border border-slate-200 dark:border-slate-800 flex items-center justify-between">
         <div>
-          <span className="text-xs uppercase font-bold text-rose-500 tracking-wider">Step 2 of 3 • Payment Gateway</span>
-          <h1 className="text-2xl font-black text-slate-900 dark:text-white mt-1">Complete Checkout</h1>
+          <span className="text-xs uppercase font-extrabold text-rose-500 tracking-wider">Step 2 of 3 • Payment Gateway</span>
+          <h1 className="text-3xl font-black text-slate-900 dark:text-white mt-1">Complete Checkout</h1>
         </div>
-        <div className="flex items-center gap-1.5 text-xs text-emerald-600 dark:text-emerald-400 font-semibold bg-emerald-500/10 px-3 py-1.5 rounded-full border border-emerald-500/30">
-          <Lock className="w-3.5 h-3.5" />
+        <div className="flex items-center gap-1.5 text-xs text-emerald-600 dark:text-emerald-400 font-extrabold bg-emerald-500/10 px-3.5 py-2 rounded-full border border-emerald-500/30 shadow-xs">
+          <Lock className="w-4 h-4" />
           256-Bit SSL Encrypted
         </div>
       </div>
@@ -190,7 +190,7 @@ export default function CheckoutPage() {
         <div className="md:col-span-2 space-y-6">
           {/* Payment Method Selector */}
           <div className="glass-card rounded-3xl p-6 border border-slate-200 dark:border-slate-800 space-y-4">
-            <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">Select Payment Method</h3>
+            <h3 className="text-sm font-black text-slate-950 dark:text-white uppercase tracking-wider">Select Payment Method</h3>
             <div className="grid grid-cols-2 gap-3">
               {[
                 { name: 'Credit Card', icon: CreditCard },
@@ -201,13 +201,13 @@ export default function CheckoutPage() {
                 <button
                   key={name}
                   onClick={() => setPaymentMethod(name)}
-                  className={`p-4 rounded-2xl border text-left text-xs font-bold transition-all flex items-center gap-3 ${
+                  className={`p-4.5 rounded-2xl border text-left text-sm font-black transition-all flex items-center gap-3 cursor-pointer ${
                     paymentMethod === name
-                      ? 'bg-rose-600/20 border-rose-500 text-rose-600 dark:text-rose-300 shadow-lg shadow-rose-600/20 scale-[1.02]'
-                      : 'bg-slate-100 dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                      ? 'bg-rose-600/20 border-rose-500 text-rose-600 dark:text-rose-305 shadow-lg shadow-rose-600/20 scale-[1.02]'
+                      : 'bg-slate-100 dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white'
                   }`}
                 >
-                  <IconComponent className="w-4 h-4 text-rose-500" />
+                  <IconComponent className="w-4.5 h-4.5 text-rose-500" />
                   {name}
                 </button>
               ))}
@@ -217,43 +217,43 @@ export default function CheckoutPage() {
           {/* Add Gourmet Snacks Card */}
           <div className="glass-card rounded-3xl p-6 border border-slate-200 dark:border-slate-800 space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
-                <Utensils className="w-4 h-4 text-emerald-500" /> Pre-order Gourmet Snacks
+              <h3 className="text-base font-black text-slate-950 dark:text-white uppercase tracking-wider flex items-center gap-2">
+                <Utensils className="w-5 h-5 text-emerald-500" /> Pre-order Gourmet Snacks
               </h3>
-              <span className="text-[10px] text-emerald-600 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20 font-bold uppercase flex items-center gap-1">
-                <Sparkles className="w-3 h-3 text-amber-500 animate-pulse" />
+              <span className="text-xs text-emerald-600 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/20 font-black uppercase flex items-center gap-1">
+                <Sparkles className="w-3.5 h-3.5 text-amber-500 animate-pulse" />
                 Skip Counter Lines
               </span>
             </div>
-            <p className="text-xs text-slate-500 dark:text-slate-400">Pre-order cinema snacks at special prices and collect them at the counter!</p>
+            <p className="text-sm font-semibold text-slate-600 dark:text-slate-400">Pre-order cinema snacks at special prices and collect them at the counter!</p>
             
             <div className="space-y-3">
               {SNACK_ITEMS.map((item) => {
                 const qty = selectedSnacks[item.id] || 0;
                 return (
-                  <div key={item.id} className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 flex items-center justify-between gap-3 text-xs">
-                    <div className="flex items-center gap-2.5 flex-1 min-w-0">
-                      <span className="text-2xl shrink-0">{item.image}</span>
+                  <div key={item.id} className="p-4.5 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 flex items-center justify-between gap-3 text-sm">
+                    <div className="flex items-center gap-3.5 flex-1 min-w-0">
+                      <span className="text-3xl shrink-0">{item.image}</span>
                       <div className="min-w-0">
-                        <span className="font-bold text-slate-900 dark:text-white block truncate">{item.name}</span>
-                        <span className="text-[10px] text-slate-500 dark:text-slate-400 block truncate">{item.desc}</span>
+                        <span className="font-black text-slate-900 dark:text-white block truncate">{item.name}</span>
+                        <span className="text-xs font-semibold text-slate-500 dark:text-slate-450 block truncate">{item.desc}</span>
                       </div>
                     </div>
-                    <div className="flex items-center gap-3 shrink-0">
-                      <span className="font-bold text-emerald-600 dark:text-emerald-400 font-mono">₹{item.price}</span>
-                      <div className="flex items-center gap-1 bg-white dark:bg-slate-800 px-1 py-0.5 rounded-lg border border-slate-200 dark:border-slate-700">
+                    <div className="flex items-center gap-3.5 shrink-0">
+                      <span className="font-black text-emerald-600 dark:text-emerald-405 font-mono text-base">₹{item.price}</span>
+                      <div className="flex items-center gap-1.5 bg-white dark:bg-slate-800 px-1.5 py-1 rounded-xl border border-slate-205 dark:border-slate-700">
                         <button
                           type="button"
                           onClick={() => updateSnackQty(item.id, -1)}
-                          className="w-5 h-5 rounded bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-200 flex items-center justify-center font-bold"
+                          className="w-6 h-6 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-200 flex items-center justify-center font-black text-sm cursor-pointer"
                         >
                           -
                         </button>
-                        <span className="w-4 text-center font-mono font-bold">{qty}</span>
+                        <span className="w-6 text-center font-mono font-black text-sm">{qty}</span>
                         <button
                           type="button"
                           onClick={() => updateSnackQty(item.id, 1)}
-                          className="w-5 h-5 rounded bg-rose-600 text-white flex items-center justify-center font-bold"
+                          className="w-6 h-6 rounded-lg bg-rose-600 text-white flex items-center justify-center font-black text-sm cursor-pointer"
                         >
                           +
                         </button>
@@ -270,35 +270,35 @@ export default function CheckoutPage() {
             <div className="glass-card rounded-3xl p-6 border border-amber-500/30 bg-gradient-to-br from-amber-500/10 via-rose-500/5 to-slate-900/10 space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-2xl bg-amber-500 text-white flex items-center justify-center shadow-lg shadow-amber-500/30">
-                    <Wallet className="w-5 h-5" />
+                  <div className="w-11 h-11 rounded-2xl bg-amber-500 text-white flex items-center justify-center shadow-lg shadow-amber-500/30">
+                    <Wallet className="w-5.5 h-5.5" />
                   </div>
                   <div>
-                    <h4 className="text-sm font-extrabold text-slate-900 dark:text-white">BookTicket VIP Wallet</h4>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">Instant 1-Click Payment</p>
+                    <h4 className="text-base font-black text-slate-905 dark:text-white">BookTicket VIP Wallet</h4>
+                    <p className="text-xs font-semibold text-slate-500 dark:text-slate-400">Instant 1-Click Payment</p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <span className="text-[10px] text-slate-400 uppercase font-bold block">Available Balance</span>
-                  <span className="text-lg font-black font-mono text-amber-600 dark:text-amber-400">
+                  <span className="text-xs text-slate-400 uppercase font-black block">Available Balance</span>
+                  <span className="text-xl font-black font-mono text-amber-600 dark:text-amber-400">
                     ₹{(user?.wallet_balance ?? 1500.00).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </span>
                 </div>
               </div>
 
               {user?.wallet_balance < finalAmount ? (
-                <div className="p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-600 dark:text-rose-300 text-xs flex items-center justify-between gap-2 font-semibold">
+                <div className="p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-650 dark:text-rose-300 text-sm flex items-center justify-between gap-2 font-bold">
                   <span>Insufficient balance for this booking.</span>
                   <button
                     type="button"
                     onClick={() => setIsWalletModalOpen(true)}
-                    className="px-3 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs transition-colors shrink-0"
+                    className="px-4.5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-extrabold text-xs transition-colors shrink-0 cursor-pointer"
                   >
                     + Top Up Now
                   </button>
                 </div>
               ) : (
-                <div className="p-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 text-xs flex items-center gap-2 font-semibold">
+                <div className="p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 text-sm flex items-center gap-2 font-bold">
                   <CheckCircle2 className="w-4 h-4 shrink-0" />
                   <span>Sufficient balance! Zero convenience fee applied.</span>
                 </div>
@@ -306,36 +306,36 @@ export default function CheckoutPage() {
             </div>
           ) : (
             <div className="glass-card rounded-3xl p-6 border border-slate-200 dark:border-slate-800 space-y-4">
-              <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">Payment Details</h3>
+              <h3 className="text-base font-black text-slate-950 dark:text-white uppercase tracking-wider">Payment Details</h3>
               <div className="space-y-3">
                 <div>
-                  <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 block mb-1">Card / Account Details</label>
+                  <label className="text-xs font-black text-slate-500 dark:text-slate-400 block mb-1.5">Card / Account Details</label>
                   <input
                     type="text"
                     value={cardNumber}
                     onChange={(e) => setCardNumber(e.target.value)}
-                    className="w-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-rose-500 font-mono"
+                    className="w-full bg-slate-100 dark:bg-slate-905 border border-slate-200/60 dark:border-slate-800 rounded-xl p-3.5 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-rose-500 font-bold font-mono"
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 block mb-1">Expiry Date</label>
+                    <label className="text-xs font-black text-slate-500 dark:text-slate-400 block mb-1.5">Expiry Date</label>
                     <input
                       type="text"
                       value={expiry}
                       onChange={(e) => setExpiry(e.target.value)}
-                      className="w-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-rose-500 font-mono"
+                      className="w-full bg-slate-100 dark:bg-slate-905 border border-slate-200/60 dark:border-slate-800 rounded-xl p-3.5 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-rose-500 font-bold font-mono"
                     />
                   </div>
 
                   <div>
-                    <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 block mb-1">CVV</label>
+                    <label className="text-xs font-black text-slate-500 dark:text-slate-400 block mb-1.5">CVV</label>
                     <input
                       type="password"
                       value={cvv}
                       onChange={(e) => setCvv(e.target.value)}
-                      className="w-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-rose-500 font-mono"
+                      className="w-full bg-slate-100 dark:bg-slate-905 border border-slate-200/60 dark:border-slate-800 rounded-xl p-3.5 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-rose-500 font-bold font-mono"
                     />
                   </div>
                 </div>
@@ -381,43 +381,43 @@ export default function CheckoutPage() {
                 </svg>
                 <Clock className="w-3.5 h-3.5 absolute text-white" />
               </div>
-              <div>
-                <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Lock Expires In</span>
-                <span className="text-xs font-mono font-black text-amber-400">
+              <div className="text-left">
+                <span className="text-xs text-slate-400 font-black uppercase tracking-wider block">Lock Expires In</span>
+                <span className="text-sm font-mono font-black text-amber-400">
                   {Math.floor(timerSeconds / 60)}:{(timerSeconds % 60) < 10 ? `0${timerSeconds % 60}` : timerSeconds % 60}
                 </span>
               </div>
             </div>
-            <span className="flex items-center gap-1 bg-rose-500/10 px-2 py-0.5 rounded-md border border-rose-500/20 text-[10px] font-bold text-rose-400">
+            <span className="flex items-center gap-1 bg-rose-500/10 px-2 py-0.5 rounded-md border border-rose-500/20 text-xs font-black text-rose-400">
               Lock Active
             </span>
           </div>
 
-          <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider border-b border-slate-200 dark:border-slate-800 pb-3">
+          <h3 className="text-base font-black text-slate-950 dark:text-white uppercase tracking-wider border-b border-slate-200 dark:border-slate-800 pb-3 text-left">
             Order Summary
           </h3>
 
-          <div className="space-y-3 text-xs">
+          <div className="space-y-3 text-sm text-left">
             <div>
-              <span className="text-slate-500 dark:text-slate-400 block">Movie</span>
-              <span className="font-extrabold text-slate-900 dark:text-white text-sm block">{showtime.movie_title}</span>
+              <span className="text-xs font-black uppercase text-slate-450 dark:text-slate-500 block">Movie</span>
+              <span className="font-black text-slate-900 dark:text-white text-base block mt-0.5">{showtime.movie_title}</span>
             </div>
 
             <div>
-              <span className="text-slate-500 dark:text-slate-400 block">Cinema & Screen</span>
-              <span className="text-slate-800 dark:text-slate-200 font-semibold">{showtime.theater_name} ({showtime.screen_type})</span>
+              <span className="text-xs font-black uppercase text-slate-450 dark:text-slate-500 block">Cinema & Screen</span>
+              <span className="text-slate-850 dark:text-slate-200 font-bold mt-0.5 block">{showtime.theater_name} ({showtime.screen_type})</span>
             </div>
 
             <div>
-              <span className="text-slate-500 dark:text-slate-400 block">Showtime</span>
-              <span className="text-rose-600 dark:text-rose-400 font-bold">{showtime.show_date} at {showtime.show_time}</span>
+              <span className="text-xs font-black uppercase text-slate-450 dark:text-slate-500 block">Showtime</span>
+              <span className="text-rose-600 dark:text-rose-400 font-black mt-0.5 block">{showtime.show_date} at {showtime.show_time}</span>
             </div>
 
             <div>
-              <span className="text-slate-500 dark:text-slate-400 block mb-1">Seats</span>
+              <span className="text-xs font-black uppercase text-slate-450 dark:text-slate-500 mb-1.5 block">Seats</span>
               <div className="flex flex-wrap gap-1">
                 {selectedSeats.map((s) => (
-                  <span key={s} className="px-2 py-0.5 rounded bg-rose-600/20 text-rose-600 dark:text-rose-300 font-mono font-bold text-[11px]">
+                  <span key={s} className="px-2.5 py-1 rounded-lg bg-rose-600/20 text-rose-600 dark:text-rose-300 font-mono font-black text-xs">
                     {s}
                   </span>
                 ))}
@@ -426,19 +426,19 @@ export default function CheckoutPage() {
           </div>
 
           {/* Promo Code Form */}
-          <form onSubmit={handleApplyPromo} className="pt-3 border-t border-slate-200 dark:border-slate-800 space-y-2">
-            <label className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 block">Promo Code</label>
+          <form onSubmit={handleApplyPromo} className="pt-4 border-t border-slate-200 dark:border-slate-800 space-y-2">
+            <label className="text-xs font-black uppercase text-slate-455 dark:text-slate-500 block">Promo Code</label>
             <div className="flex gap-2">
               <input
                 type="text"
                 placeholder="Try CINEMA10"
                 value={promoCode}
                 onChange={(e) => setPromoCode(e.target.value)}
-                className="flex-1 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white uppercase focus:outline-none focus:border-rose-500"
+                className="flex-1 bg-slate-100 dark:bg-slate-905 border border-slate-200/60 dark:border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 dark:text-white uppercase font-bold focus:outline-none focus:border-rose-500"
               />
               <button
                 type="submit"
-                className="px-3 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-xs font-bold text-slate-800 dark:text-slate-200"
+                className="px-4.5 py-2.5 rounded-xl bg-slate-250 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-xs font-black text-slate-800 dark:text-slate-200 cursor-pointer"
               >
                 Apply
               </button>
@@ -446,8 +446,8 @@ export default function CheckoutPage() {
           </form>
 
           {/* Quick-Apply Coupon Section */}
-          <div className="pt-3 border-t border-slate-200 dark:border-slate-800 space-y-2">
-            <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 block">Available Coupons</span>
+          <div className="pt-4 border-t border-slate-200 dark:border-slate-800 space-y-2">
+            <span className="text-xs font-black uppercase text-slate-455 dark:text-slate-500 block">Available Coupons</span>
             <div className="grid grid-cols-2 gap-2">
               {AVAILABLE_COUPONS.map((coupon) => (
                 <button
@@ -458,48 +458,48 @@ export default function CheckoutPage() {
                     setDiscount(totalPrice * coupon.value);
                     addToast(`Promo code ${coupon.code} applied! ${coupon.discount} Discount`, 'success');
                   }}
-                  className="p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 hover:bg-rose-500/10 hover:border-rose-500/30 text-left transition-all group duration-300 cursor-pointer"
+                  className="p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 hover:bg-rose-500/10 hover:border-rose-500/30 text-left transition-all group duration-300 cursor-pointer"
                 >
                   <div className="flex items-center gap-1.5">
                     <Tag className="w-3.5 h-3.5 text-rose-500 group-hover:rotate-12 transition-transform" />
-                    <span className="font-extrabold text-[11px] text-slate-800 dark:text-slate-200 tracking-wider font-mono">{coupon.code}</span>
+                    <span className="font-extrabold text-xs text-slate-850 dark:text-slate-200 tracking-wider font-mono">{coupon.code}</span>
                   </div>
-                  <span className="text-[9px] text-emerald-600 dark:text-emerald-400 font-bold block mt-1">{coupon.discount} Off ({coupon.desc})</span>
+                  <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold block mt-1">{coupon.discount} Off ({coupon.desc})</span>
                 </button>
               ))}
             </div>
           </div>
 
           {/* Pricing Total Calculation */}
-          <div className="pt-4 border-t border-slate-200 dark:border-slate-800 space-y-2 text-xs">
-            <div className="flex justify-between text-slate-600 dark:text-slate-400">
+          <div className="pt-4 border-t border-slate-200 dark:border-slate-800 space-y-2 text-sm font-semibold">
+            <div className="flex justify-between text-slate-600 dark:text-slate-450">
               <span>Subtotal</span>
-              <span>₹{totalPrice.toFixed(2)}</span>
+              <span className="font-mono">₹{totalPrice.toFixed(2)}</span>
             </div>
             {discount > 0 && (
-              <div className="flex justify-between text-emerald-600 dark:text-emerald-400 font-semibold">
-                <span>Promo Discount (10%)</span>
-                <span>-₹{discount.toFixed(2)}</span>
+              <div className="flex justify-between text-emerald-600 dark:text-emerald-400 font-bold">
+                <span>Promo Discount</span>
+                <span className="font-mono">-₹{discount.toFixed(2)}</span>
               </div>
             )}
             {snacksTotal > 0 && (
-              <div className="flex justify-between text-slate-600 dark:text-slate-400">
+              <div className="flex justify-between text-slate-650 dark:text-slate-450">
                 <span>Snacks Add-on</span>
-                <span>₹{snacksTotal.toFixed(2)}</span>
+                <span className="font-mono">₹{snacksTotal.toFixed(2)}</span>
               </div>
             )}
-            <div className="flex justify-between text-slate-600 dark:text-slate-400">
+            <div className="flex justify-between text-slate-600 dark:text-slate-450">
               <span>Convenience Fee</span>
               {paymentMethod === 'Digital Wallet' ? (
-                <span className="text-emerald-600 dark:text-emerald-400 font-semibold">₹0.00 (Wallet offer)</span>
+                <span className="text-emerald-600 dark:text-emerald-400 font-bold">₹0.00 (Wallet offer)</span>
               ) : (
-                <span>₹30.00</span>
+                <span className="font-mono">₹30.00</span>
               )}
             </div>
 
             <div className="pt-2 border-t border-slate-200 dark:border-slate-800 flex justify-between items-center">
-              <span className="text-sm font-bold text-slate-900 dark:text-white">Final Total</span>
-              <span className="text-2xl font-black text-emerald-600 dark:text-emerald-400 font-mono">
+              <span className="text-base font-black text-slate-900 dark:text-white">Final Total</span>
+              <span className="text-3xl font-black text-emerald-600 dark:text-emerald-405 font-mono">
                 ₹{finalAmount.toFixed(2)}
               </span>
             </div>
@@ -508,9 +508,9 @@ export default function CheckoutPage() {
           <button
             onClick={handleConfirmPayment}
             disabled={isProcessing}
-            className="w-full py-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white font-extrabold text-sm shadow-xl shadow-emerald-600/30 flex items-center justify-center gap-2 hover:scale-[1.02] transition-all"
+            className="w-full py-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white font-black text-base shadow-xl shadow-emerald-600/30 flex items-center justify-center gap-2 hover:scale-[1.02] transition-all cursor-pointer"
           >
-            <CheckCircle2 className="w-5 h-5" />
+            <CheckCircle2 className="w-5.5 h-5.5" />
             {isProcessing ? 'Processing Payment...' : 'Pay & Confirm Booking'}
           </button>
         </div>
