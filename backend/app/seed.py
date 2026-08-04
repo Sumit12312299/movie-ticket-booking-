@@ -49,7 +49,7 @@ async def seed_data():
 
     # Clear old list and seed full catalog
     await movies_col.delete_one({"_id": "dummy"}) # trigger fallback init if needed
-    movie_count = await movies_col.count_documents()
+    movie_count = await movies_col.count_documents({})
     
     # We insert/update blockbuster movies catalog (including July & August 2026 releases)
     movies_data = [

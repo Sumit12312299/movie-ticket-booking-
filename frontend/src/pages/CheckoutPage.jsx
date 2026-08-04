@@ -19,23 +19,8 @@ export default function CheckoutPage() {
 
   const [isWalletModalOpen, setIsWalletModalOpen] = useState(false);
 
-  const checkoutState = location.state;
-
-  if (!checkoutState || !checkoutState.showtime) {
-    return (
-      <div className="py-20 text-center space-y-4">
-        <h2 className="text-xl font-bold text-slate-300">No Active Booking Session</h2>
-        <button
-          onClick={() => navigate('/')}
-          className="px-6 py-2.5 rounded-xl bg-rose-600 text-white font-bold text-xs"
-        >
-          Return to Movies
-        </button>
-      </div>
-    );
-  }
-
-  const { showtime, selectedSeats, totalPrice, preSelectedSnacks, timerSecondsRemaining } = checkoutState;
+  const checkoutState = location.state || {};
+  const { showtime = {}, selectedSeats = [], totalPrice = 0, preSelectedSnacks = {}, timerSecondsRemaining = 300 } = checkoutState;
 
   const [paymentMethod, setPaymentMethod] = useState('Credit Card');
   const [promoCode, setPromoCode] = useState('');
@@ -43,8 +28,16 @@ export default function CheckoutPage() {
   const [isProcessing, setIsProcessing] = useState(false);
 
   // Synced Seat Lock countdown state
-  const [timerSeconds, setTimerSeconds] = useState(timerSecondsRemaining || 300);
+  const [timerSeconds, setTimerSeconds] = useState(timerSecondsRemaining);
   const [isExpired, setIsExpired] = useState(false);
+
+  // Form payment fields
+  const [cardNumber, setCardNumber] = useState('4532 •••• •••• 8892');
+  const [expiry, setExpiry] = useState('08/28');
+  const [cvv, setCvv] = useState('889');
+
+  // Gourmet Snacks state initialized from pre-selected items
+  const [selectedSnacks, setSelectedSnacks] = useState(preSelectedSnacks);
 
   const getTimerStyles = () => {
     if (timerSeconds > 120) {
@@ -77,6 +70,7 @@ export default function CheckoutPage() {
   const timerStyles = getTimerStyles();
 
   React.useEffect(() => {
+    if (!showtime.id) return;
     if (timerSeconds <= 0) {
       if (!isExpired) {
         setIsExpired(true);
@@ -95,13 +89,19 @@ export default function CheckoutPage() {
     return () => clearInterval(interval);
   }, [timerSeconds, isExpired, showtime.id, selectedSeats]);
 
-  // Form payment fields
-  const [cardNumber, setCardNumber] = useState('4532 •••• •••• 8892');
-  const [expiry, setExpiry] = useState('08/28');
-  const [cvv, setCvv] = useState('889');
-
-  // Gourmet Snacks state initialized from pre-selected items
-  const [selectedSnacks, setSelectedSnacks] = useState(preSelectedSnacks || {});
+  if (!checkoutState || !checkoutState.showtime) {
+    return (
+      <div className="py-20 text-center space-y-4">
+        <h2 className="text-xl font-bold text-slate-300">No Active Booking Session</h2>
+        <button
+          onClick={() => navigate('/')}
+          className="px-6 py-2.5 rounded-xl bg-rose-600 text-white font-bold text-xs"
+        >
+          Return to Movies
+        </button>
+      </div>
+    );
+  }
   const updateSnackQty = (id, delta) => {
     setSelectedSnacks((prev) => {
       const current = prev[id] || 0;

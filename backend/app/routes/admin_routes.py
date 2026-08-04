@@ -15,9 +15,9 @@ async def get_admin_stats(current_admin: UserProfile = Depends(get_current_admin
     users_col = db["users"]
     showtimes_col = db["showtimes"]
 
-    total_movies = await movies_col.count_documents()
-    total_users = await users_col.count_documents()
-    total_showtimes = await showtimes_col.count_documents()
+    total_movies = await movies_col.count_documents({})
+    total_users = await users_col.count_documents({})
+    total_showtimes = await showtimes_col.count_documents({})
 
     all_bookings = await bookings_col.find().to_list(length=1000)
 
