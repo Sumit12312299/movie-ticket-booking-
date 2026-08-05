@@ -8,6 +8,9 @@ router = APIRouter(prefix="/admin", tags=["Admin Dashboard"])
 
 @router.get("/stats")
 async def get_admin_stats(current_admin: UserProfile = Depends(get_current_admin)):
+    """
+    Calculate KPI metrics, total revenue, tickets sold, and monthly genre revenue.
+    """
     db = get_database()
 
     movies_col = db["movies"]
