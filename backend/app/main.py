@@ -12,6 +12,11 @@ from app.routes.admin_routes import router as admin_router
 from app.seed import seed_data
 from app.utils.logger import logger
 
+"""
+BookTicket Entrypoint Module.
+Sets up the FastAPI application instance, registers global middlewares (CORS, GZip compression),
+registers startup/shutdown lifecycle hooks, and hooks up the routing endpoints.
+"""
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version=settings.VERSION,
