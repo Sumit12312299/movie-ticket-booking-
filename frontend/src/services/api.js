@@ -20,6 +20,7 @@ API.interceptors.request.use(
 );
 
 // Response interceptor for handling 401 unauth
+// Clear authentication tokens and evicts session if credentials decay
 API.interceptors.response.use(
   (response) => response,
   (error) => {
