@@ -2,6 +2,11 @@ import os
 from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
+    """
+    Application Settings configuration.
+    Uses pydantic-settings to automatically parse system environment variables
+    with default values for fallback configuration.
+    """
     PROJECT_NAME: str = "BookTicket Movie Booking API"
     VERSION: str = "1.0.0"
     API_V1_STR: str = "/api"
