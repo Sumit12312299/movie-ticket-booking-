@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Armchair, Clock, ArrowRight, ShieldAlert, Sparkles, CheckCircle2, Utensils } from 'lucide-react';
+import { Clock, ArrowRight, ShieldAlert, Sparkles, Utensils } from 'lucide-react';
 import API from '../services/api';
 import SeatMap from '../components/SeatMap';
+import TrailerModal from '../components/TrailerModal';
 import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
 
@@ -44,6 +45,7 @@ export default function SeatSelectionPage() {
   const { addToast } = useNotification();
 
   const [showtime, setShowtime] = useState(null);
+  const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
@@ -54,6 +56,7 @@ export default function SeatSelectionPage() {
   const [isExpired, setIsExpired] = useState(false);
   const [showSnackStep, setShowSnackStep] = useState(false);
   const [selectedSnacks, setSelectedSnacks] = useState({});
+  const [activeTrailerMovie, setActiveTrailerMovie] = useState(null);
 
   const updateSnackQty = (id, delta) => {
     setSelectedSnacks((prev) => {
@@ -72,7 +75,6 @@ export default function SeatSelectionPage() {
     const item = SNACK_ITEMS.find((s) => s.id === Number(id));
     return sum + (item ? item.price * qty : 0);
   }, 0);
-
 
   useEffect(() => {
     fetchShowtime();
@@ -141,6 +143,14 @@ export default function SeatSelectionPage() {
     try {
       const res = await API.get(`/showtimes/${showtimeId}`);
       setShowtime(res.data);
+      
+      // Fetch movie details for banner
+      try {
+        const movieRes = await API.get(`/movies/${res.data.movie_id}`);
+        setMovie(movieRes.data);
+      } catch (err) {
+        console.error('Failed to load movie details for banner:', err);
+      }
     } catch (err) {
       console.error(err);
       addToast('Failed to load seat layout', 'error');
@@ -206,6 +216,50 @@ export default function SeatSelectionPage() {
   const minutes = Math.floor(timerSeconds / 60);
   const seconds = timerSeconds % 60;
 
+  // Dynamic list of 7 days centered on showtime.show_date
+  const getDatesRange = () => {
+    if (!showtime?.show_date) return [];
+    try {
+      const baseDate = new Date(showtime.show_date);
+      const dates = [];
+      for (let i = -3; i <= 3; i++) {
+        const d = new Date(baseDate);
+        d.setDate(baseDate.getDate() + i);
+        dates.push({
+          dayNum: d.getDate().toString().padStart(2, '0'),
+          dayName: d.toLocaleString('en-US', { weekday: 'short' }),
+          monthName: d.toLocaleString('en-US', { month: 'short' }),
+          formatted: d.toISOString().split('T')[0],
+          isOriginal: i === 0
+        });
+      }
+      return dates;
+    } catch {
+      return [];
+    }
+  };
+
+  const selectedSeatsTiers = selectedSeats.reduce((acc, seatId) => {
+    const row = seatId.charAt(0);
+    let tier = 'Normal';
+    let price = showtime?.regular_price || 250;
+    if (['C', 'D', 'E'].includes(row)) {
+      tier = 'Deluxe';
+      price = (showtime?.regular_price || 250) + 100;
+    } else if (['F', 'G', 'H'].includes(row)) {
+      tier = 'Super';
+      price = showtime?.vip_price || 550;
+    }
+    acc[tier] = acc[tier] || { count: 0, subtotal: 0 };
+    acc[tier].count += 1;
+    acc[tier].subtotal += price;
+    return acc;
+  }, {
+    Normal: { count: 0, subtotal: 0 },
+    Deluxe: { count: 0, subtotal: 0 },
+    Super: { count: 0, subtotal: 0 }
+  });
+
   if (loading) {
     return (
       <div className="space-y-8 pb-16 animate-fade-in">
@@ -238,116 +292,214 @@ export default function SeatSelectionPage() {
   if (!showtime) return null;
 
   return (
-    <div className="space-y-8 pb-16">
-      {/* Header & Movie Brief */}
-      <div className="glass-panel p-6 rounded-3xl border border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="text-xs uppercase font-bold text-rose-500 tracking-wider">Step 1 of 3 • Seat Map</span>
-            <span className="flex items-center gap-1.5 bg-emerald-500/10 px-3 py-0.5 rounded-full border border-emerald-500/30 text-[10px] font-extrabold text-emerald-600 dark:text-emerald-400">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-              </span>
-              Live Seat Sync
-            </span>
+    <div className="space-y-6 pb-16">
+      
+      {/* 🎬 Movie Brief cinematic backdrop banner */}
+      {movie && (
+        <div className="relative w-full rounded-3xl overflow-hidden border border-slate-800/80 shadow-2xl bg-[#070d19]/90 p-5 sm:p-6 flex flex-col md:flex-row items-center gap-6">
+          {/* Blurred banner cover background */}
+          <div 
+            className="absolute inset-0 bg-cover bg-center opacity-10 pointer-events-none scale-105 blur-lg" 
+            style={{ backgroundImage: `url(${movie.banner_url || movie.poster_url})` }}
+          ></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/80 to-transparent pointer-events-none"></div>
+
+          {/* Poster block */}
+          <img 
+            src={movie.poster_url} 
+            alt={movie.title} 
+            className="relative z-10 w-28 h-40 object-cover rounded-2xl border border-slate-800 shadow-2xl shrink-0"
+          />
+
+          {/* Title & metadata specs */}
+          <div className="relative z-10 text-center md:text-left flex-1 min-w-0 space-y-4">
+            <div>
+              <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight leading-snug">{movie.title}</h1>
+              
+              <div className="flex flex-wrap items-center justify-center md:justify-start gap-2.5 text-slate-400 font-bold text-xs mt-2">
+                <div className="flex items-center bg-amber-500/20 border border-amber-500/30 text-amber-500 rounded px-1.5 py-0.5 text-[10px] font-black tracking-wide">
+                  IMDb {movie.rating?.toFixed(1) || '8.1'}/10
+                </div>
+                <span>•</span>
+                <span>{movie.duration_mins || '130'} mins</span>
+                <span>•</span>
+                <span>{movie.release_date ? movie.release_date.split('-')[0] : '2019'}</span>
+                <span>•</span>
+                <span className="truncate">{Array.isArray(movie.genre) ? movie.genre.join('/') : 'Action'}</span>
+              </div>
+            </div>
+
+            {/* Watch Trailer Button */}
+            {movie.trailer_url && (
+              <button
+                onClick={() => setActiveTrailerMovie(movie)}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-amber-500/10 hover:bg-amber-500/25 border border-amber-500/30 text-amber-500 font-black text-xs transition-all shadow-sm active:scale-97 cursor-pointer"
+              >
+                Watch Trailer ▶
+              </button>
+            )}
           </div>
-          <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white mt-1">{showtime.movie_title}</h1>
-          <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
-            {showtime.theater_name} • <span className="text-amber-600 dark:text-amber-400 font-semibold">{showtime.screen_type}</span> • {showtime.show_date} at {showtime.show_time}
-          </p>
+        </div>
+      )}
+
+      {/* Date, Time, Theater Bar */}
+      <div className="bg-[#070d19]/90 border border-slate-800 rounded-3xl p-4 flex flex-col lg:flex-row items-center justify-between gap-6 shadow-lg">
+        {/* Date Selector */}
+        <div className="flex items-center gap-4 w-full lg:w-auto overflow-x-auto pb-2 lg:pb-0 scrollbar-none">
+          <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest shrink-0">Date</span>
+          <div className="flex items-center gap-1.5">
+            <button className="p-1 rounded-full text-slate-500 hover:text-white transition-colors cursor-pointer select-none">&lt;</button>
+            <div className="flex items-center gap-2">
+              {getDatesRange().map((dObj, idx) => (
+                <div
+                  key={idx}
+                  className={`flex flex-col items-center justify-center py-2 px-3.5 rounded-2xl transition-all select-none min-w-[56px] text-center ${
+                    dObj.isOriginal
+                      ? 'bg-blue-600 text-white font-extrabold shadow-lg shadow-blue-600/30'
+                      : 'text-slate-500 font-bold hover:text-slate-350 hover:bg-slate-900/50'
+                  }`}
+                >
+                  <span className="text-[8px] uppercase tracking-wider font-semibold opacity-80">{dObj.monthName}</span>
+                  <span className="text-sm leading-none font-black mt-0.5">{dObj.dayNum}</span>
+                  <span className="text-[8px] uppercase tracking-wider font-semibold opacity-70 mt-1">{dObj.dayName}</span>
+                </div>
+              ))}
+            </div>
+            <button className="p-1 rounded-full text-slate-500 hover:text-white transition-colors cursor-pointer select-none">&gt;</button>
+          </div>
         </div>
 
-        {/* Radial Circular Seat Lock Timer */}
-        <div className="flex items-center gap-3 bg-gradient-to-r from-slate-900 to-slate-950 text-white px-4 py-2.5 rounded-2xl border border-slate-800 shadow-lg">
-          <div className="relative w-8 h-8 flex items-center justify-center">
-            <svg className="w-8 h-8 transform -rotate-90">
-              <circle
-                cx="16"
-                cy="16"
-                r="12"
-                stroke="currentColor"
-                strokeWidth="3"
-                className="text-slate-800"
-                fill="transparent"
-              />
-              <circle
-                cx="16"
-                cy="16"
-                r="12"
-                stroke="currentColor"
-                strokeWidth="3"
-                strokeDasharray={2 * Math.PI * 12}
-                strokeDashoffset={((300 - timerSeconds) / 300) * (2 * Math.PI * 12)}
-                className={`transition-all duration-1000 ${
-                  timerSeconds > 120
-                    ? 'text-emerald-500'
-                    : timerSeconds > 60
-                    ? 'text-amber-500'
-                    : 'text-red-500 timer-glow-red'
-                }`}
-                fill="transparent"
-                strokeLinecap="round"
-              />
-            </svg>
-            <Clock className="w-3.5 h-3.5 absolute text-white" />
+        {/* Time and Theater Selector */}
+        <div className="flex items-center gap-6 w-full lg:w-auto shrink-0 justify-end text-xs font-bold text-slate-400">
+          {/* Radial countdown timer embedded */}
+          <div className="flex items-center gap-2 bg-[#050811] px-3.5 py-2 rounded-2xl border border-slate-850 shadow-md">
+            <Clock className="w-3.5 h-3.5 text-rose-500 animate-pulse" />
+            <div className="text-left leading-tight">
+              <span className="text-[8px] text-slate-500 font-bold uppercase tracking-wider block">Lock Expires In</span>
+              <span className="text-xs font-mono font-black text-rose-550">
+                {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
+              </span>
+            </div>
           </div>
-          <div>
-            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Lock Expires In</span>
-            <span className="text-xs font-mono font-black text-amber-400">
-              {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
-            </span>
+
+          <div className="w-[1px] h-8 bg-slate-800"></div>
+
+          {/* Time Selector */}
+          <div className="flex flex-col text-left">
+            <span className="text-[9px] uppercase tracking-wider text-slate-500 font-black">Time</span>
+            <div className="mt-1 flex items-center gap-1 text-white font-black">
+              <span>{showtime.show_time}</span>
+            </div>
+          </div>
+
+          <div className="w-[1px] h-8 bg-slate-800"></div>
+
+          {/* Theater Selector */}
+          <div className="flex flex-col text-left">
+            <span className="text-[9px] uppercase tracking-wider text-slate-500 font-black">Theater</span>
+            <div className="mt-1 flex items-center gap-1 text-white font-black">
+              <span>{showtime.theater_name.replace('CinePlex ', '')}</span>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Interactive Seat Map */}
-      <SeatMap
-        bookedSeats={showtime.booked_seats || []}
-        lockedSeats={showtime.locked_seats || []}
-        selectedSeats={selectedSeats}
-        onSeatClick={handleSeatClick}
-        regularPrice={showtime.regular_price}
-        vipPrice={showtime.vip_price}
-      />
+      {/* Two Columns Grid: Sidebar (Left) + Seat Layout (Right) */}
+      <div className="flex flex-col lg:flex-row gap-6 items-start">
+        
+        {/* Left Sidebar Billing & Info */}
+        <div className="w-full lg:w-80 shrink-0 space-y-6">
+          <div className="bg-[#070d19]/90 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-6">
+            <div>
+              <h2 className="text-base font-black text-white">Your Selected Seats</h2>
+              <p className="text-[11px] text-slate-450 font-bold mt-1">
+                {selectedSeats.length} {selectedSeats.length === 1 ? 'Seat' : 'Seats'}
+              </p>
+            </div>
 
-      {/* Booking Summary Footer Bar */}
-      <div className="glass-panel p-6 rounded-3xl border border-rose-500/30 sticky bottom-4 z-30 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div className="space-y-1 text-center sm:text-left">
-          <span className="text-xs text-slate-600 dark:text-slate-400 block">Selected Seats ({selectedSeats.length})</span>
-          <div className="flex flex-wrap items-center gap-1.5 justify-center sm:justify-start">
-            {selectedSeats.length === 0 ? (
-              <span className="text-xs text-slate-500 italic">No seats selected yet</span>
-            ) : (
-              selectedSeats.map((s) => (
-                <span key={s} className="px-2.5 py-0.5 rounded-md bg-rose-600/20 text-rose-600 dark:text-rose-300 text-xs font-bold border border-rose-500/40">
-                  {s}
+            {/* Selected Seats Badges */}
+            <div className="flex flex-wrap gap-2 min-h-[48px] items-center">
+              {selectedSeats.length === 0 ? (
+                <p className="text-xs text-slate-500 italic">No seats selected yet</p>
+              ) : (
+                selectedSeats.map((s) => (
+                  <span key={s} className="px-3.5 py-1.5 rounded-xl bg-blue-600/10 border border-blue-500/20 text-blue-400 text-xs font-black animate-scale-up">
+                    {s}
+                  </span>
+                ))
+              )}
+            </div>
+
+            {/* Pricing breakdown table */}
+            <div className="space-y-3.5 pt-4 border-t border-slate-800/80 text-xs text-slate-400 font-bold">
+              <div className="flex justify-between items-center">
+                <span>Normal</span>
+                <span className="font-mono text-slate-300">
+                  {selectedSeatsTiers.Normal.count > 0 
+                    ? `${selectedSeatsTiers.Normal.count} | ₹${selectedSeatsTiers.Normal.subtotal}`
+                    : '- | ₹0'
+                  }
                 </span>
-              ))
-            )}
+              </div>
+              <div className="flex justify-between items-center">
+                <span>Deluxe</span>
+                <span className="font-mono text-slate-300">
+                  {selectedSeatsTiers.Deluxe.count > 0 
+                    ? `${selectedSeatsTiers.Deluxe.count} | ₹${selectedSeatsTiers.Deluxe.subtotal}`
+                    : '- | ₹0'
+                  }
+                </span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span>Super</span>
+                <span className="font-mono text-slate-300">
+                  {selectedSeatsTiers.Super.count > 0 
+                    ? `${selectedSeatsTiers.Super.count} | ₹${selectedSeatsTiers.Super.subtotal}`
+                    : '- | ₹0'
+                  }
+                </span>
+              </div>
+              <div className="flex justify-between items-center pt-3 border-t border-slate-800/60 font-black text-sm text-white">
+                <span>Total</span>
+                <span className="font-mono text-emerald-400">₹{totalPrice.toFixed(0)}</span>
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div className="space-y-3 pt-2">
+              <button
+                onClick={() => setShowSnackStep(true)}
+                className="w-full py-3.5 rounded-2xl bg-[#091020] border border-slate-850 hover:bg-slate-800 text-slate-300 font-black text-xs flex items-center justify-center gap-2 cursor-pointer transition-all shadow-sm active:scale-97"
+              >
+                <Utensils className="w-3.5 h-3.5 text-emerald-500" />
+                + Add Foods
+              </button>
+
+              <button
+                onClick={handleProceedToCheckout}
+                disabled={locking || selectedSeats.length === 0}
+                className={`w-full py-3.5 rounded-2xl font-black text-xs flex items-center justify-center gap-2 transition-all shadow-lg select-none cursor-pointer ${
+                  selectedSeats.length > 0 && !locking
+                    ? 'bg-amber-505 hover:bg-amber-400 bg-amber-500 text-[#070d19] shadow-amber-500/20 active:scale-97'
+                    : 'bg-slate-800 text-slate-500 border border-slate-800/80 cursor-not-allowed opacity-50'
+                }`}
+              >
+                {locking ? 'Locking Seats...' : 'Purchase'}
+              </button>
+            </div>
           </div>
         </div>
 
-        <div className="flex items-center gap-6">
-          <div className="text-right">
-            <span className="text-xs text-slate-600 dark:text-slate-400 block">Total Amount</span>
-            <span className="text-2xl font-black text-emerald-600 dark:text-emerald-400 font-mono">
-              ₹{totalPrice.toFixed(2)}
-            </span>
-          </div>
-
-          <button
-            onClick={handleProceedToCheckout}
-            disabled={locking || selectedSeats.length === 0}
-            className={`px-8 py-3.5 rounded-2xl font-bold text-sm flex items-center gap-2 shadow-xl transition-all ${
-              selectedSeats.length > 0 && !locking
-                ? 'bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-400 text-white shadow-rose-600/30 hover:scale-105'
-                : 'bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-500 cursor-not-allowed border border-slate-300 dark:border-slate-700'
-            }`}
-          >
-            {locking ? 'Locking Seats...' : 'Proceed to Checkout'}
-            <ArrowRight className="w-4 h-4" />
-          </button>
+        {/* Right Main Seat Layout */}
+        <div className="flex-1 w-full">
+          <SeatMap
+            bookedSeats={showtime.booked_seats || []}
+            lockedSeats={showtime.locked_seats || []}
+            selectedSeats={selectedSeats}
+            onSeatClick={handleSeatClick}
+            regularPrice={showtime.regular_price}
+            vipPrice={showtime.vip_price}
+          />
         </div>
       </div>
 
@@ -378,7 +530,7 @@ export default function SeatSelectionPage() {
         </div>
       )}
 
-      {/* Step 1.5 Gourmet Snacks Selection Modal */}
+      {/* Gourmet Snacks Selection Modal */}
       {showSnackStep && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-md animate-fade-in">
           <div className="relative w-full max-w-xl bg-slate-950 rounded-3xl border border-slate-900 shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-scale-up text-slate-200">
@@ -392,7 +544,7 @@ export default function SeatSelectionPage() {
                   <h3 className="text-base font-black text-white flex items-center gap-2">
                     Step 1.5: Customize Your Gourmet Experience <Sparkles className="w-4 h-4 text-amber-550 fill-amber-500/10 animate-pulse" />
                   </h3>
-                  <p className="text-xs text-slate-450 font-medium">Skip counter queues! Pre-order and collect at snacks bar.</p>
+                  <p className="text-xs text-slate-455 font-medium">Skip counter queues! Pre-order and collect at snacks bar.</p>
                 </div>
               </div>
             </div>
@@ -454,7 +606,7 @@ export default function SeatSelectionPage() {
                 </button>
                 <button
                   onClick={() => handleProceedToFinalCheckout(selectedSnacks)}
-                  className="flex-1 sm:flex-none px-8 py-3.5 rounded-2xl bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-400 text-white font-extrabold text-xs shadow-xl shadow-rose-600/20 hover:scale-105 active:scale-95 transition-all cursor-pointer"
+                  className="flex-1 sm:flex-none px-8 py-3.5 rounded-2xl bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-455 text-white font-extrabold text-xs shadow-xl shadow-rose-600/20 hover:scale-105 active:scale-95 transition-all cursor-pointer"
                 >
                   Add & Proceed
                 </button>
@@ -462,6 +614,14 @@ export default function SeatSelectionPage() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Trailer Modal Overlay */}
+      {activeTrailerMovie && (
+        <TrailerModal 
+          movie={activeTrailerMovie} 
+          onClose={() => setActiveTrailerMovie(null)} 
+        />
       )}
     </div>
   );

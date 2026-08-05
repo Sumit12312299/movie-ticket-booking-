@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Armchair, Sparkles } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 
 export default function SeatMap({
   bookedSeats = [],
   lockedSeats = [],
   selectedSeats = [],
   onSeatClick,
-  regularPrice = 350.00,
+  regularPrice = 250.00,
   vipPrice = 550.00
 }) {
   const rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
@@ -20,51 +20,76 @@ export default function SeatMap({
     return 'available';
   };
 
-  const getSeatTier = (row) => {
-    return ['G', 'H'].includes(row) ? 'VIP' : 'Regular';
+  const getSeatInfo = (row) => {
+    if (['A', 'B'].includes(row)) {
+      return { tier: 'Normal', price: regularPrice };
+    } else if (['C', 'D', 'E'].includes(row)) {
+      return { tier: 'Deluxe', price: regularPrice + 100 };
+    } else {
+      return { tier: 'Super', price: vipPrice };
+    }
   };
 
   return (
-    <div className="w-full flex flex-col items-center py-10 px-4 sm:px-8 bg-slate-950 rounded-3xl border border-slate-900 shadow-2xl relative overflow-hidden text-slate-200 transition-all duration-300">
-      {/* Cinematic Hall Ambient Grid Effect */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(244,63,94,0.15),transparent_80%)] pointer-events-none"></div>
-
-      {/* 🎬 3D Curved Screen & Projection Light Rays */}
-      <div className="relative w-full max-w-2xl mb-12 flex flex-col items-center">
-        {/* Projector Light Beam Cone */}
-        <div 
-          className="absolute -top-10 left-1/2 w-4/5 h-36 pointer-events-none z-0 mix-blend-screen animate-projector opacity-25"
-          style={{
-            clipPath: 'polygon(45% 0%, 55% 0%, 100% 100%, 0% 100%)',
-            background: 'linear-gradient(to bottom, rgba(244, 63, 94, 0.4) 0%, rgba(99, 102, 241, 0.1) 60%, transparent 100%)',
-            filter: 'blur(10px)',
-          }}
-        />
-
-        {/* Cinematic Screen Reflection shadow glow */}
-        <div className="absolute top-2 w-3/4 h-20 bg-rose-500/10 blur-2xl pointer-events-none rounded-b-full"></div>
-
-        {/* Curved IMAX Screen */}
-        <div className="relative w-full h-8 rounded-b-[120px] bg-gradient-to-r from-slate-900 via-rose-600 to-amber-300 shadow-[0_12px_28px_rgba(244,63,94,0.35)] border-b-4 border-slate-100 dark:border-amber-300/60 flex items-center justify-center overflow-hidden transition-all duration-500 z-10">
-          {/* Moving highlight reflection on screen */}
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/35 to-transparent animate-[shimmer_4s_infinite_linear] bg-[length:200%_100%]"></div>
-          {/* Laser screen border glow line */}
-          <div className="w-full h-[2px] bg-rose-500/80 shadow-[0_0_8px_#ff2a5f] mt-auto"></div>
+    <div className="w-full flex flex-col items-center py-8 px-4 sm:px-8 bg-[#070d19]/90 dark:bg-[#040811] rounded-3xl border border-slate-800 shadow-2xl relative overflow-hidden text-slate-200 transition-all duration-300">
+      
+      {/* 🎬 Seat Legend (Aligned at top) */}
+      <div className="w-full flex flex-wrap justify-between items-center gap-4 text-[11px] text-slate-400 font-black tracking-wider pb-6 border-b border-slate-800/80 mb-8">
+        {/* Left Tiers */}
+        <div className="flex flex-wrap items-center gap-4">
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 rounded border border-blue-500/40 bg-blue-500/5"></div>
+            <span>Normal (₹{regularPrice.toFixed(0)})</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 rounded border border-indigo-500/40 bg-indigo-500/5"></div>
+            <span>Deluxe ({(regularPrice + 100).toFixed(0)})</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 rounded border border-purple-500/40 bg-purple-500/5"></div>
+            <span>Super (₹{vipPrice.toFixed(0)})</span>
+          </div>
         </div>
 
-        <p className="text-[10px] font-black tracking-widest text-slate-400 uppercase mt-4 flex items-center gap-1.5 z-10">
-          <Sparkles className="w-3.5 h-3.5 text-rose-500 animate-pulse" /> IMAX 3D LASER SCREEN <Sparkles className="w-3.5 h-3.5 text-rose-500 animate-pulse" />
+        {/* Right Statuses */}
+        <div className="flex flex-wrap items-center gap-4">
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 rounded bg-[#0b1424]"></div>
+            <span>Sold</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 rounded border border-slate-700 bg-transparent"></div>
+            <span>Available</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 rounded bg-amber-500"></div>
+            <span className="text-white">Selected</span>
+          </div>
+        </div>
+      </div>
+
+      {/* 🎬 Curved Gold Screen */}
+      <div className="relative w-full max-w-xl mb-12 flex flex-col items-center">
+        {/* Screen Ambient Glow */}
+        <div className="absolute top-2 w-4/5 h-16 bg-amber-500/5 blur-2xl pointer-events-none rounded-b-full"></div>
+
+        {/* Curved Screen Line */}
+        <div className="relative w-full h-2 rounded-b-[180px] bg-gradient-to-r from-transparent via-amber-450 to-transparent shadow-[0_4px_16px_rgba(245,158,11,0.25)] border-b-2 border-amber-450/70 flex items-center justify-center z-10">
+        </div>
+
+        <p className="text-[10px] font-black tracking-widest text-slate-500 uppercase mt-4 flex items-center gap-1.5 z-10">
+          SCREEN THIS WAY
         </p>
 
         {/* Live Hover Tooltip Display */}
-        <div className="h-8 mt-2 flex items-center justify-center z-10">
+        <div className="h-6 mt-2 flex items-center justify-center z-10">
           {hoveredSeat ? (
-            <div className="px-4 py-1.5 rounded-full bg-slate-900 text-white text-[11px] font-mono font-black shadow-lg border border-rose-500/30 animate-scale-up">
-              {hoveredSeat.id} • <span className="text-amber-400">{hoveredSeat.tier}</span> • <span className="text-rose-400">₹{hoveredSeat.price.toFixed(2)}</span>
+            <div className="px-3.5 py-1 rounded-full bg-slate-900/90 text-white text-[10px] font-mono font-black shadow-lg border border-amber-500/30 animate-scale-up">
+              Seat {hoveredSeat.id} • <span className="text-amber-400">{hoveredSeat.tier}</span> • <span className="text-emerald-400">₹{hoveredSeat.price.toFixed(0)}</span>
             </div>
           ) : (
-            <div className="text-[11px] font-bold text-slate-500 italic">
-              Select your seats below
+            <div className="text-[10px] font-bold text-slate-500 italic">
+              Hover over a seat to view details
             </div>
           )}
         </div>
@@ -72,85 +97,57 @@ export default function SeatMap({
 
       {/* Seat Grid Container */}
       <div className="overflow-x-auto w-full flex justify-center pb-4 z-10">
-        <div className="grid gap-3 min-w-[600px] max-w-3xl">
+        <div className="grid gap-3.5 min-w-[620px] max-w-3xl">
           {rows.map((row) => {
-            const isVipRow = getSeatTier(row) === 'VIP';
+            const { tier, price } = getSeatInfo(row);
+            const isVipRow = tier === 'Super';
             return (
-              <div key={row} className="flex items-center justify-between gap-3">
-                {/* Row Label */}
-                <span className="w-6 text-xs font-black text-slate-500 text-center">{row}</span>
+              <div key={row} className="flex items-center justify-between gap-4">
+                {/* Left Row Label */}
+                <span className="w-5 text-[10px] font-black text-slate-500 text-center">{row}</span>
 
                 {/* Seat Row */}
-                <div className="flex-1 flex justify-center items-center gap-1.5 sm:gap-2.5">
+                <div className="flex-1 flex justify-center items-center gap-1.5 sm:gap-2">
                   {Array.from({ length: seatsPerRow }, (_, i) => i + 1).map((seatNum) => {
                     const seatId = `${row}${seatNum}`;
                     const status = getSeatStatus(seatId);
-                    const price = isVipRow ? vipPrice : regularPrice;
-                    const tier = isVipRow ? 'VIP Recliner' : 'Standard Cinema';
 
-                    const hasAisle = seatNum === 6;
+                    const hasAisle = seatNum === 3 || seatNum === 9; // Aisles like in standard multiplex layouts
 
                     return (
                       <React.Fragment key={seatId}>
+                        {hasAisle && <div className="w-4 sm:w-6"></div>}
                         <button
                           disabled={status === 'booked' || status === 'locked'}
                           onClick={() => onSeatClick(seatId, price, isVipRow)}
                           onMouseEnter={() => setHoveredSeat({ id: seatId, price, tier })}
                           onMouseLeave={() => setHoveredSeat(null)}
-                          className={`group relative w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center text-xs font-bold transition-all duration-200 cursor-pointer ${
+                          className={`group relative w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center text-[10px] font-black transition-all duration-200 cursor-pointer ${
                             status === 'selected'
-                              ? 'bg-gradient-to-tr from-red-600 to-rose-500 text-white shadow-lg shadow-rose-600/40 scale-110 border-2 border-slate-950 ring-2 ring-rose-500/50'
+                              ? 'bg-amber-500 border-amber-500 text-[#070d19] font-black shadow-lg shadow-amber-500/20 hover:scale-105 active:scale-95'
                               : status === 'booked'
-                              ? 'bg-slate-900/30 text-slate-700 border border-slate-950/40 cursor-not-allowed opacity-35'
+                              ? 'bg-[#0b1424]/90 text-slate-800 border border-transparent cursor-not-allowed'
                               : status === 'locked'
-                              ? 'bg-amber-950/20 text-amber-600 border border-amber-900/30 cursor-not-allowed opacity-40'
-                              : isVipRow
-                              ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20 hover:bg-amber-500/20 hover:text-white hover:scale-110 shadow-xs'
-                              : 'bg-slate-900/80 text-slate-300 border border-slate-800/80 hover:bg-slate-800 hover:text-white hover:scale-110 shadow-xs'
+                              ? 'bg-amber-950/30 text-amber-700 border border-amber-900/20 cursor-not-allowed'
+                              : tier === 'Super'
+                              ? 'border border-purple-500/30 text-purple-400/80 bg-purple-500/2 hover:bg-purple-500/10 hover:text-purple-300 hover:scale-110'
+                              : tier === 'Deluxe'
+                              ? 'border border-indigo-500/30 text-indigo-400/80 bg-indigo-500/2 hover:bg-indigo-500/10 hover:text-indigo-300 hover:scale-110'
+                              : 'border border-blue-500/30 text-blue-400/80 bg-blue-500/2 hover:bg-blue-500/10 hover:text-blue-300 hover:scale-110'
                           }`}
                         >
-                          <Armchair className="w-4 h-4 opacity-75 group-hover:opacity-100 transition-opacity" />
-                          <span className="absolute text-[8px] font-black -bottom-0.5">{seatNum}</span>
+                          <span>{seatNum}</span>
                         </button>
-                          {hasAisle && <div className="w-4 sm:w-8"></div>}
                       </React.Fragment>
                     );
                   })}
                 </div>
 
-                {/* Row Tier Badge */}
-                <span
-                  className={`w-14 text-[10px] font-extrabold text-center px-1.5 py-0.5 rounded-full ${
-                    isVipRow
-                      ? 'bg-amber-500/20 text-amber-450 border border-amber-500/40'
-                      : 'text-slate-500'
-                  }`}
-                >
-                  {isVipRow ? 'VIP' : 'Std'}
-                </span>
+                {/* Right Row Label */}
+                <span className="w-5 text-[10px] font-black text-slate-500 text-center">{row}</span>
               </div>
             );
           })}
-        </div>
-      </div>
-
-      {/* Seat Legend */}
-      <div className="mt-8 pt-6 border-t border-slate-900 w-full flex flex-wrap justify-center items-center gap-6 text-xs text-slate-400 font-bold z-10">
-        <div className="flex items-center gap-2">
-          <div className="w-5 h-5 rounded-lg bg-slate-900 border border-slate-800"></div>
-          <span>Available (₹{regularPrice.toFixed(2)})</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-5 h-5 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-400"></div>
-          <span>VIP Recliner (₹{vipPrice.toFixed(2)})</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-5 h-5 rounded-lg bg-gradient-to-tr from-red-600 to-rose-500 border border-rose-600 shadow-md"></div>
-          <span className="font-extrabold text-white">Selected</span>
-        </div>
-        <div className="flex items-center gap-2 opacity-50">
-          <div className="w-5 h-5 rounded-lg bg-slate-900/30 border border-slate-950/40"></div>
-          <span>Booked</span>
         </div>
       </div>
     </div>
