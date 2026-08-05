@@ -331,8 +331,8 @@ export default function HomePage() {
 
         {/* Movies Grid / Carousel */}
         {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 animate-fade-in">
-            {[1, 2, 3, 4, 5, 6, 7, 8].map((n) => (
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 animate-fade-in">
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((n) => (
               <MovieCardSkeleton key={n} />
             ))}
           </div>
@@ -343,7 +343,7 @@ export default function HomePage() {
             <p className="text-xs text-slate-500 leading-relaxed font-medium">Try selecting another category or check back later.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 animate-fade-in">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 animate-fade-in">
             {movies.map((movie) => (
               <MovieCard key={movie.id} movie={movie} onOpenTrailer={setActiveTrailerMovie} />
             ))}
