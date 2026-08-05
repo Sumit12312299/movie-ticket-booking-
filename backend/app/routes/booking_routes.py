@@ -161,6 +161,9 @@ async def cancel_booking(
     booking_id: str,
     current_user: UserProfile = Depends(get_current_user)
 ):
+    """
+    Cancel an active booking. Returns refund to wallet balance and frees up showtime seats.
+    """
     db = get_database()
     bookings_col = db["bookings"]
     showtimes_col = db["showtimes"]
