@@ -5,6 +5,10 @@ from app.config.config import settings
 
 class SeatLockingService:
     """
+    SeatLockingService manages temporary leases on theater seats.
+    Prevents race conditions and double-booking during concurrently busy showtimes.
+    """
+    """
     In-memory / DB state manager for temporary seat locks during checkout.
     Provides atomic verification to prevent concurrent double-booking.
     """
