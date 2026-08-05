@@ -140,9 +140,18 @@ export default function ShowtimeSelectionPage() {
 
   return (
     <div className="relative max-w-5xl mx-auto space-y-8 pb-20 px-4 md:px-0">
-      {/* Background Decorative Ambient Blobs */}
-      <div className="absolute top-10 left-10 w-72 h-72 bg-rose-500/10 rounded-full blur-3xl pointer-events-none -z-10 animate-pulse"></div>
-      <div className="absolute bottom-20 right-20 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl pointer-events-none -z-10 animate-pulse" style={{ animationDelay: '2s' }}></div>
+      {/* Dynamic Fullscreen Movie Banner Backdrop */}
+      {movie && (
+        <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none select-none transition-all duration-1000">
+          <div 
+            className="absolute inset-0 bg-cover bg-center filter blur-[120px] opacity-25 dark:opacity-30 scale-110"
+            style={{ backgroundImage: `url(${movie.banner_url || movie.poster_url})` }}
+          ></div>
+          <div className="absolute inset-0 bg-slate-50/90 dark:bg-slate-950/95 transition-colors duration-300"></div>
+          {/* Radial spotlight effect */}
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_10%,#f8fafc_100%)] dark:bg-[radial-gradient(circle_at_center,transparent_10%,#060812_100%)]"></div>
+        </div>
+      )}
 
       {/* Top Header Actions */}
       <div className="flex items-center justify-between">
