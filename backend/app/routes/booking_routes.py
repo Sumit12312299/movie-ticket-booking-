@@ -51,6 +51,7 @@ async def lock_seats(
         if seat in booked:
             raise HTTPException(status_code=400, detail=f"Seat {seat} has already been booked by another customer")
 
+    # Call seat locking service to lock seats for 5 minutes during checkout
     success, msg = seat_lock_service.lock_seats(request.showtime_id, request.seats, current_user.id)
     if not success:
         raise HTTPException(status_code=409, detail=msg)
