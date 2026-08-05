@@ -58,6 +58,18 @@ async def startup_event():
 async def shutdown_event():
     await close_mongo_connection()
 
+# Global Error Handling
+from fastapi import HTTPException as StarletteHTTPException
+from fastapi.responses import JSONResponse
+
+@app.exception_handler(StarletteHTTPException)
+async def http_exception_handler(request, exc):
+    """Formats validation and generic HTTP errors into clean JSON payloads."""
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"detail": exc.detail, "status": "error"}
+    )
+
 # Include API Routers
 app.include_router(auth_router, prefix=settings.API_V1_STR)
 app.include_router(movie_router, prefix=settings.API_V1_STR)
