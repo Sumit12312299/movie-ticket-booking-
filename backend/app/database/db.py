@@ -15,7 +15,11 @@ class FallbackCollection:
         self._data = []
         self._id_counter = 1000
 
-    def _matches(self, doc, filter_dict):
+    def _matches(self, doc: dict, filter_dict: dict) -> bool:
+        """
+        Checks if a document matches the given query constraints.
+        Supports basic equality checks and comparative operations like $lt, $gt.
+        """
         if not filter_dict:
             return True
         for k, v in filter_dict.items():
