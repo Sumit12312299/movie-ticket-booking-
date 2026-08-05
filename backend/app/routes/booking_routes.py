@@ -15,6 +15,9 @@ from app.services.seat_locking_service import seat_lock_service
 router = APIRouter(prefix="/bookings", tags=["Bookings"])
 
 def generate_booking_ref() -> str:
+    """
+    Generates a unique booking reference formatted CT-XXXXXXXX.
+    """
     chars = string.ascii_uppercase + string.digits
     return "CT-" + "".join(random.choices(chars, k=8))
 
