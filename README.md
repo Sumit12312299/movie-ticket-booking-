@@ -272,6 +272,9 @@ cd backend
 # Install dependencies
 python -m pip install -r requirements.txt
 
+# Seed initial database records
+python -m app.seed
+
 # Run FastAPI server
 python run.py
 ```
