@@ -29,6 +29,8 @@ app = FastAPI(
 app.add_middleware(GZipMiddleware, minimum_size=1000)
 
 # CORS Configuration
+# Allowed CORS origins for development, staging, and wildcard fallback.
+# In a strict production environment, wildcard '*' should be restricted to trusted domains.
 origins = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
