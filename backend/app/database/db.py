@@ -6,6 +6,10 @@ from app.config.config import settings
 logger = logging.getLogger("bookticket")
 
 class FallbackCollection:
+    """
+    In-memory fallback collection replicating basic MongoDB collection queries.
+    Provides High-Availability when connection to the primary database is lost.
+    """
     def __init__(self, name: str):
         self.name = name
         self._data = []
