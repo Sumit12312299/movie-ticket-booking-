@@ -85,6 +85,9 @@ async def topup_wallet(
     payload: WalletTopupRequest,
     current_user: UserProfile = Depends(get_current_user)
 ):
+    """
+    Top up the authenticated user's virtual wallet balance.
+    """
     if payload.amount <= 0:
         raise HTTPException(status_code=400, detail="Top-up amount must be greater than zero")
 
