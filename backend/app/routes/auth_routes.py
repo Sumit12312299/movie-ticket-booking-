@@ -9,6 +9,11 @@ router = APIRouter(prefix="/auth", tags=["Authentication"])
 
 @router.post("/register", response_model=Token, status_code=status.HTTP_201_CREATED)
 async def register(user_data: UserCreate):
+    """
+    Register a new user account.
+    Ensures unique emails, hashes passwords, seeds default wallet balance,
+    and returns JWT credentials.
+    """
     db = get_database()
     users_col = db["users"]
     
