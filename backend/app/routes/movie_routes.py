@@ -96,6 +96,9 @@ async def create_movie(
     movie_data: MovieCreate,
     current_admin: UserProfile = Depends(get_current_admin)
 ):
+    """
+    Creates a new movie catalog entry. Admin credentials required.
+    """
     db = get_database()
     movies_col = db["movies"]
     
