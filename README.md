@@ -305,3 +305,11 @@ Pre-seeded out-of-the-box demo accounts for testing:
   - Email: `user@bookticket.com`
   - Password: `user123`
   - *Access*: Movie Browse, Seat Selection, Payment Checkout, Digital E-Tickets.
+
+---
+
+## 🤝 Contributing & Git Workflow
+
+All changes are integrated incrementally via small, atomic commits to track modular improvements. To contribute:
+1. Ensure the code conforms to standard PEP 8 styling.
+2. Run tests to confirm zero regressions before committing.
