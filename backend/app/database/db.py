@@ -174,6 +174,11 @@ class DatabaseManager:
 db_manager = DatabaseManager()
 
 async def connect_to_mongo():
+    """
+    Connects to the MongoDB server using Motor async driver.
+    If the connection times out or fails, automatically switches to the
+    in-memory FallbackDatabase to maintain zero-downtime availability.
+    """
     try:
         logger.info(f"Attempting MongoDB connection at {settings.MONGODB_URL}...")
         client = AsyncIOMotorClient(settings.MONGODB_URL, serverSelectionTimeoutMS=1500)
