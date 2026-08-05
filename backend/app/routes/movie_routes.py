@@ -18,6 +18,10 @@ async def list_movies(
     page: int = Query(1, ge=1),
     limit: int = Query(12, ge=1, le=50)
 ):
+    """
+    Retrieve and paginate the list of movies.
+    Supports search and filters on genre or status.
+    """
     db = get_database()
     movies_col = db["movies"]
     
