@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { Film, Search, Star, Sparkles, Filter, Play, ChevronRight, ChevronLeft, TrendingUp, Flame, Tag, ShieldCheck, Ticket, Crown, Headphones, Tv, Clapperboard, Zap } from 'lucide-react';
+import { 
+  Film, Star, Sparkles, Play, ChevronRight, ChevronLeft, 
+  TrendingUp, Flame, Ticket, Crown, Headphones, Tv, Clapperboard, Zap, Heart, ShieldCheck 
+} from 'lucide-react';
 import API from '../services/api';
 import MovieCard from '../components/MovieCard';
 import TrailerModal from '../components/TrailerModal';
@@ -18,18 +21,14 @@ const getAutoplayUrl = (url) => {
 
 function MovieCardSkeleton() {
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-md flex flex-col overflow-hidden">
+    <div className="bg-[#070d19]/90 rounded-2xl border border-slate-800 shadow-md flex flex-col overflow-hidden">
       <div className="aspect-[2/3] w-full shimmer-bg"></div>
       <div className="p-3.5 space-y-3 flex-1 flex flex-col justify-between">
         <div className="space-y-2">
           <div className="h-4 w-3/4 rounded shimmer-bg"></div>
           <div className="h-3 w-1/2 rounded shimmer-bg"></div>
-          <div className="flex gap-1.5 mt-2">
-            <div className="h-4 w-12 rounded shimmer-bg"></div>
-            <div className="h-4 w-14 rounded shimmer-bg"></div>
-          </div>
         </div>
-        <div className="pt-2.5 border-t border-slate-100 dark:border-slate-800/80 flex items-center gap-2">
+        <div className="pt-2.5 border-t border-slate-800/80 flex items-center gap-2">
           <div className="h-9 w-9 rounded-xl shimmer-bg shrink-0"></div>
           <div className="h-9 flex-1 rounded-xl shimmer-bg"></div>
         </div>
@@ -51,15 +50,17 @@ export default function HomePage() {
   const [hoveredHeroId, setHoveredHeroId] = useState(null);
   const [playTrailer, setPlayTrailer] = useState(false);
 
+  const genres = ['All', 'Sci-Fi', 'Action', 'Drama', 'Adventure', 'Biography', 'Fantasy'];
 
-  const genres = ['All', 'Sci-Fi', 'Action', 'Drama', 'Adventure', 'Cyberpunk', 'Biography', 'Fantasy'];
-
-  const experienceBadges = [
-    { title: 'IMAX 3D Laser', icon: Tv, color: 'text-sky-500', desc: '4K Dual Laser Projection' },
-    { title: 'VIP Recliner Lounge', icon: Crown, color: 'text-amber-500', desc: 'Plush Leather Recliners' },
-    { title: 'Dolby Atmos Audio', icon: Headphones, color: 'text-emerald-500', desc: '360° Spatial Sound' },
-    { title: '4DX Motion Experience', icon: Clapperboard, color: 'text-red-500', desc: 'Environmental Effects' }
-  ];
+  const genreIcons = {
+    All: Clapperboard,
+    Action: Zap,
+    Drama: Heart,
+    'Sci-Fi': Sparkles,
+    Adventure: Film,
+    Biography: Crown,
+    Fantasy: TrendingUp
+  };
 
   const fetchMovies = async () => {
     setLoading(true);
@@ -80,7 +81,7 @@ export default function HomePage() {
     }
   };
 
-  const featuredMovies = movies.slice(0, 4);
+  const featuredMovies = movies.slice(0, 3);
   const activeHero = featuredMovies[heroIndex] || movies[0];
 
   useEffect(() => {
@@ -91,12 +92,12 @@ export default function HomePage() {
   useEffect(() => {
     if (!movies.length) return;
     const interval = setInterval(() => {
-      setHeroIndex((prev) => (prev + 1) % Math.min(movies.length, 4));
-    }, 6000);
+      setHeroIndex((prev) => (prev + 1) % Math.min(movies.length, 3));
+    }, 8000);
     return () => clearInterval(interval);
   }, [movies]);
 
-  // Netflix-style Autoplay hover trailer delay handler
+  // Autoplay delay handler
   useEffect(() => {
     if (!hoveredHeroId) {
       setPlayTrailer(false);
@@ -104,19 +105,13 @@ export default function HomePage() {
     }
     const timer = setTimeout(() => {
       setPlayTrailer(true);
-    }, 1200);
+    }, 1500);
     return () => clearTimeout(timer);
   }, [hoveredHeroId]);
 
-  // Update hoveredHeroId when the slider changes activeHero while mouse is hovered
-  useEffect(() => {
-    if (hoveredHeroId && activeHero && hoveredHeroId !== activeHero.id) {
-      setHoveredHeroId(activeHero.id);
-    }
-  }, [activeHero, hoveredHeroId]);
-
   return (
-    <div className="space-y-10 pb-20">
+    <div className="space-y-8 pb-20">
+      
       {/* 🎟️ Top Promo Offer Banner */}
       <div className="relative overflow-hidden bg-gradient-to-r from-red-600 via-rose-600 to-amber-500 rounded-3xl p-3.5 px-6 text-white text-xs font-bold flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xl shadow-rose-600/20">
         <div className="flex items-center gap-2.5">
@@ -132,12 +127,12 @@ export default function HomePage() {
         </span>
       </div>
 
-      {/* Featured Hero Premiere Slider */}
+      {/* Featured Hero Premiere Slider (Mockup Style) */}
       {activeHero && !liveQuery && selectedGenre === 'All' && (
         <section 
           onMouseEnter={() => setHoveredHeroId(activeHero.id)}
           onMouseLeave={() => setHoveredHeroId(null)}
-          className="relative w-full rounded-3xl overflow-hidden bg-slate-950 shadow-2xl border border-slate-200 dark:border-slate-800 min-h-[480px] sm:min-h-[520px] flex items-end p-6 sm:p-12 text-white group animate-fade-in"
+          className="relative w-full rounded-3xl overflow-hidden bg-slate-950 shadow-2xl border border-slate-800 min-h-[460px] sm:min-h-[500px] flex items-end p-6 sm:p-12 pb-16 sm:pb-20 text-white group animate-fade-in gap-8"
         >
           {/* Background Poster Banner */}
           <div className="absolute inset-0 z-0 overflow-hidden">
@@ -145,10 +140,10 @@ export default function HomePage() {
               key={activeHero.id}
               src={activeHero.banner_url || activeHero.poster_url}
               alt={activeHero.title}
-              className={`w-full h-full object-cover object-center filter brightness-60 contrast-110 scale-105 group-hover:scale-100 transition-all duration-1000 ease-out ${playTrailer && activeHero.trailer_url ? 'opacity-0 scale-95' : 'opacity-100'}`}
+              className={`w-full h-full object-cover object-center filter brightness-50 contrast-110 scale-102 transition-all duration-1000 ease-out ${playTrailer && activeHero.trailer_url ? 'opacity-0 scale-95' : 'opacity-100'}`}
             />
             
-            {/* Netflix-style Auto-play Trailer iframe overlay */}
+            {/* Auto-play Trailer iframe overlay */}
             {playTrailer && activeHero.trailer_url && (
               <div className="absolute inset-0 w-full h-full pointer-events-none transition-all duration-700 ease-in-out opacity-100 scale-105">
                 <iframe
@@ -159,7 +154,6 @@ export default function HomePage() {
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   allowFullScreen
                 ></iframe>
-                {/* Overlay to dim the video and blend it cinematically */}
                 <div className="absolute inset-0 bg-slate-950/40 mix-blend-multiply"></div>
               </div>
             )}
@@ -169,36 +163,18 @@ export default function HomePage() {
             <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/80 to-transparent"></div>
           </div>
 
-          {/* Hero Slider Navigation Arrows */}
-          {featuredMovies.length > 1 && (
-            <>
-              <button
-                onClick={() => setHeroIndex((prev) => (prev - 1 + featuredMovies.length) % featuredMovies.length)}
-                className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-slate-900/60 hover:bg-rose-600 text-white border border-white/20 flex items-center justify-center backdrop-blur-md transition-all shadow-lg hover:scale-110"
-              >
-                <ChevronLeft className="w-6 h-6" />
-              </button>
-              <button
-                onClick={() => setHeroIndex((prev) => (prev + 1) % featuredMovies.length)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-slate-900/60 hover:bg-rose-600 text-white border border-white/20 flex items-center justify-center backdrop-blur-md transition-all shadow-lg hover:scale-110"
-              >
-                <ChevronRight className="w-6 h-6" />
-              </button>
-            </>
-          )}
-
-          {/* Hero Content Details */}
-          <div className="relative z-10 max-w-2xl space-y-4">
+          {/* Left Hero Content Details */}
+          <div className="relative z-10 flex-1 space-y-4 text-left">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-gradient-to-r from-red-600 to-rose-500 text-white shadow-lg flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5" />
+              <span className="px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-rose-600 text-white shadow-lg flex items-center gap-1.5">
+                <Flame className="w-3.5 h-3.5 animate-pulse" />
                 Featured Blockbuster
               </span>
-              <span className="px-3 py-1 rounded-full text-xs font-black bg-amber-400 text-slate-950 flex items-center gap-1 shadow-md">
-                <Star className="w-3.5 h-3.5 fill-slate-950 text-slate-950" />
-                {activeHero.rating ? Number(activeHero.rating).toFixed(1) : '5.0'} / 5.0 Rating
+              <span className="px-3 py-1 rounded-full text-xs font-black bg-amber-500 text-[#070d19] flex items-center gap-1 shadow-md">
+                <Star className="w-3.5 h-3.5 fill-[#070d19] text-[#070d19]" />
+                {activeHero.rating ? Number(activeHero.rating).toFixed(1) : '5.0'} Rating
               </span>
-              <span className="px-3 py-1 rounded-full text-xs font-bold bg-white/20 text-white border border-white/20 backdrop-blur-md">
+              <span className="px-3 py-1 rounded-full text-xs font-bold bg-white/10 text-white border border-white/15 backdrop-blur-md">
                 IMAX 3D • {activeHero.language}
               </span>
             </div>
@@ -214,7 +190,7 @@ export default function HomePage() {
             <div className="pt-2 flex flex-wrap items-center gap-4">
               <Link
                 to={`/showtimes/${activeHero.id}`}
-                className="px-7 py-3.5 rounded-2xl bg-gradient-to-r from-red-600 to-rose-500 hover:from-red-500 hover:to-rose-400 text-white font-extrabold text-sm shadow-xl shadow-rose-600/40 flex items-center gap-2 transition-all hover:scale-105 active:scale-95"
+                className="px-6 py-3 rounded-2xl bg-rose-600 hover:bg-rose-500 text-white font-extrabold text-xs shadow-xl shadow-rose-600/30 flex items-center gap-2 transition-all hover:scale-105 active:scale-95"
               >
                 <Ticket className="w-4 h-4" />
                 Book Tickets Now
@@ -223,130 +199,151 @@ export default function HomePage() {
               {activeHero.trailer_url && (
                 <button
                   onClick={() => setActiveTrailerMovie(activeHero)}
-                  className="px-6 py-3.5 rounded-2xl bg-white/20 hover:bg-white/30 text-white font-bold text-sm backdrop-blur-md flex items-center gap-2 border border-white/30 transition-all hover:scale-105 active:scale-95"
+                  className="px-6 py-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs backdrop-blur-md flex items-center gap-2 border border-white/20 transition-all hover:scale-105 active:scale-95 cursor-pointer"
                 >
                   <Play className="w-4 h-4 fill-white" />
                   Watch Trailer
                 </button>
               )}
             </div>
+          </div>
 
-            {/* Slider Dots Indicator */}
-            {featuredMovies.length > 1 && (
-              <div className="pt-4 flex items-center gap-2">
-                {featuredMovies.map((m, idx) => (
-                  <button
-                    key={m.id}
-                    onClick={() => setHeroIndex(idx)}
-                    className={`h-2.5 rounded-full transition-all duration-300 ${
-                      heroIndex === idx ? 'w-8 bg-rose-500 shadow-md shadow-rose-500/50' : 'w-2.5 bg-white/40 hover:bg-white/70'
-                    }`}
-                  />
-                ))}
+          {/* Right Playlist Stack (Mockup style) */}
+          <div className="hidden lg:flex flex-col gap-3 w-72 shrink-0 z-10">
+            {featuredMovies.map((m, idx) => (
+              <div
+                key={m.id}
+                onClick={() => setHeroIndex(idx)}
+                className={`p-3 rounded-2xl border cursor-pointer transition-all duration-300 flex items-center gap-3 ${
+                  heroIndex === idx
+                    ? 'bg-slate-900/90 border-rose-500 shadow-md shadow-rose-500/10 scale-102'
+                    : 'bg-slate-950/60 border-slate-850 hover:bg-slate-900/60 hover:border-slate-700'
+                }`}
+              >
+                <img
+                  src={m.poster_url}
+                  alt={m.title}
+                  className="w-10 h-14 object-cover rounded-xl border border-slate-800"
+                />
+                <div className="flex-1 min-w-0 text-left">
+                  <h4 className="text-xs font-black text-white truncate">{m.title}</h4>
+                  <p className="text-[10px] text-slate-400 font-bold mt-0.5">
+                    {Array.isArray(m.genre) ? m.genre[0] : 'Action'} • {m.language}
+                  </p>
+                  <div className="flex items-center gap-1 mt-1 text-amber-500 text-[10px] font-black">
+                    <Star className="w-3 h-3 fill-amber-500" />
+                    <span>{m.rating?.toFixed(1) || '5.0'}</span>
+                  </div>
+                </div>
               </div>
-            )}
+            ))}
+          </div>
+
+          {/* Bottom features bar matching mockup */}
+          <div className="absolute bottom-0 left-0 right-0 bg-slate-950/80 backdrop-blur-md border-t border-slate-900 px-6 sm:px-12 py-3.5 flex flex-wrap items-center justify-between gap-4 z-10 text-[10px] font-black tracking-wider text-slate-400">
+            <div className="flex items-center gap-2">
+              <Film className="w-3.5 h-3.5 text-rose-500" />
+              <span>10,000+ MOVIES & SHOWS</span>
+            </div>
+            <div className="w-[1px] h-4 bg-slate-800 hidden md:block"></div>
+            <div className="flex items-center gap-2">
+              <Zap className="w-3.5 h-3.5 text-rose-500" />
+              <span>4K HDR ULTRA HD QUALITY</span>
+            </div>
+            <div className="w-[1px] h-4 bg-slate-800 hidden md:block"></div>
+            <div className="flex items-center gap-2">
+              <Tv className="w-3.5 h-3.5 text-rose-500" />
+              <span>ANY DEVICE WATCH ANYWHERE</span>
+            </div>
+            <div className="w-[1px] h-4 bg-slate-800 hidden md:block"></div>
+            <div className="flex items-center gap-2">
+              <Headphones className="w-3.5 h-3.5 text-rose-500" />
+              <span>OFFLINE DOWNLOAD & GO</span>
+            </div>
           </div>
         </section>
       )}
 
-      {/* 🎬 Experience Category Badges */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        {experienceBadges.map((exp, idx) => {
-          const IconComp = exp.icon;
-          return (
-            <div
-              key={idx}
-              className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 rounded-3xl flex items-center gap-3.5 shadow-sm hover:shadow-xl hover:border-rose-500/40 hover:-translate-y-1 transition-all duration-300 cursor-pointer group"
-            >
-              <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                <IconComp className={`w-6 h-6 ${exp.color}`} />
-              </div>
-              <div>
-                <h4 className="text-xs font-extrabold text-slate-900 dark:text-white group-hover:text-red-600 dark:group-hover:text-rose-400 transition-colors">
-                  {exp.title}
-                </h4>
-                <span className="text-[10px] font-medium text-slate-500 dark:text-slate-400">{exp.desc}</span>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
       {/* Movies Catalog Filter & Header */}
       <section className="space-y-6">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-5">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-red-600 to-rose-500 text-white flex items-center justify-center shadow-lg shadow-rose-600/30">
-              <Flame className="w-5 h-5 fill-white" />
-            </div>
-            <div>
-              <h2 className="text-xl font-black text-slate-900 dark:text-white tracking-tight">
-                {selectedStatus === 'now_showing' ? 'Now Showing in Multiplexes' : 'Upcoming Blockbusters'}
-              </h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400">Select showtimes & reserve your favorite seats</p>
-            </div>
+        
+        {/* Popular Categories Genre Grid */}
+        <div className="space-y-3.5 text-left">
+          <div className="flex items-center gap-2">
+            <Flame className="w-4 h-4 text-rose-500" />
+            <h3 className="text-sm font-black text-white uppercase tracking-wider">Popular Categories</h3>
           </div>
-
-          {/* Controls */}
-          <div className="flex flex-wrap items-center gap-3 w-full md:w-auto justify-between md:justify-end">
-            {/* Status Switcher */}
-            <div className="flex items-center gap-1 bg-slate-200/80 dark:bg-slate-900 p-1.5 rounded-2xl border border-slate-300 dark:border-slate-800">
-              <button
-                onClick={() => setSelectedStatus('now_showing')}
-                className={`px-4 py-2 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 ${
-                  selectedStatus === 'now_showing'
-                    ? 'bg-gradient-to-r from-red-600 to-rose-500 text-white shadow-md shadow-rose-600/30'
-                    : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-                }`}
-              >
-                <Film className="w-3.5 h-3.5" /> Now Showing
-              </button>
-              <button
-                onClick={() => setSelectedStatus('coming_soon')}
-                className={`px-4 py-2 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 ${
-                  selectedStatus === 'coming_soon'
-                    ? 'bg-gradient-to-r from-red-600 to-rose-500 text-white shadow-md shadow-rose-600/30'
-                    : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-                }`}
-              >
-                <Sparkles className="w-3.5 h-3.5" /> Coming Soon
-              </button>
-            </div>
-
-            {/* Genre Filter Scrollable */}
-            <div className="flex items-center gap-1.5 overflow-x-auto max-w-full pb-1 sm:pb-0">
-              {genres.map((genre) => (
+          <div className="flex items-center gap-3 overflow-x-auto pb-2 scrollbar-none justify-start">
+            {genres.map((genre) => {
+              const IconComp = genreIcons[genre] || Clapperboard;
+              const isSelected = selectedGenre === genre;
+              return (
                 <button
                   key={genre}
                   onClick={() => setSelectedGenre(genre)}
-                  className={`px-3.5 py-2 rounded-xl text-xs font-black shrink-0 transition-all ${
-                    selectedGenre === genre
-                      ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-md scale-105'
-                      : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800'
+                  className={`py-3 px-6 rounded-2xl text-xs font-black shrink-0 transition-all flex items-center gap-2 cursor-pointer border ${
+                    isSelected
+                      ? 'bg-rose-600 text-white shadow-lg shadow-rose-600/30 scale-105 border-rose-500'
+                      : 'bg-[#070d19]/90 text-slate-400 border-slate-800 hover:text-white hover:bg-slate-900/60'
                   }`}
                 >
-                  {genre}
+                  <IconComp className={`w-4 h-4 ${isSelected ? 'text-white' : 'text-slate-500'}`} />
+                  <span>{genre}</span>
                 </button>
-              ))}
-            </div>
+              );
+            })}
           </div>
         </div>
 
-        {/* Movies Grid */}
+        {/* Section Title */}
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-slate-800 pb-4 text-left">
+          <div>
+            <h2 className="text-lg font-black text-white tracking-tight flex items-center gap-2">
+              {selectedStatus === 'now_showing' ? 'Trending Now' : 'Upcoming Blockbusters'}
+            </h2>
+            <p className="text-xs text-slate-450 font-bold mt-1">Select showtimes & reserve your seats instantly</p>
+          </div>
+
+          {/* Status Switcher (Now Showing vs Coming Soon) */}
+          <div className="flex items-center gap-1 bg-[#050811] p-1.5 rounded-2xl border border-slate-850 shrink-0">
+            <button
+              onClick={() => setSelectedStatus('now_showing')}
+              className={`px-4 py-2 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 ${
+                selectedStatus === 'now_showing'
+                  ? 'bg-rose-600 text-white shadow-md shadow-rose-600/20'
+                  : 'text-slate-500 hover:text-white'
+              }`}
+            >
+              <Film className="w-3.5 h-3.5" /> Now Showing
+            </button>
+            <button
+              onClick={() => setSelectedStatus('coming_soon')}
+              className={`px-4 py-2 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 ${
+                selectedStatus === 'coming_soon'
+                  ? 'bg-rose-600 text-white shadow-md shadow-rose-600/20'
+                  : 'text-slate-500 hover:text-white'
+              }`}
+            >
+              <Sparkles className="w-3.5 h-3.5" /> Coming Soon
+            </button>
+          </div>
+        </div>
+
+        {/* Movies Grid / Carousel */}
         {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 animate-fade-in">
             {[1, 2, 3, 4, 5, 6, 7, 8].map((n) => (
               <MovieCardSkeleton key={n} />
             ))}
           </div>
         ) : movies.length === 0 ? (
-          <div className="text-center py-20 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-3 shadow-sm">
-            <Film className="w-12 h-12 text-slate-400 mx-auto" />
-            <h3 className="text-base font-bold text-slate-800 dark:text-slate-300">No Movies Found</h3>
-            <p className="text-xs text-slate-500">Try selecting another genre filter or clearing your search input.</p>
+          <div className="text-center py-20 bg-[#070d19]/90 rounded-3xl border border-slate-800 space-y-3 shadow-xl">
+            <Film className="w-12 h-12 text-slate-500 mx-auto animate-pulse" />
+            <h3 className="text-base font-bold text-slate-350">No Movies Found</h3>
+            <p className="text-xs text-slate-500 leading-relaxed font-medium">Try selecting another category or check back later.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 animate-fade-in">
             {movies.map((movie) => (
               <MovieCard key={movie.id} movie={movie} onOpenTrailer={setActiveTrailerMovie} />
             ))}
@@ -361,4 +358,3 @@ export default function HomePage() {
     </div>
   );
 }
-
