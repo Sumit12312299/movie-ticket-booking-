@@ -11,6 +11,9 @@
 
 A complete, production-ready Full Stack Web Application designed for online movie ticket booking, seat reservation, and cinema management. Built with **FastAPI**, **MongoDB**, **React**, and **Tailwind CSS**.
 
+### 🌟 Resilient Offline Fallback Architecture
+BookTicket implements a dual-mode database manager. If MongoDB is unavailable during startup, the application auto-switches to an embedded in-memory data store, guaranteeing zero startup downtime and continuous availability for testing.
+
 ---
 
 ## 📄 Project Documentation
