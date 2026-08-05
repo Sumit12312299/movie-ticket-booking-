@@ -316,3 +316,9 @@ Pre-seeded out-of-the-box demo accounts for testing:
 All changes are integrated incrementally via small, atomic commits to track modular improvements. To contribute:
 1. Ensure the code conforms to standard PEP 8 styling.
 2. Run tests to confirm zero regressions before committing.
+
+---
+
+## 🛠️ Developer Mode & High Availability
+
+The backend includes logging utilities that trace database and application health. If database connections decay, the server remains fully operational under local test scenarios.
