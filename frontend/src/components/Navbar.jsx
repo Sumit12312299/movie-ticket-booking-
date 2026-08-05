@@ -290,11 +290,36 @@ export default function Navbar({ onSearchChange }) {
               className={`px-4 py-2.5 rounded-2xl text-xs font-black transition-all shadow-xs ${
                 location.pathname === '/'
                   ? 'bg-gradient-to-r from-rose-600 to-rose-500 text-white shadow-lg shadow-rose-600/20'
-                  : 'text-slate-750 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-805 border border-transparent'
+                  : 'text-slate-755 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-805 border border-transparent'
               }`}
             >
               Movies
             </Link>
+
+            {/* Direct access to Offers, Snacks, and Support */}
+            <button
+              onClick={() => setIsVouchersOpen(true)}
+              className="hidden lg:flex items-center gap-1.5 px-4 py-2.5 rounded-2xl text-xs font-black text-slate-755 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-805 transition-all border border-transparent cursor-pointer"
+            >
+              <Gift className="w-4 h-4 text-purple-500 fill-purple-500/10" />
+              <span>Offers</span>
+            </button>
+
+            <button
+              onClick={() => setIsSnacksOpen(true)}
+              className="hidden lg:flex items-center gap-1.5 px-4 py-2.5 rounded-2xl text-xs font-black text-slate-755 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-805 transition-all border border-transparent cursor-pointer"
+            >
+              <Utensils className="w-4 h-4 text-emerald-500" />
+              <span>Snacks</span>
+            </button>
+
+            <button
+              onClick={() => setIsSupportOpen(true)}
+              className="hidden xl:flex items-center gap-1.5 px-4 py-2.5 rounded-2xl text-xs font-black text-slate-755 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-805 transition-all border border-transparent cursor-pointer"
+            >
+              <HelpCircle className="w-4 h-4 text-indigo-500" />
+              <span>Support</span>
+            </button>
 
             {user && (
               <button
