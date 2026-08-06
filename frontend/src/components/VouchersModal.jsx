@@ -26,6 +26,10 @@ const ACTIVE_PROMOS = [
   }
 ];
 
+/**
+ * VouchersModal displays active promotional discount codes.
+ * Offers click-to-copy utility for coupons like CINEMA10, VIPWALLETPASS, and SNACK50.
+ */
 export default function VouchersModal({ isOpen, onClose }) {
   const { addToast } = useNotification();
   const [copiedCode, setCopiedCode] = React.useState(null);
