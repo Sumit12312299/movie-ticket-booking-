@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import { Film, Mail, Phone, ShieldCheck, Heart, Send, CheckCircle2, Smartphone, CreditCard, Download, Shield } from 'lucide-react';
 import { useNotification } from '../context/NotificationContext';
 
+/**
+ * Footer component rendered at the bottom of the BookTicket layout.
+ * Provides newsletter subscriptions, social links, system security assurances, and copyright declarations.
+ */
 export default function Footer() {
   const { addToast } = useNotification();
   const [email, setEmail] = useState('');
