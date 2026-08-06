@@ -17,6 +17,11 @@ const FAQS = [
   }
 ];
 
+/**
+ * SupportModal component provides user documentation and 24/7 help.
+ * Displays FAQs regarding booking cancellation, E-ticket usage, and wallet refunds.
+ * Offers live chat simulation and call support helpline buttons.
+ */
 export default function SupportModal({ isOpen, onClose }) {
   const { addToast } = useNotification();
   const [openFaq, setOpenFaq] = useState(0);
