@@ -3,21 +3,25 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  /* Cinematic midnight slate overrides */
-  --color-slate-50: #f8fafc;
-  --color-slate-100: #f0f3fa;
-  --color-slate-200: #e2e8f5;
-  --color-slate-350: #8ba0c8;
-  --color-slate-700: #252c4b;
-  --color-slate-800: #161b33;
-  --color-slate-900: #0d1021;
-  --color-slate-950: #060812;
+  /* Cinematic midnight slate overrides - mapped to IMDb grays and deep black */
+  --color-slate-50: #f5f5f5;
+  --color-slate-100: #e5e5e5;
+  --color-slate-200: #cccccc;
+  --color-slate-350: #8a8a8a;
+  --color-slate-700: #3a3a3a;
+  --color-slate-800: #252525; /* IMDb secondary dark */
+  --color-slate-900: #1a1a1a; /* IMDb card background */
+  --color-slate-950: #121212; /* IMDb primary dark background */
 
-  /* Cinema red/rose neon accents */
-  --color-rose-500: #ff2a5f;
-  --color-rose-600: #e11d48;
-  --color-red-600: #ff1c53;
-  --color-amber-400: #fbbf24;
+  /* Cinema red/rose/indigo accents - remapped to IMDb yellow-gold */
+  --color-rose-500: #f5c518;
+  --color-rose-600: #dfb311;
+  --color-red-500: #f5c518;
+  --color-red-600: #dfb311;
+  --color-indigo-500: #f5c518;
+  --color-indigo-600: #dfb311;
+  --color-indigo-950: #1a1a1a;
+  --color-amber-400: #f5c518;
 }
 
 html {
@@ -26,11 +30,11 @@ html {
 }
 
 .ambient-glow-rose {
-  background: radial-gradient(circle at 50% 50%, rgba(255, 42, 95, 0.12) 0%, transparent 60%);
+  background: radial-gradient(circle at 50% 50%, rgba(245, 197, 24, 0.08) 0%, transparent 60%);
 }
 
 .ambient-glow-indigo {
-  background: radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.12) 0%, transparent 60%);
+  background: radial-gradient(circle at 50% 50%, rgba(223, 179, 17, 0.05) 0%, transparent 60%);
 }
 
 .glass-card {
@@ -60,7 +64,7 @@ html {
   }
 
   body {
-    @apply bg-slate-100 text-slate-900 font-sans antialiased min-h-screen selection:bg-rose-500 selection:text-white;
+    @apply bg-slate-100 text-slate-900 font-sans antialiased min-h-screen selection:bg-[#f5c518] selection:text-black;
     font-family: 'Outfit', 'Inter', system-ui, -apple-system, sans-serif;
   }
   
@@ -70,24 +74,25 @@ html {
   }
 }
 
-/* BookMyShow Iconic Ultra-Smooth Theme */
+/* IMDb Gold & Midnight Theme Override variables */
 :root {
-  --bms-red: #ff2a5f;
-  --bms-red-hover: #e6194b;
-  --bms-navy: #161b33;
-  --bms-dark-nav: #0d1021;
+  --bms-red: #f5c518;
+  --bms-red-hover: #dfb311;
+  --bms-navy: #1a1a1a;
+  --bms-dark-nav: #121212;
 }
 
 .bms-btn-red {
   background-color: var(--bms-red);
-  color: #ffffff;
+  color: #000000;
+  font-weight: 800;
   transition: transform 0.15s ease, background-color 0.2s ease, box-shadow 0.2s ease;
   transform: translateZ(0);
 }
 
 .bms-btn-red:hover {
   background-color: var(--bms-red-hover);
-  box-shadow: 0 4px 14px 0 rgba(255, 42, 95, 0.39);
+  box-shadow: 0 4px 14px 0 rgba(245, 197, 24, 0.3);
   transform: translateY(-1px) translateZ(0);
 }
 
@@ -105,9 +110,9 @@ html.dark .panel-card {
 }
 
 .curved-screen {
-  background: linear-gradient(180deg, var(--bms-red) 0%, rgba(255, 42, 95, 0.15) 80%, transparent 100%);
+  background: linear-gradient(180deg, var(--bms-red) 0%, rgba(245, 197, 24, 0.15) 80%, transparent 100%);
   border-radius: 50% / 15px;
-  box-shadow: 0 10px 20px -5px rgba(255, 42, 95, 0.25);
+  box-shadow: 0 10px 20px -5px rgba(245, 197, 24, 0.25);
 }
 
 @keyframes slideUpFade {
@@ -163,7 +168,7 @@ html.dark ::-webkit-scrollbar-thumb {
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #f84464;
+  background: #f5c518;
 }
 
 /* Premium Shimmer Loading Animation */
