@@ -3,25 +3,26 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  /* Cinematic midnight slate overrides - mapped to IMDb grays and deep black */
-  --color-slate-50: #f5f5f5;
-  --color-slate-100: #e5e5e5;
-  --color-slate-200: #cccccc;
-  --color-slate-350: #8a8a8a;
-  --color-slate-700: #3a3a3a;
-  --color-slate-800: #252525; /* IMDb secondary dark */
-  --color-slate-900: #1a1a1a; /* IMDb card background */
-  --color-slate-950: #121212; /* IMDb primary dark background */
+  /* Cinematic slate overrides - mapped to custom midnight-slate colors */
+  --color-slate-50: #fcfcfd;
+  --color-slate-100: #f4f4f6;
+  --color-slate-200: #e4e4e7;
+  --color-slate-350: var(--text-secondary); /* #A1A1AA */
+  --color-slate-700: #3f3f46;
+  --color-slate-800: var(--card); /* #1C1C24 */
+  --color-slate-900: var(--surface); /* #15151C */
+  --color-slate-950: var(--bg); /* #0B0B0F */
 
-  /* Cinema red/rose/indigo accents - remapped to IMDb yellow-gold */
-  --color-rose-500: #f5c518;
-  --color-rose-600: #dfb311;
-  --color-red-500: #f5c518;
-  --color-red-600: #dfb311;
-  --color-indigo-500: #f5c518;
-  --color-indigo-600: #dfb311;
-  --color-indigo-950: #1a1a1a;
-  --color-amber-400: #f5c518;
+  /* Primary Accent color mapping (replacing rose, red, and indigo) */
+  --color-rose-500: var(--primary); /* #FF5F45 */
+  --color-rose-600: var(--primary-hover); /* #FF7A5C */
+  --color-red-500: var(--primary);
+  --color-red-600: var(--primary-hover);
+  --color-indigo-500: var(--primary);
+  --color-indigo-600: var(--primary-hover);
+  --color-indigo-950: var(--surface);
+  --color-amber-400: var(--accent); /* #FFB84D */
+  --color-amber-500: var(--accent);
 }
 
 html {
@@ -30,11 +31,11 @@ html {
 }
 
 .ambient-glow-rose {
-  background: radial-gradient(circle at 50% 50%, rgba(245, 197, 24, 0.08) 0%, transparent 60%);
+  background: radial-gradient(circle at 50% 50%, rgba(255, 95, 69, 0.08) 0%, transparent 60%);
 }
 
 .ambient-glow-indigo {
-  background: radial-gradient(circle at 50% 50%, rgba(223, 179, 17, 0.05) 0%, transparent 60%);
+  background: radial-gradient(circle at 50% 50%, rgba(255, 184, 77, 0.05) 0%, transparent 60%);
 }
 
 .glass-card {
@@ -64,7 +65,7 @@ html {
   }
 
   body {
-    @apply bg-slate-100 text-slate-900 font-sans antialiased min-h-screen selection:bg-[#f5c518] selection:text-black;
+    @apply bg-slate-100 text-slate-900 font-sans antialiased min-h-screen selection:bg-[#FF5F45] selection:text-white;
     font-family: 'Outfit', 'Inter', system-ui, -apple-system, sans-serif;
   }
   
@@ -74,17 +75,46 @@ html {
   }
 }
 
-/* IMDb Gold & Midnight Theme Override variables */
+/* Custom Color Theme Variables */
 :root {
-  --bms-red: #f5c518;
-  --bms-red-hover: #dfb311;
-  --bms-navy: #1a1a1a;
-  --bms-dark-nav: #121212;
+  /* Background */
+  --bg: #0B0B0F;
+  --surface: #15151C;
+  --card: #1C1C24;
+
+  /* Primary */
+  --primary: #FF5F45;
+  --primary-hover: #FF7A5C;
+
+  /* Accent */
+  --accent: #FFB84D;
+
+  /* Text */
+  --text: #FFFFFF;
+  --text-secondary: #A1A1AA;
+
+  /* Border */
+  --border: rgba(255,255,255,0.08);
+
+  /* Shadow */
+  --shadow: rgba(0,0,0,0.35);
+
+  /* Success */
+  --success: #22C55E;
+
+  /* Danger */
+  --danger: #EF4444;
+
+  /* BookMyShow legacy override variables mapping */
+  --bms-red: var(--primary);
+  --bms-red-hover: var(--primary-hover);
+  --bms-navy: var(--surface);
+  --bms-dark-nav: var(--bg);
 }
 
 .bms-btn-red {
   background-color: var(--bms-red);
-  color: #000000;
+  color: #ffffff;
   font-weight: 800;
   transition: transform 0.15s ease, background-color 0.2s ease, box-shadow 0.2s ease;
   transform: translateZ(0);
@@ -92,7 +122,7 @@ html {
 
 .bms-btn-red:hover {
   background-color: var(--bms-red-hover);
-  box-shadow: 0 4px 14px 0 rgba(245, 197, 24, 0.3);
+  box-shadow: 0 4px 14px 0 rgba(255, 95, 69, 0.35);
   transform: translateY(-1px) translateZ(0);
 }
 
@@ -110,9 +140,9 @@ html.dark .panel-card {
 }
 
 .curved-screen {
-  background: linear-gradient(180deg, var(--bms-red) 0%, rgba(245, 197, 24, 0.15) 80%, transparent 100%);
+  background: linear-gradient(180deg, var(--bms-red) 0%, rgba(255, 95, 69, 0.15) 80%, transparent 100%);
   border-radius: 50% / 15px;
-  box-shadow: 0 10px 20px -5px rgba(245, 197, 24, 0.25);
+  box-shadow: 0 10px 20px -5px rgba(255, 95, 69, 0.25);
 }
 
 @keyframes slideUpFade {
@@ -168,7 +198,7 @@ html.dark ::-webkit-scrollbar-thumb {
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #f5c518;
+  background: var(--primary);
 }
 
 /* Premium Shimmer Loading Animation */
