@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
 import { Sparkles } from 'lucide-react';
 
+/**
+ * SeatMap manages the visualization of theater auditorium seat selections.
+ * @param {Array} props.bookedSeats - Seats already purchased and confirmed
+ * @param {Array} props.lockedSeats - Seats temporarily held during ongoing checkouts
+ * @param {Array} props.selectedSeats - Seats currently highlighted by the active session
+ * @param {function} props.onSeatClick - Click event handler triggered on seat toggle
+ */
 export default function SeatMap({
   bookedSeats = [],
   lockedSeats = [],
