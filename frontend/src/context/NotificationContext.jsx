@@ -3,6 +3,11 @@ import { CheckCircle, AlertCircle, Info, X } from 'lucide-react';
 
 const NotificationContext = createContext();
 
+/**
+ * NotificationProvider component displays transient overlay toast notices.
+ * Schedules active dismiss timeouts and maps message types (success, error, warning, info)
+ * to color-coded feedback toasts.
+ */
 export const NotificationProvider = ({ children }) => {
   const [toasts, setToasts] = useState([]);
 
