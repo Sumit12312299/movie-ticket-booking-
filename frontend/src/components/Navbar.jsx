@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { 
   Film, Search, Heart, User, LogOut, ShieldAlert, Ticket, 
   Sun, Moon, Star, X, Wallet, Crown, Utensils, Settings, 
-  HelpCircle, Gift, MapPin, ChevronDown, Check
+  HelpCircle, Gift, MapPin, ChevronDown, Check, Bell
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
@@ -31,6 +31,13 @@ export default function Navbar({ onSearchChange }) {
   const [isScrolled, setIsScrolled] = useState(false);
 
   const [showLocationMenu, setShowLocationMenu] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [notifications, setNotifications] = useState([
+    { id: 1, text: "🎟️ Ticket Booking Confirmed: Spider-Man Across the Spider-Verse", time: "2 mins ago" },
+    { id: 2, text: "🎁 Flat 10% promo code active: CINEMA10", time: "1 hour ago" },
+    { id: 3, text: "📍 Location auto-detected and set to Mumbai", time: "3 hours ago" }
+  ]);
+  const notificationMenuRef = useRef(null);
   const [selectedCity, setSelectedCity] = useState(() => {
     return localStorage.getItem('bookticket_city') || 'Mumbai';
   });
@@ -111,6 +118,9 @@ export default function Navbar({ onSearchChange }) {
       }
       if (locationMenuRef.current && !locationMenuRef.current.contains(e.target)) {
         setShowLocationMenu(false);
+      }
+      if (notificationMenuRef.current && !notificationMenuRef.current.contains(e.target)) {
+        setShowNotifications(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -252,19 +262,45 @@ export default function Navbar({ onSearchChange }) {
               </div>
             )}
           </div>
-
-          {/* Navigation Controls */}
           <nav className="flex items-center gap-2 sm:gap-3">
             {/* Theme Toggle Button */}
             <button
               onClick={toggleTheme}
-              className="w-10 h-10 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-amber-400 flex items-center justify-center hover:bg-slate-200 dark:hover:bg-slate-700/80 transition-all border border-slate-200 dark:border-slate-750 shadow-xs hover:scale-105 active:scale-95 cursor-pointer"
+              className="w-10 h-10 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-amber-400 flex items-center justify-center hover:bg-slate-200 dark:hover:bg-slate-700/80 transition-all border border-slate-205 dark:border-slate-750 shadow-xs hover:scale-105 active:scale-95 cursor-pointer"
               title={isDarkMode ? 'Light Mode' : 'Dark Mode'}
             >
               {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </button>
 
-            {/* Direct Exposed Wishlist (Heart) Link */}
+            {/* Movies link (flat style) */}
+            <Link
+              to="/"
+              className={`px-4 py-2.5 rounded-2xl text-xs font-black transition-all shadow-xs ${
+                location.pathname === '/'
+                  ? 'bg-rose-500 text-white shadow-md'
+                  : 'text-slate-755 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 border border-transparent'
+              }`}
+            >
+              Movies
+            </Link>
+
+            {/* Events link (toast trigger) */}
+            <button
+              onClick={() => addToast('🎉 Live Plays, Concerts & Comedy Events are coming soon to your city!', 'info')}
+              className="px-4 py-2.5 rounded-2xl text-xs font-black text-slate-755 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-all border border-transparent cursor-pointer"
+            >
+              Events
+            </button>
+
+            {/* Offers link */}
+            <button
+              onClick={() => setIsVouchersOpen(true)}
+              className="px-4 py-2.5 rounded-2xl text-xs font-black text-slate-755 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-all border border-transparent cursor-pointer"
+            >
+              Offers
+            </button>
+
+            {/* Wishlist Link */}
             {user && (
               <Link
                 to="/dashboard"
@@ -272,89 +308,71 @@ export default function Navbar({ onSearchChange }) {
                 className={`relative w-10 h-10 rounded-2xl flex items-center justify-center border transition-all hover:scale-105 active:scale-95 shadow-xs ${
                   location.pathname === '/dashboard' && location.state?.tab === 'wishlist'
                     ? 'bg-rose-500/10 border-rose-500 text-rose-500'
-                    : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-750 hover:text-rose-500 dark:hover:text-rose-500 hover:bg-rose-500/5'
+                    : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-350 border-slate-200 dark:border-slate-755 hover:text-rose-500 dark:hover:text-rose-500 hover:bg-rose-500/5'
                 }`}
                 title="Saved Wishlist"
               >
                 <Heart className={`w-4 h-4 ${wishlistCount > 0 ? 'fill-rose-500 text-rose-500' : ''}`} />
                 {wishlistCount > 0 && (
-                  <span className="absolute -top-1.5 -right-1.5 bg-rose-600 text-white text-[9px] font-black w-4.5 h-4.5 rounded-full flex items-center justify-center border border-white dark:border-slate-900 shadow-md animate-pulse">
+                  <span className="absolute -top-1.5 -right-1.5 bg-rose-600 text-white text-[9px] font-black w-4.5 h-4.5 rounded-full flex items-center justify-center border border-white dark:border-slate-900 shadow-md">
                     {wishlistCount}
                   </span>
                 )}
               </Link>
             )}
 
-            <Link
-              to="/"
-              className={`px-4 py-2.5 rounded-2xl text-xs font-black transition-all shadow-xs ${
-                location.pathname === '/'
-                  ? 'bg-gradient-to-r from-rose-600 to-rose-500 text-white shadow-lg shadow-rose-600/20'
-                  : 'text-slate-755 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-805 border border-transparent'
-              }`}
-            >
-              Movies
-            </Link>
-
-            {/* Direct access to Offers, Snacks, and Support */}
-            <button
-              onClick={() => setIsVouchersOpen(true)}
-              className="hidden lg:flex items-center gap-1.5 px-4 py-2.5 rounded-2xl text-xs font-black text-slate-755 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-805 transition-all border border-transparent cursor-pointer"
-            >
-              <Gift className="w-4 h-4 text-purple-500 fill-purple-500/10" />
-              <span>Offers</span>
-            </button>
-
-            <button
-              onClick={() => setIsSnacksOpen(true)}
-              className="hidden lg:flex items-center gap-1.5 px-4 py-2.5 rounded-2xl text-xs font-black text-slate-755 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-805 transition-all border border-transparent cursor-pointer"
-            >
-              <Utensils className="w-4 h-4 text-emerald-500" />
-              <span>Snacks</span>
-            </button>
-
-            <button
-              onClick={() => setIsSupportOpen(true)}
-              className="hidden xl:flex items-center gap-1.5 px-4 py-2.5 rounded-2xl text-xs font-black text-slate-755 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-805 transition-all border border-transparent cursor-pointer"
-            >
-              <HelpCircle className="w-4 h-4 text-indigo-500" />
-              <span>Support</span>
-            </button>
-
-            {user && (
+            {/* Notifications Center */}
+            <div className="relative animate-fade-in" ref={notificationMenuRef}>
               <button
-                onClick={() => setIsWalletOpen(true)}
-                className="px-3.5 py-2.5 rounded-2xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-600 dark:text-amber-400 font-black text-xs flex items-center gap-2 transition-all shadow-xs group hover:scale-103 active:scale-95 cursor-pointer"
-                title="Top-Up Wallet"
+                onClick={() => setShowNotifications(!showNotifications)}
+                className={`relative w-10 h-10 rounded-2xl flex items-center justify-center border transition-all hover:scale-105 active:scale-95 shadow-xs bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-355 border-slate-200 dark:border-slate-750 hover:text-rose-500 dark:hover:text-rose-500 hover:bg-rose-500/5 cursor-pointer`}
+                title="Recent Notifications"
               >
-                <Wallet className="w-4 h-4 group-hover:rotate-12 transition-transform text-amber-500 fill-amber-500/10" />
-                <span className="font-mono font-black text-slate-850 dark:text-amber-300">
-                  ₹{(user.wallet_balance ?? 1500.00).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                </span>
+                <Bell className="w-4 h-4" />
+                {notifications.length > 0 && (
+                  <span className="absolute -top-1.5 -right-1.5 bg-rose-500 text-white text-[9px] font-black w-4.5 h-4.5 rounded-full flex items-center justify-center border border-white dark:border-slate-900 shadow-md">
+                    {notifications.length}
+                  </span>
+                )}
               </button>
-            )}
 
-            {user && (
-              <Link
-                to="/dashboard"
-                state={{ tab: 'bookings' }}
-                className={`px-4 py-2.5 rounded-2xl text-xs font-black flex items-center gap-1.5 transition-all shadow-xs ${
-                  location.pathname === '/dashboard' && (!location.state || location.state?.tab === 'bookings')
-                    ? 'bg-gradient-to-r from-rose-600 to-rose-500 text-white shadow-lg shadow-rose-600/25'
-                    : 'text-slate-755 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
-                }`}
-              >
-                <Ticket className="w-4 h-4" />
-                <span className="hidden lg:inline">My Bookings</span>
-              </Link>
-            )}
+              {showNotifications && (
+                <div className="absolute right-0 mt-3 w-80 bg-white dark:bg-slate-900 rounded-3xl p-3 shadow-2xl border border-slate-200 dark:border-slate-800 z-50 animate-slide-up space-y-2 text-left">
+                  <div className="px-3 py-2 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                    <h4 className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider">Notifications</h4>
+                    {notifications.length > 0 && (
+                      <button 
+                        onClick={() => setNotifications([])} 
+                        className="text-[10px] text-rose-500 font-black hover:underline"
+                      >
+                        Clear All
+                      </button>
+                    )}
+                  </div>
+                  <div className="max-h-64 overflow-y-auto space-y-1.5 p-0.5">
+                    {notifications.length > 0 ? (
+                      notifications.map((n) => (
+                        <div key={n.id} className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-805/40 border border-slate-100 dark:border-slate-800/80 space-y-1 text-xs">
+                          <p className="font-bold text-slate-800 dark:text-slate-200 leading-normal">{n.text}</p>
+                          <span className="text-[9px] text-slate-400 font-bold block">{n.time}</span>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="p-6 text-center text-xs text-slate-450 dark:text-slate-400 font-bold">
+                        No new notifications
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
 
             {/* Profile Dropdown Menu */}
             {user ? (
-              <div className="relative" ref={profileMenuRef}>
+              <div className="relative animate-fade-in" ref={profileMenuRef}>
                 <button
                   onClick={() => setShowProfileMenu(!showProfileMenu)}
-                  className="p-0.5 rounded-full bg-gradient-to-tr from-rose-600 via-rose-500 to-amber-500 hover:scale-105 transition-transform shadow-md cursor-pointer"
+                  className="p-0.5 rounded-full bg-rose-500 hover:scale-105 transition-transform shadow-md cursor-pointer"
                 >
                   <div className="w-9 h-9 rounded-full bg-slate-950 font-black text-white flex items-center justify-center text-sm border-2 border-white dark:border-slate-900">
                     {user.full_name.charAt(0).toUpperCase()}
@@ -515,7 +533,7 @@ export default function Navbar({ onSearchChange }) {
             ) : (
               <Link
                 to="/auth"
-                className="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-455 text-white font-extrabold text-xs shadow-lg shadow-rose-600/30 transition-all hover:scale-105 flex items-center gap-2"
+                className="px-5 py-2.5 rounded-2xl bg-rose-500 hover:bg-rose-600 text-white font-extrabold text-xs shadow-md transition-all hover:scale-105 flex items-center gap-2"
               >
                 <User className="w-4 h-4" />
                 Sign In
