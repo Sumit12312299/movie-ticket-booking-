@@ -2,6 +2,10 @@ import logging
 import sys
 
 def setup_logger():
+    """
+    Initializes and configures the application logger for BookTicket.
+    Sets up log levels, formatter, and standard output stream handlers.
+    """
     logger = logging.getLogger("bookticket")
     logger.setLevel(logging.INFO)
     
