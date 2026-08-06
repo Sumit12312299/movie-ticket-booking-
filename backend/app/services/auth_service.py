@@ -7,6 +7,10 @@ from app.schemas.user_schema import UserProfile
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
 
 async def get_current_user(token: str = Depends(oauth2_scheme)) -> UserProfile:
+    """
+    Dependency to fetch and validate the current authenticated user's session profile.
+    Decodes the JWT access token and queries user parameters from MongoDB database.
+    """
     payload = decode_access_token(token)
     if not payload:
         raise HTTPException(
@@ -33,6 +37,10 @@ async def get_current_user(token: str = Depends(oauth2_scheme)) -> UserProfile:
     )
 
 async def get_current_admin(current_user: UserProfile = Depends(get_current_user)) -> UserProfile:
+    """
+    Dependency to assert that the current authenticated user has administrative privileges.
+    Checks the resolved role flag in user profile and raises HTTP 403 if unauthorized.
+    """
     if current_user.role != "admin":
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
