@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import { QrCode, Ticket, Calendar, Clock, MapPin, Printer, CheckCircle2, Film, Sparkles, Scan } from 'lucide-react';
 
+/**
+ * TicketPass renders the printable E-Ticket layout.
+ * Visual design resembles a real boarding pass with dynamic booking fields,
+ * interactive 3D card tilt animation, and simulated scanning QR Code.
+ */
 export default function TicketPass({ booking }) {
   const [rotateX, setRotateX] = useState(0);
   const [rotateY, setRotateY] = useState(0);
