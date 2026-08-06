@@ -2,6 +2,10 @@ from pydantic import BaseModel, Field
 from typing import List, Optional
 
 class MovieBase(BaseModel):
+    """
+    Base schema for movie properties, providing validation rules.
+    Contains movie catalog metadata, format details, and availability status.
+    """
     title: str
     synopsis: str
     genre: List[str]
@@ -13,7 +17,7 @@ class MovieBase(BaseModel):
     poster_url: str
     banner_url: str
     trailer_url: Optional[str] = ""
-    status: str = "now_showing"  # "now_showing", "coming_soon"
+    status: str = "now_showing"  # Supported values: "now_showing", "coming_soon"
     cast: List[str] = []
     director: Optional[str] = ""
 
@@ -36,4 +40,7 @@ class MovieUpdate(BaseModel):
     director: Optional[str] = None
 
 class MovieResponse(MovieBase):
+    """
+    Schema for returning Movie data from MongoDB containing database object id.
+    """
     id: str
