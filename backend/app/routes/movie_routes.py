@@ -80,6 +80,10 @@ async def list_movies(
 
 @router.get("/{movie_id}", response_model=MovieResponse)
 async def get_movie(movie_id: str):
+    """
+    Fetch details for a single movie by its unique identifier (ID).
+    Returns basic catalog parameters, ratings, duration, status, and cast lists.
+    """
     db = get_database()
     movies_col = db["movies"]
     
