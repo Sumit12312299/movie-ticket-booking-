@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams, useNavigate } from 'react-router-dom';
+import { useNotification } from '../context/NotificationContext';
 import { 
   Film, Star, Sparkles, Play, ChevronRight, ChevronLeft, 
   TrendingUp, Flame, Ticket, Crown, Headphones, Tv, Clapperboard, Zap, Heart, ShieldCheck 
@@ -49,6 +50,24 @@ export default function HomePage() {
   const [liveQuery, setLiveQuery] = useState(searchParams.get('search') || '');
   const [hoveredHeroId, setHoveredHeroId] = useState(null);
   const [playTrailer, setPlayTrailer] = useState(false);
+
+  const navigate = useNavigate();
+  const { addToast } = useNotification();
+
+  const [widgetCity, setWidgetCity] = useState('Mumbai');
+  const [widgetDate, setWidgetDate] = useState('Today');
+  const [widgetMovieId, setWidgetMovieId] = useState('');
+  const [widgetPeople, setWidgetPeople] = useState('1');
+
+  const CITIES = ['Mumbai', 'Delhi NCR', 'Bengaluru', 'Pune', 'Hyderabad', 'Ahmedabad', 'Kolkata'];
+
+  const handleWidgetBookClick = () => {
+    if (!widgetMovieId) {
+      addToast('Please select a movie from the dropdown to book tickets', 'warning');
+      return;
+    }
+    navigate(`/showtimes/${widgetMovieId}`);
+  };
 
   const genres = ['All', 'Sci-Fi', 'Action', 'Drama', 'Adventure', 'Biography', 'Fantasy'];
 
@@ -127,138 +146,183 @@ export default function HomePage() {
         </span>
       </div>
 
-      {/* Featured Hero Premiere Slider (Mockup Style) */}
-      {activeHero && !liveQuery && selectedGenre === 'All' && (
+      {/* Redesigned Premium Hero Premiere Banner (Mockup Style) */}
+      {!liveQuery && selectedGenre === 'All' && (
         <section 
-          onMouseEnter={() => setHoveredHeroId(activeHero.id)}
-          onMouseLeave={() => setHoveredHeroId(null)}
-          className="relative w-full rounded-3xl overflow-hidden bg-slate-950 shadow-2xl border border-slate-800 min-h-[460px] sm:min-h-[500px] flex items-end p-6 sm:p-12 pb-16 sm:pb-20 text-white group animate-fade-in gap-8"
+          className="relative w-full rounded-3xl overflow-hidden bg-cover bg-center border border-slate-800 shadow-2xl p-6 sm:p-12 pb-24 sm:pb-32 text-white group animate-fade-in flex flex-col justify-between"
+          style={{
+            backgroundImage: `linear-gradient(to bottom, rgba(11, 11, 15, 0.4) 0%, rgba(11, 11, 15, 0.95) 100%), url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=1600')`,
+            minHeight: '520px'
+          }}
         >
-          {/* Background Poster Banner */}
-          <div className="absolute inset-0 z-0 overflow-hidden">
-            <img
-              key={activeHero.id}
-              src={activeHero.banner_url || activeHero.poster_url}
-              alt={activeHero.title}
-              className={`w-full h-full object-cover object-center filter brightness-50 contrast-110 scale-102 transition-all duration-1000 ease-out ${playTrailer && activeHero.trailer_url ? 'opacity-0 scale-95' : 'opacity-100'}`}
-            />
+          {/* Main Hero grid containing Headline (Left) and Featured Cards (Right) */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center w-full z-10 pt-4">
             
-            {/* Auto-play Trailer iframe overlay */}
-            {playTrailer && activeHero.trailer_url && (
-              <div className="absolute inset-0 w-full h-full pointer-events-none transition-all duration-700 ease-in-out opacity-100 scale-105">
-                <iframe
-                  src={getAutoplayUrl(activeHero.trailer_url)}
-                  title={`${activeHero.title} Trailer Preview`}
-                  className="absolute w-full h-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 scale-[1.35] pointer-events-none"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullScreen
-                ></iframe>
-                <div className="absolute inset-0 bg-slate-950/40 mix-blend-multiply"></div>
+            {/* Left Headline Section */}
+            <div className="lg:col-span-6 space-y-4 text-left">
+              <h1 className="text-3xl sm:text-5xl font-black text-white leading-tight tracking-tight drop-shadow-md">
+                Get your tickets<br className="hidden sm:inline" /> to the show: Book<br className="hidden sm:inline" /> your movie<br className="hidden sm:inline" /> experience now!
+              </h1>
+              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-bold max-w-md pt-2">
+                This modern trend looks nice and all, but we fell into the same trap again.
+              </p>
+            </div>
+
+            {/* Right Cards Stack (Mockup Movies Grid) */}
+            <div className="lg:col-span-6 grid grid-cols-1 sm:grid-cols-12 gap-4 w-full">
+              {/* Column 1: Middle Cards (Two Horizontal Cards) */}
+              <div className="sm:col-span-7 flex flex-col gap-4">
+                {movies.slice(0, 2).map((m) => (
+                  <div
+                    key={m.id}
+                    onClick={() => navigate(`/movie/${m.id}`)}
+                    className="relative aspect-video sm:h-[135px] rounded-xl overflow-hidden border border-slate-800 cursor-pointer group/card hover:scale-[1.02] hover:border-[#FF5F45]/40 transition-all duration-300"
+                  >
+                    <img
+                      src={m.banner_url || m.poster_url}
+                      alt={m.title}
+                      className="w-full h-full object-cover filter brightness-75 group-hover/card:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0F]/90 via-[#0B0B0F]/20 to-transparent"></div>
+                    
+                    {/* Now Showing Badge */}
+                    <span className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded bg-[#FFB84D] text-black font-extrabold text-[8px] uppercase tracking-wider">
+                      {m.status === 'now_showing' ? 'Now Showing' : 'Coming Soon'}
+                    </span>
+
+                    {/* Rating Badge */}
+                    <div className="absolute top-2.5 right-2.5 px-1.5 py-0.5 rounded bg-black/60 border border-slate-700/60 flex items-center gap-0.5">
+                      <Star className="w-2.5 h-2.5 text-[#FFB84D] fill-[#FFB84D]" />
+                      <span className="text-[9px] font-black text-white">{m.rating ? m.rating.toFixed(1) : '4.5'}/5</span>
+                    </div>
+
+                    {/* Title */}
+                    <div className="absolute bottom-2.5 left-2.5 right-2.5 text-left">
+                      <h4 className="text-xs font-black text-white truncate">{m.title}</h4>
+                    </div>
+                  </div>
+                ))}
               </div>
-            )}
 
-            {/* Cinematic Gradient Overlays */}
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent"></div>
-            <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/80 to-transparent"></div>
-          </div>
+              {/* Column 2: Right Card (One Full-Height Vertical Card) */}
+              <div className="sm:col-span-5">
+                {movies[2] && (
+                  <div
+                    onClick={() => navigate(`/movie/${movies[2].id}`)}
+                    className="relative w-full h-[286px] rounded-xl overflow-hidden border border-slate-800 cursor-pointer group/card hover:scale-[1.02] hover:border-[#FF5F45]/40 transition-all duration-300"
+                  >
+                    <img
+                      src={movies[2].poster_url}
+                      alt={movies[2].title}
+                      className="w-full h-full object-cover filter brightness-75 group-hover/card:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0F]/95 via-[#0B0B0F]/10 to-transparent"></div>
 
-          {/* Left Hero Content Details */}
-          <div className="relative z-10 flex-1 space-y-4 text-left">
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-rose-600 text-white shadow-lg flex items-center gap-1.5">
-                <Flame className="w-3.5 h-3.5 animate-pulse" />
-                Featured Blockbuster
-              </span>
-              <span className="px-3 py-1 rounded-full text-xs font-black bg-amber-500 text-[#070d19] flex items-center gap-1 shadow-md">
-                <Star className="w-3.5 h-3.5 fill-[#070d19] text-[#070d19]" />
-                {activeHero.rating ? Number(activeHero.rating).toFixed(1) : '5.0'} Rating
-              </span>
-              <span className="px-3 py-1 rounded-full text-xs font-bold bg-white/10 text-white border border-white/15 backdrop-blur-md">
-                IMAX 3D • {activeHero.language}
-              </span>
-            </div>
+                    {/* Release Date Badge */}
+                    <span className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded bg-[#FFB84D] text-black font-extrabold text-[8px] uppercase tracking-wider">
+                      {movies[2].status === 'now_showing' ? 'Now Showing' : 'Coming Soon'}
+                    </span>
 
-            <h1 className="text-3xl sm:text-5xl font-black text-white leading-tight tracking-tight drop-shadow-lg">
-              {activeHero.title}
-            </h1>
+                    {/* Rating Badge */}
+                    <div className="absolute top-2.5 right-2.5 px-1.5 py-0.5 rounded bg-black/60 border border-slate-700/60 flex items-center gap-0.5">
+                      <Star className="w-2.5 h-2.5 text-[#FFB84D] fill-[#FFB84D]" />
+                      <span className="text-[9px] font-black text-white">{movies[2].rating ? movies[2].rating.toFixed(1) : '4.8'}/5</span>
+                    </div>
 
-            <p className="text-sm text-slate-200 line-clamp-3 leading-relaxed font-medium max-w-xl">
-              {activeHero.synopsis}
-            </p>
-
-            <div className="pt-2 flex flex-wrap items-center gap-4">
-              <Link
-                to={`/showtimes/${activeHero.id}`}
-                className="px-6 py-3 rounded-2xl bg-rose-600 hover:bg-rose-500 text-white font-extrabold text-xs shadow-xl shadow-rose-600/30 flex items-center gap-2 transition-all hover:scale-105 active:scale-95"
-              >
-                <Ticket className="w-4 h-4" />
-                Book Tickets Now
-              </Link>
-
-              {activeHero.trailer_url && (
-                <button
-                  onClick={() => setActiveTrailerMovie(activeHero)}
-                  className="px-6 py-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs backdrop-blur-md flex items-center gap-2 border border-white/20 transition-all hover:scale-105 active:scale-95 cursor-pointer"
-                >
-                  <Play className="w-4 h-4 fill-white" />
-                  Watch Trailer
-                </button>
-              )}
+                    {/* Title */}
+                    <div className="absolute bottom-2.5 left-2.5 right-2.5 text-left">
+                      <h4 className="text-xs font-black text-white truncate">{movies[2].title}</h4>
+                      <span className="text-[9px] text-slate-400 font-bold block mt-0.5 truncate">
+                        {movies[2].genre?.join(' • ')}
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 
-          {/* Right Playlist Stack (Mockup style) */}
-          <div className="hidden lg:flex flex-col gap-3 w-72 shrink-0 z-10">
-            {featuredMovies.map((m, idx) => (
-              <div
-                key={m.id}
-                onClick={() => setHeroIndex(idx)}
-                className={`p-3 rounded-2xl border cursor-pointer transition-all duration-300 flex items-center gap-3 ${
-                  heroIndex === idx
-                    ? 'bg-slate-900/90 border-rose-500 shadow-md shadow-rose-500/10 scale-102'
-                    : 'bg-slate-950/60 border-slate-850 hover:bg-slate-900/60 hover:border-slate-700'
-                }`}
-              >
-                <img
-                  src={m.poster_url}
-                  alt={m.title}
-                  className="w-10 h-14 object-cover rounded-xl border border-slate-800"
-                />
-                <div className="flex-1 min-w-0 text-left">
-                  <h4 className="text-xs font-black text-white truncate">{m.title}</h4>
-                  <p className="text-[10px] text-slate-400 font-bold mt-0.5">
-                    {Array.isArray(m.genre) ? m.genre[0] : 'Action'} • {m.language}
-                  </p>
-                  <div className="flex items-center gap-1 mt-1 text-amber-500 text-[10px] font-black">
-                    <Star className="w-3 h-3 fill-amber-500" />
-                    <span>{m.rating?.toFixed(1) || '5.0'}</span>
+          {/* Floating Booking Widget Selector */}
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-full max-w-4xl px-4 z-20">
+            <div className="bg-[#15151C]/90 backdrop-blur-md rounded-2xl border border-white/5 p-4 sm:py-5 sm:px-6 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full text-left">
+                {/* Location Picker */}
+                <div className="space-y-1">
+                  <span className="text-[9px] uppercase font-black text-slate-400 tracking-wider">Location</span>
+                  <div className="relative">
+                    <select
+                      value={widgetCity}
+                      onChange={(e) => setWidgetCity(e.target.value)}
+                      className="w-full bg-transparent text-xs font-black text-white pr-6 py-1 focus:outline-none cursor-pointer appearance-none"
+                    >
+                      {CITIES.map((c) => (
+                        <option key={c} value={c} className="bg-[#15151C] text-white font-bold">{c}</option>
+                      ))}
+                    </select>
+                    <span className="absolute right-0 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-[10px]">▼</span>
+                  </div>
+                </div>
+
+                {/* Date Picker */}
+                <div className="space-y-1">
+                  <span className="text-[9px] uppercase font-black text-slate-400 tracking-wider">Date</span>
+                  <div className="relative">
+                    <select
+                      value={widgetDate}
+                      onChange={(e) => setWidgetDate(e.target.value)}
+                      className="w-full bg-transparent text-xs font-black text-white pr-6 py-1 focus:outline-none cursor-pointer appearance-none"
+                    >
+                      <option value="Today" className="bg-[#15151C] text-white font-bold">Today, {new Date().toLocaleDateString(undefined, {month:'short', day:'numeric'})}</option>
+                      <option value="Tomorrow" className="bg-[#15151C] text-white font-bold">Tomorrow</option>
+                      <option value="Day after" className="bg-[#15151C] text-white font-bold">Day after</option>
+                    </select>
+                    <span className="absolute right-0 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-[10px]">▼</span>
+                  </div>
+                </div>
+
+                {/* Movie Picker */}
+                <div className="space-y-1 col-span-1">
+                  <span className="text-[9px] uppercase font-black text-slate-400 tracking-wider">Movie</span>
+                  <div className="relative">
+                    <select
+                      value={widgetMovieId}
+                      onChange={(e) => setWidgetMovieId(e.target.value)}
+                      className="w-full bg-transparent text-xs font-black text-white pr-6 py-1 focus:outline-none cursor-pointer appearance-none truncate"
+                    >
+                      <option value="" className="bg-[#15151C] text-slate-400 font-bold">Select Movie...</option>
+                      {movies.map((m) => (
+                        <option key={m.id} value={m.id} className="bg-[#15151C] text-white font-bold">{m.title}</option>
+                      ))}
+                    </select>
+                    <span className="absolute right-0 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-[10px]">▼</span>
+                  </div>
+                </div>
+
+                {/* People Count Picker */}
+                <div className="space-y-1">
+                  <span className="text-[9px] uppercase font-black text-slate-400 tracking-wider">People</span>
+                  <div className="relative">
+                    <select
+                      value={widgetPeople}
+                      onChange={(e) => setWidgetPeople(e.target.value)}
+                      className="w-full bg-transparent text-xs font-black text-white pr-6 py-1 focus:outline-none cursor-pointer appearance-none"
+                    >
+                      {[1,2,3,4,5,6,7,8].map((n) => (
+                        <option key={n} value={n} className="bg-[#15151C] text-white font-bold">{n} Person{n > 1 ? 's' : ''}</option>
+                      ))}
+                    </select>
+                    <span className="absolute right-0 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-[10px]">▼</span>
                   </div>
                 </div>
               </div>
-            ))}
-          </div>
 
-          {/* Bottom features bar matching mockup */}
-          <div className="absolute bottom-0 left-0 right-0 bg-slate-950/80 backdrop-blur-md border-t border-slate-900 px-6 sm:px-12 py-3.5 flex flex-wrap items-center justify-between gap-4 z-10 text-[10px] font-black tracking-wider text-slate-400">
-            <div className="flex items-center gap-2">
-              <Film className="w-3.5 h-3.5 text-rose-500" />
-              <span>10,000+ MOVIES & SHOWS</span>
-            </div>
-            <div className="w-[1px] h-4 bg-slate-800 hidden md:block"></div>
-            <div className="flex items-center gap-2">
-              <Zap className="w-3.5 h-3.5 text-rose-500" />
-              <span>4K HDR ULTRA HD QUALITY</span>
-            </div>
-            <div className="w-[1px] h-4 bg-slate-800 hidden md:block"></div>
-            <div className="flex items-center gap-2">
-              <Tv className="w-3.5 h-3.5 text-rose-500" />
-              <span>ANY DEVICE WATCH ANYWHERE</span>
-            </div>
-            <div className="w-[1px] h-4 bg-slate-800 hidden md:block"></div>
-            <div className="flex items-center gap-2">
-              <Headphones className="w-3.5 h-3.5 text-rose-500" />
-              <span>OFFLINE DOWNLOAD & GO</span>
+              {/* Book Now trigger */}
+              <button
+                onClick={handleWidgetBookClick}
+                className="w-full md:w-auto px-8 py-3 rounded-xl bg-[#FF5F45] hover:bg-[#FF7A5C] text-white font-extrabold text-xs tracking-wider uppercase transition-all shadow-md hover:scale-[1.02] active:scale-[0.98] shrink-0"
+              >
+                Book Now
+              </button>
             </div>
           </div>
         </section>
