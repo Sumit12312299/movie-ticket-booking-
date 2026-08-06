@@ -17,6 +17,7 @@ class SeatLockingService:
     @classmethod
     def lock_seats(cls, showtime_id: str, seats: List[str], user_id: str) -> Tuple[bool, str]:
         now = time.time()
+        # Calculate seat lock lease duration based on configuration (typically 5 minutes)
         expiry = now + (settings.SEAT_LOCK_EXPIRATION_MINUTES * 60)
         
         if showtime_id not in cls._active_locks:
