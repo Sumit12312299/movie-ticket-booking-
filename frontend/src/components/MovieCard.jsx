@@ -4,6 +4,11 @@ import { Star, Clock, Ticket, Play, Heart, Film, Info } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
 
+/**
+ * MovieCard displays details of a movie with an interactive 3D tilt hover effect.
+ * @param {object} props.movie - Movie catalog item dataset
+ * @param {function} props.onOpenTrailer - Event handler trigger to load youtube video trailer modal
+ */
 export default function MovieCard({ movie, onOpenTrailer }) {
   const { user, toggleFavorite } = useAuth();
   const { addToast } = useNotification();
