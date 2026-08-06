@@ -256,3 +256,36 @@ html.dark .shimmer-bg {
 .animate-projector {
   animation: projectorFlicker 4s infinite alternate ease-in-out;
 }
+
+/* Force flat solid background colors instead of gradients */
+.from-red-600, .from-rose-600, .from-rose-500 {
+  --tw-gradient-from: var(--primary) !important;
+  --tw-gradient-to: var(--primary) !important;
+  --tw-gradient-stops: var(--primary), var(--primary) !important;
+  background-color: var(--primary) !important;
+  background-image: none !important;
+}
+
+.hover\:from-red-500:hover, .hover\:from-rose-500:hover {
+  --tw-gradient-from: var(--primary-hover) !important;
+  --tw-gradient-to: var(--primary-hover) !important;
+  --tw-gradient-stops: var(--primary-hover), var(--primary-hover) !important;
+  background-color: var(--primary-hover) !important;
+  background-image: none !important;
+}
+
+.from-emerald-600 {
+  --tw-gradient-from: #22C55E !important;
+  --tw-gradient-to: #22C55E !important;
+  --tw-gradient-stops: #22C55E, #22C55E !important;
+  background-color: #22C55E !important;
+  background-image: none !important;
+}
+
+.from-amber-500 {
+  --tw-gradient-from: var(--accent) !important;
+  --tw-gradient-to: var(--accent) !important;
+  --tw-gradient-stops: var(--accent), var(--accent) !important;
+  background-color: var(--accent) !important;
+  background-image: none !important;
+}
