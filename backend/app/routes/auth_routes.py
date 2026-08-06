@@ -51,6 +51,10 @@ async def register(user_data: UserCreate):
 
 @router.post("/login", response_model=Token)
 async def login(credentials: UserLogin):
+    """
+    Authenticate a user and return a JWT access token.
+    Checks user credentials, matches password hash, and encodes role privileges.
+    """
     db = get_database()
     users_col = db["users"]
     
