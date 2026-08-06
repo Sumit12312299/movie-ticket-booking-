@@ -13,6 +13,10 @@ const getEmbedUrl = (url) => {
   return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
 };
 
+/**
+ * TrailerModal displays movie video trailer content in an overlay modal.
+ * Leverages YouTube embedding API helpers to parse URLs and render iframes.
+ */
 export default function TrailerModal({ movie, onClose }) {
   if (!movie || !movie.trailer_url) return null;
 
