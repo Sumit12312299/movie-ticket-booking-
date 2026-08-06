@@ -3,6 +3,11 @@ import API from '../services/api';
 
 const AuthContext = createContext();
 
+/**
+ * AuthProvider component manages global session authentication state.
+ * Syncs user profile datasets and bearer tokens with localStorage,
+ * and distributes login, register, and logout handlers to the React tree.
+ */
 export const AuthProvider = ({ children }) => {
   // Application-wide react authorization context provider
   const [user, setUser] = useState(null);
