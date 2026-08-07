@@ -544,7 +544,7 @@ export default function SeatSelectionPage() {
                   <h3 className="text-base font-black text-white flex items-center gap-2">
                     Step 1.5: Customize Your Gourmet Experience <Sparkles className="w-4 h-4 text-amber-550 fill-amber-500/10 animate-pulse" />
                   </h3>
-                  <p className="text-xs text-slate-455 font-medium">Skip counter queues! Pre-order and collect at snacks bar.</p>
+                  <p className="text-xs text-slate-400 font-medium">Skip counter queues! Pre-order and collect at snacks bar.</p>
                 </div>
               </div>
             </div>
@@ -606,7 +606,7 @@ export default function SeatSelectionPage() {
                 </button>
                 <button
                   onClick={() => handleProceedToFinalCheckout(selectedSnacks)}
-                  className="flex-1 sm:flex-none px-8 py-3.5 rounded-2xl bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-455 text-white font-extrabold text-xs shadow-xl shadow-rose-600/20 hover:scale-105 active:scale-95 transition-all cursor-pointer"
+                  className="flex-1 sm:flex-none px-8 py-3.5 rounded-2xl bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-500 text-white font-extrabold text-xs shadow-xl shadow-rose-600/20 hover:scale-105 active:scale-95 transition-all cursor-pointer"
                 >
                   Add & Proceed
                 </button>

@@ -233,7 +233,7 @@ export default function CheckoutPage() {
                   onClick={() => setPaymentMethod(name)}
                   className={`p-4.5 rounded-2xl border text-left text-sm font-black transition-all flex items-center gap-3 cursor-pointer ${
                     paymentMethod === name
-                      ? 'bg-rose-600/20 border-rose-500 text-rose-600 dark:text-rose-305 shadow-lg shadow-rose-600/20 scale-[1.02]'
+                      ? 'bg-rose-600/20 border-rose-500 text-rose-600 dark:text-rose-300 shadow-lg shadow-rose-600/20 scale-[1.02]'
                       : 'bg-slate-100 dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white'
                   }`}
                 >
@@ -270,8 +270,8 @@ export default function CheckoutPage() {
                       </div>
                     </div>
                     <div className="flex items-center gap-3.5 shrink-0">
-                      <span className="font-black text-emerald-600 dark:text-emerald-405 font-mono text-base">₹{item.price}</span>
-                      <div className="flex items-center gap-1.5 bg-white dark:bg-slate-800 px-1.5 py-1 rounded-xl border border-slate-205 dark:border-slate-700">
+                      <span className="font-black text-emerald-600 dark:text-emerald-400 font-mono text-base">₹{item.price}</span>
+                      <div className="flex items-center gap-1.5 bg-white dark:bg-slate-800 px-1.5 py-1 rounded-xl border border-slate-200 dark:border-slate-700">
                         <button
                           type="button"
                           onClick={() => updateSnackQty(item.id, -1)}
@@ -304,7 +304,7 @@ export default function CheckoutPage() {
                     <Wallet className="w-5.5 h-5.5" />
                   </div>
                   <div>
-                    <h4 className="text-base font-black text-slate-905 dark:text-white">BookTicket VIP Wallet</h4>
+                    <h4 className="text-base font-black text-slate-900 dark:text-white">BookTicket VIP Wallet</h4>
                     <p className="text-xs font-semibold text-slate-500 dark:text-slate-400">Instant 1-Click Payment</p>
                   </div>
                 </div>
@@ -344,7 +344,7 @@ export default function CheckoutPage() {
                     type="text"
                     value={cardNumber}
                     onChange={(e) => setCardNumber(e.target.value)}
-                    className="w-full bg-slate-100 dark:bg-slate-905 border border-slate-200/60 dark:border-slate-800 rounded-xl p-3.5 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-rose-500 font-bold font-mono"
+                    className="w-full bg-slate-100 dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 rounded-xl p-3.5 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-rose-500 font-bold font-mono"
                   />
                 </div>
 
@@ -355,7 +355,7 @@ export default function CheckoutPage() {
                       type="text"
                       value={expiry}
                       onChange={(e) => setExpiry(e.target.value)}
-                      className="w-full bg-slate-100 dark:bg-slate-905 border border-slate-200/60 dark:border-slate-800 rounded-xl p-3.5 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-rose-500 font-bold font-mono"
+                      className="w-full bg-slate-100 dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 rounded-xl p-3.5 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-rose-500 font-bold font-mono"
                     />
                   </div>
 
@@ -365,7 +365,7 @@ export default function CheckoutPage() {
                       type="password"
                       value={cvv}
                       onChange={(e) => setCvv(e.target.value)}
-                      className="w-full bg-slate-100 dark:bg-slate-905 border border-slate-200/60 dark:border-slate-800 rounded-xl p-3.5 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-rose-500 font-bold font-mono"
+                      className="w-full bg-slate-100 dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 rounded-xl p-3.5 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-rose-500 font-bold font-mono"
                     />
                   </div>
                 </div>
@@ -387,7 +387,7 @@ export default function CheckoutPage() {
                     r="16"
                     stroke="currentColor"
                     strokeWidth="3.5"
-                    className="text-slate-205 dark:text-slate-800"
+                    className="text-slate-200 dark:text-slate-800"
                     fill="transparent"
                   />
                   <circle
@@ -451,14 +451,14 @@ export default function CheckoutPage() {
 
           {/* Promo Code Form */}
           <form onSubmit={handleApplyPromo} className="pt-4 border-t border-slate-200 dark:border-slate-800 space-y-2">
-            <label className="text-xs font-black uppercase text-slate-455 dark:text-slate-500 block">Promo Code</label>
+            <label className="text-xs font-black uppercase text-slate-400 dark:text-slate-500 block">Promo Code</label>
             <div className="flex gap-2">
               <input
                 type="text"
                 placeholder="Try CINEMA10"
                 value={promoCode}
                 onChange={(e) => setPromoCode(e.target.value)}
-                className="flex-1 bg-slate-100 dark:bg-slate-905 border border-slate-200/60 dark:border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 dark:text-white uppercase font-bold focus:outline-none focus:border-rose-500"
+                className="flex-1 bg-slate-100 dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 dark:text-white uppercase font-bold focus:outline-none focus:border-rose-500"
               />
               <button
                 type="submit"
@@ -471,7 +471,7 @@ export default function CheckoutPage() {
 
           {/* Quick-Apply Coupon Section */}
           <div className="pt-4 border-t border-slate-200 dark:border-slate-800 space-y-2">
-            <span className="text-xs font-black uppercase text-slate-455 dark:text-slate-500 block">Available Coupons</span>
+            <span className="text-xs font-black uppercase text-slate-400 dark:text-slate-500 block">Available Coupons</span>
             <div className="grid grid-cols-2 gap-2">
               {AVAILABLE_COUPONS.map((coupon) => (
                 <button
@@ -523,7 +523,7 @@ export default function CheckoutPage() {
 
             <div className="pt-2 border-t border-slate-200 dark:border-slate-800 flex justify-between items-center">
               <span className="text-base font-black text-slate-900 dark:text-white">Final Total</span>
-              <span className="text-3xl font-black text-emerald-600 dark:text-emerald-405 font-mono">
+              <span className="text-3xl font-black text-emerald-600 dark:text-emerald-400 font-mono">
                 ₹{finalAmount.toFixed(2)}
               </span>
             </div>

@@ -301,7 +301,7 @@ export default function ShowtimeSelectionPage() {
                   className={`px-4 py-2.5 rounded-2xl text-xs font-black transition-all cursor-pointer hover:scale-102 active:scale-97 ${
                     selectedTimeOfDay === timeText
                       ? 'bg-rose-600 text-white shadow-lg shadow-rose-600/25 border border-rose-500/20'
-                      : 'bg-slate-100 dark:bg-slate-900 text-slate-650 dark:text-slate-355 hover:text-slate-900 dark:hover:text-white border border-slate-200/85 dark:border-slate-800/85'
+                      : 'bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white border border-slate-200/85 dark:border-slate-800/85'
                   }`}
                 >
                   {timeText}
@@ -323,7 +323,7 @@ export default function ShowtimeSelectionPage() {
                   className={`px-4 py-2.5 rounded-2xl text-xs font-black transition-all cursor-pointer hover:scale-102 active:scale-97 ${
                     selectedScreen === fmt
                       ? 'bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/40'
-                      : 'bg-slate-100 dark:bg-slate-900 text-slate-650 dark:text-slate-355 hover:text-slate-900 dark:hover:text-white border border-slate-200/85 dark:border-slate-800/85'
+                      : 'bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white border border-slate-200/85 dark:border-slate-800/85'
                   }`}
                 >
                   {fmt}
@@ -357,7 +357,7 @@ export default function ShowtimeSelectionPage() {
           className="text-center py-20 glass-card rounded-3xl space-y-4 border border-slate-200 dark:border-slate-800 shadow-xl"
         >
           <Compass className="w-16 h-16 text-slate-450 dark:text-slate-700 mx-auto animate-bounce" />
-          <h3 className="text-xl font-black text-slate-750 dark:text-slate-200">No Matching Screenings</h3>
+          <h3 className="text-xl font-black text-slate-700 dark:text-slate-200">No Matching Screenings</h3>
           <p className="text-xs text-slate-400 max-w-sm mx-auto leading-relaxed">
             No showtimes match your current filters. Try selecting a different date, clearing filters, or choosing another screen format.
           </p>

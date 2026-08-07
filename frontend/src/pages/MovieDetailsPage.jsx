@@ -450,7 +450,7 @@ export default function MovieDetailsPage() {
                         style={{ width: `${percentage}%` }}
                       ></div>
                     </div>
-                    <span className="w-8 text-right text-[10px] font-black text-slate-500 dark:text-slate-405 font-mono">
+                    <span className="w-8 text-right text-[10px] font-black text-slate-500 dark:text-slate-400 font-mono">
                       {count} ({Math.round(percentage)}%)
                     </span>
                   </div>

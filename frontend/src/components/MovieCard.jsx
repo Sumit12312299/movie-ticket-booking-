@@ -50,7 +50,7 @@ export default function MovieCard({ movie, onOpenTrailer }) {
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="bg-white dark:bg-[#1a1a1a] rounded-lg border border-slate-200 dark:border-slate-800 shadow-md hover:shadow-xl hover:border-[#f5c518]/30 transition-all duration-305 flex flex-col overflow-hidden group"
+      className="bg-white dark:bg-[#1a1a1a] rounded-lg border border-slate-200 dark:border-slate-800 shadow-md hover:shadow-xl hover:border-[#f5c518]/30 transition-all duration-300 flex flex-col overflow-hidden group"
     >
       {/* Poster Image Container - Standard 2:3 Cinema Ratio */}
       <div 

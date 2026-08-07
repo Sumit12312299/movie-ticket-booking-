@@ -166,7 +166,7 @@ export default function Navbar({ onSearchChange }) {
             <div className="relative shrink-0" ref={locationMenuRef}>
               <button
                 onClick={() => setShowLocationMenu(!showLocationMenu)}
-                className="flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700/80 transition-all border border-slate-205 dark:border-slate-750 text-xs font-black cursor-pointer shadow-xs hover:scale-102 active:scale-97"
+                className="flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700/80 transition-all border border-slate-200 dark:border-slate-700 text-xs font-black cursor-pointer shadow-xs hover:scale-102 active:scale-97"
               >
                 <MapPin className="w-3.5 h-3.5 text-rose-500 fill-rose-500/10" />
                 <span>{selectedCity}</span>
@@ -204,7 +204,7 @@ export default function Navbar({ onSearchChange }) {
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
                 onFocus={() => searchInput.trim() && setShowDropdown(true)}
-                className="w-full pl-10 pr-10 py-2.5 rounded-2xl bg-slate-100/80 dark:bg-slate-800/80 border border-slate-200/50 dark:border-slate-700/60 text-xs text-slate-900 dark:text-slate-100 placeholder-slate-455 focus:outline-none focus:border-rose-500 focus:bg-white dark:focus:bg-slate-900 transition-all shadow-inner"
+                className="w-full pl-10 pr-10 py-2.5 rounded-2xl bg-slate-100/80 dark:bg-slate-800/80 border border-slate-200/50 dark:border-slate-700/60 text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-rose-500 focus:bg-white dark:focus:bg-slate-900 transition-all shadow-inner"
               />
               {searchInput && (
                 <button
@@ -246,7 +246,7 @@ export default function Navbar({ onSearchChange }) {
                           </p>
                           <div className="flex items-center gap-1 mt-1">
                             <Star className="w-3 h-3 text-amber-500 fill-amber-500" />
-                            <span className="text-[10px] font-black text-amber-600 dark:text-amber-455">
+                            <span className="text-[10px] font-black text-amber-600 dark:text-amber-400">
                               {m.rating?.toFixed(1) || '5.0'}
                             </span>
                           </div>
@@ -266,7 +266,7 @@ export default function Navbar({ onSearchChange }) {
             {/* Theme Toggle Button */}
             <button
               onClick={toggleTheme}
-              className="w-10 h-10 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-amber-400 flex items-center justify-center hover:bg-slate-200 dark:hover:bg-slate-700/80 transition-all border border-slate-205 dark:border-slate-750 shadow-xs hover:scale-105 active:scale-95 cursor-pointer"
+              className="w-10 h-10 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-amber-400 flex items-center justify-center hover:bg-slate-200 dark:hover:bg-slate-700/80 transition-all border border-slate-200 dark:border-slate-700 shadow-xs hover:scale-105 active:scale-95 cursor-pointer"
               title={isDarkMode ? 'Light Mode' : 'Dark Mode'}
             >
               {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
@@ -325,7 +325,7 @@ export default function Navbar({ onSearchChange }) {
             <div className="relative animate-fade-in" ref={notificationMenuRef}>
               <button
                 onClick={() => setShowNotifications(!showNotifications)}
-                className={`relative w-10 h-10 rounded-2xl flex items-center justify-center border transition-all hover:scale-105 active:scale-95 shadow-xs bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-355 border-slate-200 dark:border-slate-750 hover:text-rose-500 dark:hover:text-rose-500 hover:bg-rose-500/5 cursor-pointer`}
+                className={`relative w-10 h-10 rounded-2xl flex items-center justify-center border transition-all hover:scale-105 active:scale-95 shadow-xs bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:text-rose-500 dark:hover:text-rose-500 hover:bg-rose-500/5 cursor-pointer`}
                 title="Recent Notifications"
               >
                 <Bell className="w-4 h-4" />
