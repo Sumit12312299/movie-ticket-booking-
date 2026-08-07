@@ -1,0 +1,203 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+/* ========================================
+   MOVIEHUB DESIGN SYSTEM
+   ======================================== */
+:root {
+  /* Brand Colors */
+  --red:         #E53935;
+  --red-hover:   #EF5350;
+  --red-dim:     rgba(229, 57, 53, 0.12);
+  --red-border:  rgba(229, 57, 53, 0.3);
+
+  /* Backgrounds */
+  --bg-base:     #0b0c1a;
+  --bg-nav:      #0f1020;
+  --bg-card:     #141528;
+  --bg-card2:    #1a1b2e;
+  --bg-input:    rgba(255,255,255,0.05);
+  --bg-hover:    rgba(255,255,255,0.04);
+
+  /* Borders */
+  --border:      rgba(255,255,255,0.07);
+  --border-sm:   rgba(255,255,255,0.05);
+
+  /* Text */
+  --text-white:  #FFFFFF;
+  --text-light:  #E0E0E0;
+  --text-mid:    #9E9EB8;
+  --text-muted:  #555570;
+
+  /* Status */
+  --green:       #4CAF50;
+  --yellow:      #FFC107;
+  --blue:        #2196F3;
+  --orange:      #FF9800;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box; margin: 0; padding: 0;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background: var(--bg-base);
+  color: var(--text-light);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar        { width: 6px; height: 6px; }
+::-webkit-scrollbar-track  { background: var(--bg-base); }
+::-webkit-scrollbar-thumb  { background: #2a2b42; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #383955; }
+
+/* ========================================
+   COMPONENTS
+   ======================================== */
+
+/* Buttons */
+.btn-red {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--red); color: #fff;
+  font-weight: 700; font-size: 14px;
+  padding: 11px 24px; border-radius: 6px;
+  border: none; cursor: pointer; text-decoration: none;
+  transition: background 0.2s, box-shadow 0.2s;
+  white-space: nowrap;
+}
+.btn-red:hover {
+  background: var(--red-hover);
+  box-shadow: 0 4px 20px rgba(229,57,53,0.35);
+}
+
+.btn-outline {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: transparent; color: var(--text-light);
+  font-weight: 700; font-size: 14px;
+  padding: 10px 22px; border-radius: 6px;
+  border: 1px solid var(--border); cursor: pointer; text-decoration: none;
+  transition: all 0.2s;
+}
+.btn-outline:hover {
+  border-color: rgba(255,255,255,0.2);
+  background: var(--bg-hover);
+  color: #fff;
+}
+
+.btn-ghost {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,0.07); color: var(--text-light);
+  font-weight: 600; font-size: 13px;
+  padding: 9px 18px; border-radius: 6px;
+  border: 1px solid var(--border); cursor: pointer; text-decoration: none;
+  transition: all 0.2s;
+}
+.btn-ghost:hover { background: rgba(255,255,255,0.12); color: #fff; }
+
+/* Cards */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+/* Movie Card */
+.movie-card {
+  flex-shrink: 0;
+  background: var(--bg-card);
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  border: 1px solid var(--border-sm);
+}
+.movie-card:hover {
+  transform: scale(1.04) translateY(-3px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.5);
+  border-color: rgba(229,57,53,0.3);
+}
+
+/* Inputs */
+.mh-input {
+  width: 100%;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: var(--text-light);
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.mh-input:focus {
+  border-color: var(--red);
+  box-shadow: 0 0 0 3px rgba(229,57,53,0.12);
+}
+.mh-input::placeholder { color: var(--text-muted); }
+.mh-input option { background: #1a1b2e; }
+
+/* Horizontal scroll row */
+.scroll-row {
+  display: flex; gap: 16px;
+  overflow-x: auto; padding-bottom: 8px;
+  -ms-overflow-style: none; scrollbar-width: none;
+}
+.scroll-row::-webkit-scrollbar { display: none; }
+
+/* Star rating */
+.stars { display: inline-flex; align-items: center; gap: 2px; }
+
+/* Badges */
+.badge {
+  display: inline-flex; align-items: center;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
+  text-transform: uppercase; padding: 3px 8px; border-radius: 4px;
+}
+.badge-red    { background: var(--red-dim); color: var(--red); border: 1px solid var(--red-border); }
+.badge-green  { background: rgba(76,175,80,0.12); color: #4CAF50; border: 1px solid rgba(76,175,80,0.3); }
+.badge-blue   { background: rgba(33,150,243,0.12); color: #2196F3; border: 1px solid rgba(33,150,243,0.3); }
+.badge-orange { background: rgba(255,152,0,0.12); color: #FF9800; border: 1px solid rgba(255,152,0,0.3); }
+
+/* Section heading */
+.section-heading {
+  font-size: 20px; font-weight: 800;
+  color: var(--text-white); margin-bottom: 20px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.section-heading a, .section-heading button {
+  font-size: 13px; font-weight: 600; color: var(--red);
+  text-decoration: none; background: none; border: none;
+  cursor: pointer; transition: color 0.2s;
+}
+.section-heading a:hover, .section-heading button:hover { color: var(--red-hover); }
+
+/* Seat styles */
+.seat {
+  width: 28px; height: 26px; border-radius: 5px 5px 8px 8px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  font-size: 9px; font-weight: 700; transition: all 0.15s; border: 1px solid transparent;
+}
+.seat-avail  { background: #1e2240; border-color: #2a2f55; color: #6d7aad; }
+.seat-avail:hover  { background: var(--red); border-color: var(--red); color: #fff; transform: scale(1.1); }
+.seat-sel    { background: var(--red); border-color: #ff6b6b; color: #fff; box-shadow: 0 0 8px rgba(229,57,53,0.5); }
+.seat-booked { background: #111220; border-color: #1a1b2e; color: #2a2b3a; cursor: not-allowed; }
+
+/* Animations */
+@keyframes fadeIn   { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes mh-spin  { to { transform: rotate(360deg); } }
+@keyframes shimmer  { 0% { background-position: -600px 0; } 100% { background-position: 600px 0; } }
+
+.animate-fadeIn { animation: fadeIn 0.35s ease-out both; }
+
+.skeleton {
+  background: linear-gradient(90deg, #141528 25%, #1d1e33 50%, #141528 75%);
+  background-size: 600px 100%;
+  animation: shimmer 1.5s infinite;
+}
