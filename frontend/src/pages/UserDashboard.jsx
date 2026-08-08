@@ -129,7 +129,7 @@ export default function UserDashboard() {
       <div className="py-20 text-center space-y-4">
         <h2 className="text-xl font-bold text-slate-700 dark:text-slate-300">Please Sign In</h2>
         <p className="text-xs text-slate-500">Log in to view your profile and ticket booking history.</p>
-        <Link to="/auth" className="inline-block px-6 py-2.5 rounded-2xl bg-rose-600 text-white text-xs font-bold shadow-lg shadow-rose-600/30">
+        <Link to="/auth" className="inline-block px-6 py-2.5 rounded-2xl bg-rose-600 text-white text-xs font-bold shadow-md">
           Go to Sign In
         </Link>
       </div>
@@ -149,7 +149,7 @@ export default function UserDashboard() {
                 className="w-20 h-20 rounded-3xl object-cover border-4 border-white dark:border-slate-900 shadow-2xl group-hover:scale-105 transition-transform"
               />
             ) : (
-              <div className="w-20 h-20 rounded-3xl bg-gradient-to-tr from-red-600 via-rose-500 to-amber-500 flex items-center justify-center text-white font-black text-3xl shadow-xl shadow-rose-600/30">
+              <div className="w-20 h-20 rounded-3xl bg-gradient-to-tr from-red-600 via-rose-500 to-amber-500 flex items-center justify-center text-white font-black text-3xl shadow-md">
                 {user.full_name.charAt(0).toUpperCase()}
               </div>
             )}
@@ -219,13 +219,12 @@ export default function UserDashboard() {
         </div>
       </div>
 
-      {/* Main Tabs Navigation */}
       <div className="flex flex-wrap items-center gap-3 border-b border-slate-200 dark:border-slate-800 pb-4">
         <button
           onClick={() => setActiveTab('bookings')}
           className={`px-6 py-3 rounded-2xl text-xs font-black flex items-center gap-2 transition-all cursor-pointer ${
             activeTab === 'bookings'
-              ? 'bg-gradient-to-r from-red-600 to-rose-500 text-white shadow-lg shadow-rose-600/30'
+              ? 'bg-rose-600 text-white shadow-md'
               : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-slate-800'
           }`}
         >
@@ -237,7 +236,7 @@ export default function UserDashboard() {
           onClick={() => setActiveTab('favorites')}
           className={`px-6 py-3 rounded-2xl text-xs font-black flex items-center gap-2 transition-all cursor-pointer ${
             activeTab === 'favorites' || activeTab === 'wishlist'
-              ? 'bg-gradient-to-r from-red-600 to-rose-500 text-white shadow-lg shadow-rose-600/30'
+              ? 'bg-rose-600 text-white shadow-md'
               : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-slate-800'
           }`}
         >
@@ -249,7 +248,7 @@ export default function UserDashboard() {
           onClick={() => setActiveTab('settings')}
           className={`px-6 py-3 rounded-2xl text-xs font-black flex items-center gap-2 transition-all cursor-pointer ${
             activeTab === 'settings'
-              ? 'bg-gradient-to-r from-red-600 to-rose-500 text-white shadow-lg shadow-rose-600/30'
+              ? 'bg-rose-600 text-white shadow-md'
               : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-slate-800'
           }`}
         >
@@ -271,7 +270,7 @@ export default function UserDashboard() {
             <Ticket className="w-12 h-12 text-slate-400 dark:text-slate-600 mx-auto" />
             <h3 className="text-lg font-bold text-slate-700 dark:text-slate-300">No Booking History</h3>
             <p className="text-xs text-slate-500">You haven't booked any movie tickets yet.</p>
-            <Link to="/" className="inline-block mt-2 px-6 py-2.5 rounded-2xl bg-rose-600 text-white text-xs font-bold shadow-md shadow-rose-600/30">
+            <Link to="/" className="inline-block mt-2 px-6 py-2.5 rounded-2xl bg-rose-600 text-white text-xs font-bold shadow-md">
               Browse Movies & Book Now
             </Link>
           </div>
@@ -347,7 +346,7 @@ export default function UserDashboard() {
 
                       <button
                         onClick={() => setSelectedTicket(b)}
-                        className="px-4 py-2 rounded-xl bg-gradient-to-r from-red-600 to-rose-500 text-white text-xs font-black flex items-center gap-1.5 shadow-md shadow-rose-600/30 hover:scale-105 transition-all"
+                        className="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-black flex items-center gap-1.5 shadow-sm hover:scale-105 transition-all"
                       >
                         <QrCode className="w-3.5 h-3.5" /> E-Pass
                       </button>
@@ -367,7 +366,7 @@ export default function UserDashboard() {
             <Heart className="w-12 h-12 text-slate-400 dark:text-slate-600 mx-auto" />
             <h3 className="text-lg font-bold text-slate-700 dark:text-slate-300">Your Wishlist is Empty</h3>
             <p className="text-xs text-slate-500">Explore movies and click the heart icon to save your favorites.</p>
-            <Link to="/" className="inline-block mt-2 px-6 py-2.5 rounded-2xl bg-rose-600 text-white text-xs font-bold shadow-md shadow-rose-600/30">
+            <Link to="/" className="inline-block mt-2 px-6 py-2.5 rounded-2xl bg-rose-600 text-white text-xs font-bold shadow-md">
               Discover Movies
             </Link>
           </div>
@@ -384,7 +383,7 @@ export default function UserDashboard() {
                 </div>
                 <Link
                   to={`/showtimes/${m.id}`}
-                  className="w-full py-2 rounded-xl bg-gradient-to-r from-red-600 to-rose-500 text-white font-extrabold text-xs text-center block shadow-sm hover:scale-105 transition-all"
+                  className="w-full py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-extrabold text-xs text-center block shadow-sm hover:scale-105 transition-all"
                 >
                   Book Tickets
                 </Link>
@@ -400,7 +399,7 @@ export default function UserDashboard() {
           {/* Profile Picture Avatar Manager Section */}
           <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-xl space-y-6">
             <div className="flex items-center gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
-              <div className="w-10 h-10 rounded-2xl bg-rose-600 text-white flex items-center justify-center shadow-lg shadow-rose-600/30">
+              <div className="w-10 h-10 rounded-2xl bg-rose-600 text-white flex items-center justify-center shadow-md">
                 <Camera className="w-5 h-5" />
               </div>
               <div>
@@ -440,7 +439,7 @@ export default function UserDashboard() {
                     <button
                       type="button"
                       onClick={() => fileInputRef.current?.click()}
-                      className="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-extrabold text-xs shadow-md shadow-emerald-600/30 flex items-center gap-2 hover:scale-105 transition-all cursor-pointer"
+                      className="px-5 py-2.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs shadow-md flex items-center gap-2 hover:scale-105 transition-all cursor-pointer"
                     >
                       <Upload className="w-4 h-4" /> Upload from Device
                     </button>
@@ -461,7 +460,7 @@ export default function UserDashboard() {
                             addToast('Custom image URL applied as profile picture!', 'success');
                           }
                         }}
-                        className="px-4 py-2.5 rounded-2xl bg-rose-600 text-white font-extrabold text-xs shadow-md shadow-rose-600/30 hover:scale-105 transition-all cursor-pointer"
+                        className="px-4 py-2.5 rounded-2xl bg-rose-600 text-white font-extrabold text-xs shadow-md hover:scale-105 transition-all cursor-pointer"
                       >
                         Apply URL
                       </button>
@@ -501,7 +500,7 @@ export default function UserDashboard() {
           {/* Account Details & Preferences Form */}
           <form onSubmit={handleSaveProfile} className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-xl space-y-6">
             <div className="flex items-center gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
-              <div className="w-10 h-10 rounded-2xl bg-sky-600 text-white flex items-center justify-center shadow-lg shadow-sky-600/30">
+              <div className="w-10 h-10 rounded-2xl bg-sky-600 text-white flex items-center justify-center shadow-md">
                 <User className="w-5 h-5" />
               </div>
               <div>
@@ -563,6 +562,7 @@ export default function UserDashboard() {
                   <option value="Bengaluru (IMAX Forum)">Bengaluru (IMAX Forum)</option>
                   <option value="Hyderabad (Prasads IMAX 4K)">Hyderabad (Prasads IMAX 4K)</option>
                   <option value="Pune (PVR Phoenix Marketcity)">Pune (PVR Phoenix Marketcity)</option>
+                  <option value="Phagwara (Majestic Grand & PVR Curo Mall)">Phagwara (Majestic Grand & PVR Curo Mall)</option>
                 </select>
               </div>
             </div>
@@ -571,7 +571,7 @@ export default function UserDashboard() {
               <button
                 type="submit"
                 disabled={isSavingSettings}
-                className="px-8 py-3.5 rounded-2xl bg-gradient-to-r from-red-600 to-rose-500 hover:from-red-500 hover:to-rose-400 text-white text-xs font-black flex items-center gap-2 shadow-xl shadow-rose-600/30 transition-all hover:scale-105 cursor-pointer"
+                className="px-8 py-3.5 rounded-2xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-black flex items-center gap-2 shadow-md transition-all hover:scale-105 cursor-pointer"
               >
                 <Save className="w-4 h-4" />
                 {isSavingSettings ? 'Saving Changes...' : 'Save Profile Changes'}
