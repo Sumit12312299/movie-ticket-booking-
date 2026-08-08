@@ -124,7 +124,7 @@ export default function BookingConfirmationPage() {
 
         <Link
           to="/"
-          className="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-gradient-to-r from-red-600 to-rose-500 hover:from-red-500 hover:to-rose-400 text-white text-xs font-black flex items-center justify-center gap-2 shadow-xl shadow-rose-600/30 transition-all hover:scale-105"
+          className="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-black flex items-center justify-center gap-2 shadow-md transition-all hover:scale-105"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to Home
