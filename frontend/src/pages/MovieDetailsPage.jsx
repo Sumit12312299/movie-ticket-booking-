@@ -195,8 +195,64 @@ export default function MovieDetailsPage() {
 
   if (!movie) return null;
 
+  const cardBgClass = isTheaterDimmed 
+    ? 'bg-slate-950 text-white border-slate-900 shadow-2xl' 
+    : 'bg-white dark:bg-[#070d19] text-slate-800 dark:text-white border-slate-200 dark:border-slate-850 shadow-md dark:shadow-2xl';
+
+  const opacityClass = isTheaterDimmed ? 'opacity-20' : 'opacity-5 dark:opacity-20';
+  
+  const gradientClass = isTheaterDimmed 
+    ? 'absolute inset-0 bg-gradient-to-tr from-slate-950/95 via-slate-950/80 to-transparent -z-10' 
+    : 'absolute inset-0 bg-gradient-to-tr from-white via-white/85 to-transparent dark:from-slate-950/95 dark:via-slate-950/80 dark:to-transparent -z-10';
+
+  const homeBtnClass = isTheaterDimmed
+    ? 'bg-white/5 border-white/10 text-rose-450 hover:text-rose-400 hover:bg-white/10'
+    : 'bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-white/10 text-rose-500 dark:text-rose-450 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-slate-200 dark:hover:bg-white/10';
+
+  const dimBtnClass = isTheaterDimmed
+    ? 'bg-amber-400 text-slate-950 border-amber-300 scale-105 shadow-sm'
+    : 'bg-slate-100 hover:bg-slate-200 dark:bg-white/10 dark:hover:bg-white/15 text-slate-850 dark:text-slate-200 border-slate-205 dark:border-white/10';
+
+  const ratingBadgeClass = isTheaterDimmed
+    ? 'bg-amber-500/25 text-amber-300 border-amber-500/35'
+    : 'bg-amber-500/10 dark:bg-amber-500/25 text-amber-700 dark:text-amber-300 border border-amber-500/20 dark:border-amber-500/35';
+
+  const langBadgeClass = isTheaterDimmed
+    ? 'bg-white/10 text-slate-200 border border-white/5'
+    : 'bg-slate-100 dark:bg-white/10 text-slate-750 dark:text-slate-200 border border-slate-200 dark:border-white/5';
+
+  const statusBadgeClass = movie.status === 'now_showing'
+    ? (isTheaterDimmed 
+        ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' 
+        : 'bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20 dark:border-emerald-500/30')
+    : (isTheaterDimmed 
+        ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' 
+        : 'bg-amber-500/10 dark:bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/20 dark:border-amber-500/30');
+
+  const titleClass = isTheaterDimmed ? 'text-white' : 'text-slate-900 dark:text-white';
+  
+  const wishlistBtnClass = isTheaterDimmed
+    ? (isFavorite 
+        ? 'bg-rose-600/20 border-rose-500/40 text-rose-500 scale-110 shadow-md' 
+        : 'bg-white/5 border-white/10 text-slate-400 hover:text-rose-500')
+    : (isFavorite 
+        ? 'bg-rose-600/20 border-rose-500/40 text-rose-600 dark:text-rose-500 scale-110 shadow-md' 
+        : 'bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-450 dark:text-slate-400 hover:text-rose-500 hover:scale-105');
+
+  const metaTextClass = isTheaterDimmed ? 'text-slate-300' : 'text-slate-650 dark:text-slate-300';
+  
+  const genreTagClass = isTheaterDimmed
+    ? 'bg-white/5 text-slate-350 border border-white/5'
+    : 'bg-slate-50 dark:bg-white/5 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-white/5';
+
+  const synopsisTextClass = isTheaterDimmed ? 'text-slate-305' : 'text-slate-600 dark:text-slate-300';
+
+  const castCardClass = isTheaterDimmed
+    ? 'bg-white/5 border border-white/10 text-slate-200'
+    : 'bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-200';
+
   return (
-    <div className={`space-y-12 pb-16 transition-all duration-700 relative px-4 md:px-0 ${isTheaterDimmed ? 'bg-slate-950 p-6 rounded-3xl ring-4 ring-rose-500/20 shadow-2xl' : ''}`}>
+    <div className={`space-y-12 pb-16 transition-all duration-700 relative px-4 md:px-0 ${isTheaterDimmed ? 'bg-slate-955 p-6 rounded-3xl ring-4 ring-rose-500/20 shadow-2xl' : ''}`}>
       {/* Dimmed Theater Lights Overlay */}
       {isTheaterDimmed && (
         <>
@@ -214,40 +270,36 @@ export default function MovieDetailsPage() {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="relative z-40 rounded-3xl overflow-hidden bg-slate-950 text-white border border-slate-800 shadow-2xl p-6 sm:p-10"
+        className={`relative z-40 rounded-3xl overflow-hidden p-6 sm:p-10 border transition-all duration-300 ${cardBgClass}`}
       >
         {/* Cinematic Blurred Backdrop Banner */}
         <div 
-          className="absolute inset-0 bg-cover bg-center filter blur-3xl opacity-20 scale-110 -z-10"
+          className={`absolute inset-0 bg-cover bg-center filter blur-3xl scale-110 -z-10 transition-opacity duration-300 ${opacityClass}`}
           style={{ backgroundImage: `url(${movie.banner_url || movie.poster_url})` }}
         ></div>
-        <div className="absolute inset-0 bg-gradient-to-tr from-slate-950/95 via-slate-950/80 to-transparent -z-10"></div>
+        <div className={gradientClass}></div>
 
         {/* Theater Dim Lights Control */}
         <div className="flex justify-between items-center mb-6">
           <Link
             to="/"
-            className="flex items-center gap-1.5 text-xs font-black text-rose-450 hover:text-rose-400 bg-white/5 hover:bg-white/10 px-4 py-2 rounded-2xl border border-white/10 transition-all shadow-md"
+            className={`flex items-center gap-1.5 text-xs font-black px-4 py-2 rounded-2xl border transition-all shadow-md ${homeBtnClass}`}
           >
             <ArrowLeft className="w-4 h-4" />
             Home
           </Link>
           <button
             onClick={() => setIsTheaterDimmed(!isTheaterDimmed)}
-            className={`px-4 py-2 rounded-2xl text-xs font-black flex items-center gap-2 transition-all border shadow-lg ${
-              isTheaterDimmed
-                ? 'bg-amber-400 text-slate-950 border-amber-300 scale-105 shadow-amber-400/20'
-                : 'bg-white/10 hover:bg-white/15 text-slate-200 border-white/10'
-            }`}
+            className={`px-4 py-2 rounded-2xl text-xs font-black flex items-center gap-2 transition-all border shadow-lg ${dimBtnClass}`}
           >
-            <Lightbulb className={`w-4 h-4 ${isTheaterDimmed ? 'fill-slate-950 text-slate-950 animate-pulse' : 'text-amber-400'}`} />
+            <Lightbulb className={`w-4 h-4 ${isTheaterDimmed ? 'fill-slate-950 text-slate-950 animate-pulse' : 'text-amber-450'}`} />
             {isTheaterDimmed ? 'Lights On' : 'Dim Theater Lights'}
           </button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-10 items-center">
           {/* Poster Card with embedded play trailer button */}
-          <div className="relative aspect-[2/3] max-w-sm mx-auto w-full rounded-2xl overflow-hidden shadow-2xl border border-slate-700/60 group">
+          <div className="relative aspect-[2/3] max-w-sm mx-auto w-full rounded-2xl overflow-hidden shadow-2xl border border-slate-200 dark:border-slate-700/60 group">
             <img src={movie.poster_url} alt={movie.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
             {movie.trailer_url && (
               <button
@@ -258,47 +310,37 @@ export default function MovieDetailsPage() {
                 <Play className="w-7 h-7 ml-1 fill-white" />
               </button>
             )}
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-60 pointer-events-none"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-955 via-transparent to-transparent opacity-60 dark:opacity-80 pointer-events-none"></div>
           </div>
 
           {/* Specs & Synopsis details */}
           <div className="md:col-span-2 space-y-6 text-left">
             <div className="flex flex-wrap items-center gap-2.5">
-              <span className="px-3.5 py-1.5 rounded-full text-xs font-black bg-amber-500/25 text-amber-300 border border-amber-500/35 flex items-center gap-1">
-                <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+              <span className={`px-3.5 py-1.5 rounded-full text-xs font-black flex items-center gap-1 border ${ratingBadgeClass}`}>
+                <Star className="w-3.5 h-3.5 fill-amber-455 text-amber-500" />
                 {movie.rating.toFixed(1)} / 5.0 ({movie.reviews_count} reviews)
               </span>
-              <span className="px-3 py-1 rounded-full text-xs font-black bg-white/10 text-slate-200 border border-white/5">
+              <span className={`px-3 py-1 rounded-full text-xs font-black border ${langBadgeClass}`}>
                 {movie.language}
               </span>
-              {movie.status === 'now_showing' ? (
-                <span className="px-3 py-1 rounded-full text-xs font-black bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                  Now Showing
-                </span>
-              ) : (
-                <span className="px-3 py-1 rounded-full text-xs font-black bg-amber-500/20 text-amber-300 border border-amber-500/30">
-                  Coming Soon
-                </span>
-              )}
+              <span className={`px-3 py-1 rounded-full text-xs font-black border ${statusBadgeClass}`}>
+                {movie.status === 'now_showing' ? 'Now Showing' : 'Coming Soon'}
+              </span>
             </div>
 
             {/* Title & Heart Wishlist Button */}
             <div className="flex items-center justify-between gap-4">
-              <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-white leading-none">{movie.title}</h1>
+              <h1 className={`text-3xl sm:text-5xl font-black tracking-tight leading-none ${titleClass}`}>{movie.title}</h1>
               <button
                 onClick={handleFavoriteClick}
-                className={`p-3.5 rounded-2xl border transition-all ${
-                  isFavorite
-                    ? 'bg-rose-600/20 border-rose-500/40 text-rose-500 scale-110 shadow-lg shadow-rose-500/20'
-                    : 'bg-white/5 border-white/10 text-slate-400 hover:text-rose-500 hover:scale-105'
-                }`}
+                className={`p-3.5 rounded-2xl border transition-all ${wishlistBtnClass}`}
                 title={isFavorite ? 'Remove from Wishlist' : 'Add to Wishlist'}
               >
                 <Heart className={`w-5 h-5 ${isFavorite ? 'fill-rose-500' : ''}`} />
               </button>
             </div>
 
-            <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs text-slate-300 font-bold">
+            <div className={`flex flex-wrap gap-x-6 gap-y-2 text-xs font-bold ${metaTextClass}`}>
               <span className="flex items-center gap-1.5">
                 <Clock className="w-4 h-4 text-rose-500" />
                 {movie.duration_mins} Minutes
@@ -318,7 +360,7 @@ export default function MovieDetailsPage() {
             {/* Genre tags */}
             <div className="flex flex-wrap gap-2">
               {movie.genre.map((g) => (
-                <span key={g} className="px-3 py-1.5 rounded-xl bg-white/5 text-xs font-black text-slate-300 border border-white/5">
+                <span key={g} className={`px-3 py-1.5 rounded-xl text-xs font-black border ${genreTagClass}`}>
                   {g}
                 </span>
               ))}
@@ -326,23 +368,23 @@ export default function MovieDetailsPage() {
 
             {/* Synopsis */}
             <div className="space-y-2.5">
-              <h3 className="text-xs font-black uppercase tracking-wider text-slate-555">Synopsis</h3>
-              <p className="text-sm text-slate-300 leading-relaxed max-w-2xl">{movie.synopsis}</p>
+              <h3 className="text-xs font-black uppercase tracking-wider text-slate-400 dark:text-slate-555">Synopsis</h3>
+              <p className={`text-sm leading-relaxed max-w-2xl ${synopsisTextClass}`}>{movie.synopsis}</p>
             </div>
 
             {/* Dynamic Star Cast List with visual Avatar circles */}
             {movie.cast && movie.cast.length > 0 && (
               <div className="space-y-3">
-                <h3 className="text-xs font-black uppercase tracking-wider text-slate-555">Starring Cast</h3>
+                <h3 className="text-xs font-black uppercase tracking-wider text-slate-400 dark:text-slate-555">Starring Cast</h3>
                 <div className="flex flex-wrap gap-4">
                   {movie.cast.map((actor) => {
                     const initials = actor.split(' ').map(n => n[0]).join('').slice(0, 2);
                     return (
-                      <div key={actor} className="flex items-center gap-2 bg-white/5 border border-white/10 px-3.5 py-1.5 rounded-full shadow-md">
+                      <div key={actor} className={`flex items-center gap-2 px-3.5 py-1.5 rounded-full shadow-md border ${castCardClass}`}>
                         <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-rose-600 to-amber-500 text-white font-black text-[9px] flex items-center justify-center uppercase shadow-inner">
                           {initials}
                         </div>
-                        <span className="text-xs font-bold text-slate-200">{actor}</span>
+                        <span className="text-xs font-bold text-inherit">{actor}</span>
                       </div>
                     );
                   })}
@@ -354,7 +396,7 @@ export default function MovieDetailsPage() {
             <div className="pt-4 flex flex-wrap items-center gap-4">
               <Link
                 to={`/showtimes/${movie.id}`}
-                className="px-8 py-4 rounded-2xl bg-gradient-to-r from-rose-600 via-rose-500 to-rose-600 hover:from-rose-500 hover:to-rose-400 text-white font-extrabold text-sm shadow-xl shadow-rose-600/35 flex items-center gap-2 hover:scale-105 active:scale-98 transition-all border border-rose-500/20"
+                className="px-8 py-4 rounded-2xl bg-rose-600 hover:bg-rose-500 text-white font-extrabold text-sm shadow-md flex items-center gap-2 hover:scale-105 active:scale-98 transition-all border border-rose-500/20"
               >
                 <Ticket className="w-5 h-5" />
                 Select Showtime & Seats
@@ -408,7 +450,7 @@ export default function MovieDetailsPage() {
             <button
               type="submit"
               disabled={submittingReview}
-              className="w-full py-3.5 rounded-xl bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-450 text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow-lg shadow-rose-600/20 transition-all hover:scale-102 active:scale-97 cursor-pointer"
+              className="w-full py-3.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow-md transition-all hover:scale-102 active:scale-97 cursor-pointer"
             >
               <Send className="w-4 h-4" />
               {submittingReview ? 'Submitting...' : 'Post Review'}
