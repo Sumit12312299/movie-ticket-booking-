@@ -59,13 +59,14 @@ export default function HomePage() {
   const [widgetMovieId, setWidgetMovieId] = useState('');
   const [widgetPeople, setWidgetPeople] = useState('1');
 
-  const CITIES = ['Mumbai', 'Delhi NCR', 'Bengaluru', 'Pune', 'Hyderabad', 'Ahmedabad', 'Kolkata'];
+  const CITIES = ['Mumbai', 'Delhi NCR', 'Bengaluru', 'Pune', 'Hyderabad', 'Ahmedabad', 'Kolkata', 'Phagwara'];
 
   const handleWidgetBookClick = () => {
     if (!widgetMovieId) {
       addToast('Please select a movie from the dropdown to book tickets', 'warning');
       return;
     }
+    localStorage.setItem('bookticket_city', widgetCity);
     navigate(`/showtimes/${widgetMovieId}`);
   };
 
@@ -147,103 +148,183 @@ export default function HomePage() {
       </div>
 
       {/* Redesigned Premium Hero Premiere Banner (Mockup Style) */}
-      {!liveQuery && selectedGenre === 'All' && (
+      {!liveQuery && selectedGenre === 'All' && activeHero && (
         <section 
-          className="relative w-full rounded-3xl overflow-hidden bg-cover bg-center border border-slate-800 shadow-2xl p-6 sm:p-12 pb-24 sm:pb-32 text-white group animate-fade-in flex flex-col justify-between"
-          style={{
-            backgroundImage: `linear-gradient(to bottom, rgba(11, 11, 15, 0.4) 0%, rgba(11, 11, 15, 0.95) 100%), url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=1600')`,
-            minHeight: '520px'
-          }}
+          className="relative w-full rounded-3xl overflow-hidden border border-slate-800 dark:border-slate-850 shadow-2xl p-6 sm:p-12 pb-24 sm:pb-32 text-white group flex flex-col justify-between min-h-[520px]"
         >
+          {/* Dynamic background with cross-fade effect */}
+          <div 
+            className="absolute inset-0 bg-cover bg-center transition-all duration-1000 ease-in-out z-0"
+            style={{
+              backgroundImage: `linear-gradient(to bottom, rgba(11, 11, 15, 0.3) 0%, rgba(11, 11, 15, 0.85) 60%, rgba(11, 11, 15, 0.98) 100%), url(${activeHero.banner_url || activeHero.poster_url || 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=1600'})`
+            }}
+          />
+
           {/* Main Hero grid containing Headline (Left) and Featured Cards (Right) */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center w-full z-10 pt-4">
             
-            {/* Left Headline Section */}
-            <div className="lg:col-span-6 space-y-4 text-left">
+            {/* Left Headline Section (Dynamic based on activeHero) */}
+            <div className="lg:col-span-6 space-y-4 text-left animate-fade-in" key={activeHero.id}>
+              {/* Category / Genre Badges */}
+              <div className="flex flex-wrap gap-2 items-center">
+                <span className="px-3 py-1 rounded-full bg-rose-600/30 border border-rose-500/30 text-rose-450 text-[10px] font-black uppercase tracking-wider">
+                  Featured Premiere
+                </span>
+                {activeHero.genre?.map((g) => (
+                  <span key={g} className="px-2.5 py-0.5 rounded-full bg-slate-900/60 border border-slate-800 text-slate-350 text-[9px] font-bold">
+                    {g}
+                  </span>
+                ))}
+              </div>
+
               <h1 className="text-3xl sm:text-5xl font-black text-white leading-tight tracking-tight drop-shadow-md">
-                Get your tickets<br className="hidden sm:inline" /> to the show: Book<br className="hidden sm:inline" /> your movie<br className="hidden sm:inline" /> experience now!
+                {activeHero.title}
               </h1>
-              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-bold max-w-md pt-2">
-                This modern trend looks nice and all, but we fell into the same trap again.
+
+              {/* Rating and Meta info */}
+              <div className="flex items-center gap-4 text-xs font-semibold text-slate-200">
+                <div className="flex items-center gap-1">
+                  <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
+                  <span className="font-extrabold">{activeHero.rating ? activeHero.rating.toFixed(1) : '4.8'}/5</span>
+                </div>
+                <span>•</span>
+                <span>{activeHero.status === 'now_showing' ? 'In Theaters' : 'Coming Soon'}</span>
+              </div>
+
+              <p className="text-xs sm:text-sm text-slate-305 leading-relaxed font-bold max-w-md pt-2">
+                {activeHero.description || `Experience the cinematic magic of ${activeHero.title} at Majestic Grand and PVR Curo Mall. Premium audio and seating configuration ready.`}
               </p>
+
+              {/* Call to Action Button */}
+              <div className="pt-4">
+                <button
+                  onClick={() => navigate(`/movie/${activeHero.id}`)}
+                  className="px-6 py-3 rounded-2xl bg-rose-600 hover:bg-rose-500 text-white font-extrabold text-xs shadow-md transition-all active:scale-95 cursor-pointer inline-flex items-center gap-2"
+                >
+                  <Ticket className="w-4 h-4" /> Book Tickets
+                </button>
+              </div>
             </div>
 
             {/* Right Cards Stack (Mockup Movies Grid) */}
-            <div className="lg:col-span-6 grid grid-cols-1 sm:grid-cols-12 gap-4 w-full">
+            <div className="lg:col-span-6 grid grid-cols-1 sm:grid-cols-12 gap-4 w-full z-10">
               {/* Column 1: Middle Cards (Two Horizontal Cards) */}
               <div className="sm:col-span-7 flex flex-col gap-4">
-                {movies.slice(0, 2).map((m) => (
-                  <div
-                    key={m.id}
-                    onClick={() => navigate(`/movie/${m.id}`)}
-                    className="relative aspect-video sm:h-[135px] rounded-xl overflow-hidden border border-slate-800 cursor-pointer group/card hover:scale-[1.02] hover:border-[#FF5F45]/40 transition-all duration-300"
-                  >
-                    <img
-                      src={m.banner_url || m.poster_url}
-                      alt={m.title}
-                      className="w-full h-full object-cover filter brightness-75 group-hover/card:scale-105 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0F]/90 via-[#0B0B0F]/20 to-transparent"></div>
-                    
-                    {/* Now Showing Badge */}
-                    <span className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded bg-[#FFB84D] text-black font-extrabold text-[8px] uppercase tracking-wider">
-                      {m.status === 'now_showing' ? 'Now Showing' : 'Coming Soon'}
-                    </span>
+                {featuredMovies.slice(0, 2).map((m, idx) => {
+                  const isActive = heroIndex === idx;
+                  return (
+                    <div
+                      key={m.id}
+                      onClick={() => setHeroIndex(idx)}
+                      className={`relative aspect-video sm:h-[135px] rounded-xl overflow-hidden border cursor-pointer group/card transition-all duration-300 ${
+                        isActive 
+                          ? 'border-rose-500 scale-[1.03] shadow-lg' 
+                          : 'border-slate-800 hover:border-[#FF5F45]/40 hover:scale-[1.01]'
+                      }`}
+                    >
+                      <img
+                        src={m.banner_url || m.poster_url}
+                        alt={m.title}
+                        className="w-full h-full object-cover filter brightness-75 group-hover/card:scale-105 transition-transform duration-500"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0F]/90 via-[#0B0B0F]/20 to-transparent"></div>
+                      
+                      {/* Active Indicator Line */}
+                      {isActive && (
+                        <div className="absolute top-0 left-0 right-0 h-1 bg-rose-500"></div>
+                      )}
 
-                    {/* Rating Badge */}
-                    <div className="absolute top-2.5 right-2.5 px-1.5 py-0.5 rounded bg-black/60 border border-slate-700/60 flex items-center gap-0.5">
-                      <Star className="w-2.5 h-2.5 text-[#FFB84D] fill-[#FFB84D]" />
-                      <span className="text-[9px] font-black text-white">{m.rating ? m.rating.toFixed(1) : '4.5'}/5</span>
-                    </div>
+                      {/* Now Showing Badge */}
+                      <span className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded bg-amber-500 text-black font-extrabold text-[8px] uppercase tracking-wider">
+                        {m.status === 'now_showing' ? 'Now Showing' : 'Coming Soon'}
+                      </span>
 
-                    {/* Title */}
-                    <div className="absolute bottom-2.5 left-2.5 right-2.5 text-left">
-                      <h4 className="text-xs font-black text-white truncate">{m.title}</h4>
+                      {/* Rating Badge */}
+                      <div className="absolute top-2.5 right-2.5 px-1.5 py-0.5 rounded bg-black/60 border border-slate-700/60 flex items-center gap-0.5">
+                        <Star className="w-2.5 h-2.5 text-amber-500 fill-amber-500" />
+                        <span className="text-[9px] font-black text-white">{m.rating ? m.rating.toFixed(1) : '4.5'}/5</span>
+                      </div>
+
+                      {/* Title */}
+                      <div className="absolute bottom-2.5 left-2.5 right-2.5 text-left">
+                        <h4 className="text-xs font-black text-white truncate">{m.title}</h4>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
 
               {/* Column 2: Right Card (One Full-Height Vertical Card) */}
               <div className="sm:col-span-5">
-                {movies[2] && (
-                  <div
-                    onClick={() => navigate(`/movie/${movies[2].id}`)}
-                    className="relative w-full h-[286px] rounded-xl overflow-hidden border border-slate-800 cursor-pointer group/card hover:scale-[1.02] hover:border-[#FF5F45]/40 transition-all duration-300"
-                  >
-                    <img
-                      src={movies[2].poster_url}
-                      alt={movies[2].title}
-                      className="w-full h-full object-cover filter brightness-75 group-hover/card:scale-105 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0F]/95 via-[#0B0B0F]/10 to-transparent"></div>
+                {featuredMovies[2] && (() => {
+                  const idx = 2;
+                  const m = featuredMovies[idx];
+                  const isActive = heroIndex === idx;
+                  return (
+                    <div
+                      onClick={() => setHeroIndex(idx)}
+                      className={`relative w-full h-[286px] rounded-xl overflow-hidden border cursor-pointer group/card transition-all duration-300 ${
+                        isActive 
+                          ? 'border-rose-500 scale-[1.03] shadow-lg' 
+                          : 'border-slate-800 hover:border-[#FF5F45]/40 hover:scale-[1.01]'
+                      }`}
+                    >
+                      <img
+                        src={m.poster_url}
+                        alt={m.title}
+                        className="w-full h-full object-cover filter brightness-75 group-hover/card:scale-105 transition-transform duration-500"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0F]/95 via-[#0B0B0F]/10 to-transparent"></div>
 
-                    {/* Release Date Badge */}
-                    <span className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded bg-[#FFB84D] text-black font-extrabold text-[8px] uppercase tracking-wider">
-                      {movies[2].status === 'now_showing' ? 'Now Showing' : 'Coming Soon'}
-                    </span>
+                      {/* Active Indicator Line */}
+                      {isActive && (
+                        <div className="absolute top-0 left-0 right-0 h-1 bg-rose-500"></div>
+                      )}
 
-                    {/* Rating Badge */}
-                    <div className="absolute top-2.5 right-2.5 px-1.5 py-0.5 rounded bg-black/60 border border-slate-700/60 flex items-center gap-0.5">
-                      <Star className="w-2.5 h-2.5 text-[#FFB84D] fill-[#FFB84D]" />
-                      <span className="text-[9px] font-black text-white">{movies[2].rating ? movies[2].rating.toFixed(1) : '4.8'}/5</span>
-                    </div>
-
-                    {/* Title */}
-                    <div className="absolute bottom-2.5 left-2.5 right-2.5 text-left">
-                      <h4 className="text-xs font-black text-white truncate">{movies[2].title}</h4>
-                      <span className="text-[9px] text-slate-400 font-bold block mt-0.5 truncate">
-                        {movies[2].genre?.join(' • ')}
+                      {/* Release Date Badge */}
+                      <span className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded bg-amber-500 text-black font-extrabold text-[8px] uppercase tracking-wider">
+                        {m.status === 'now_showing' ? 'Now Showing' : 'Coming Soon'}
                       </span>
+
+                      {/* Rating Badge */}
+                      <div className="absolute top-2.5 right-2.5 px-1.5 py-0.5 rounded bg-black/60 border border-slate-700/60 flex items-center gap-0.5">
+                        <Star className="w-2.5 h-2.5 text-amber-500 fill-amber-500" />
+                        <span className="text-[9px] font-black text-white">{m.rating ? m.rating.toFixed(1) : '4.8'}/5</span>
+                      </div>
+
+                      {/* Title */}
+                      <div className="absolute bottom-2.5 left-2.5 right-2.5 text-left">
+                        <h4 className="text-xs font-black text-white truncate">{m.title}</h4>
+                        <span className="text-[9px] text-slate-400 font-bold block mt-0.5 truncate">
+                          {m.genre?.join(' • ')}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                )}
+                  );
+                })()}
               </div>
             </div>
           </div>
 
-          {/* Floating Booking Widget Selector */}
-          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-full max-w-4xl px-4 z-20">
+          {/* Slide Indicator Dots at bottom left */}
+          <div className="absolute bottom-28 left-6 sm:left-12 z-10 flex gap-2">
+            {featuredMovies.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => setHeroIndex(idx)}
+                className={`h-1.5 rounded-full transition-all duration-300 ${
+                  heroIndex === idx ? 'w-6 bg-rose-500' : 'w-1.5 bg-white/40 hover:bg-white/80'
+                }`}
+                aria-label={`Go to slide ${idx + 1}`}
+              />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Floating Booking Widget Selector (Only if Hero Banner is visible) */}
+      {!liveQuery && selectedGenre === 'All' && (
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-full max-w-4xl px-4 z-20">
             <div className="bg-[#15151C]/90 backdrop-blur-md rounded-2xl border border-white/5 p-4 sm:py-5 sm:px-6 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-4">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full text-left">
                 {/* Location Picker */}
@@ -325,8 +406,7 @@ export default function HomePage() {
               </button>
             </div>
           </div>
-        </section>
-      )}
+        )}
 
       {/* Movies Catalog Filter & Header */}
       <section className="space-y-6">
@@ -335,7 +415,7 @@ export default function HomePage() {
         <div className="space-y-3.5 text-left">
           <div className="flex items-center gap-2">
             <Flame className="w-4 h-4 text-rose-500" />
-            <h3 className="text-sm font-black text-white uppercase tracking-wider">Popular Categories</h3>
+            <h3 className="text-sm font-black text-slate-800 dark:text-white uppercase tracking-wider">Popular Categories</h3>
           </div>
           <div className="flex items-center gap-3 overflow-x-auto pb-2 scrollbar-none justify-start">
             {genres.map((genre) => {
@@ -347,11 +427,11 @@ export default function HomePage() {
                   onClick={() => setSelectedGenre(genre)}
                   className={`py-3 px-6 rounded-2xl text-xs font-black shrink-0 transition-all flex items-center gap-2 cursor-pointer border ${
                     isSelected
-                      ? 'bg-rose-600 text-white shadow-lg shadow-rose-600/30 scale-105 border-rose-500'
-                      : 'bg-[#070d19]/90 text-slate-400 border-slate-800 hover:text-white hover:bg-slate-900/60'
+                      ? 'bg-rose-600 text-white shadow-md scale-105 border-rose-500'
+                      : 'bg-white dark:bg-[#070d19]/90 text-slate-650 dark:text-slate-400 border-slate-200 dark:border-slate-800 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-900/60 shadow-sm'
                   }`}
                 >
-                  <IconComp className={`w-4 h-4 ${isSelected ? 'text-white' : 'text-slate-500'}`} />
+                  <IconComp className={`w-4 h-4 ${isSelected ? 'text-white' : 'text-slate-550 dark:text-slate-500'}`} />
                   <span>{genre}</span>
                 </button>
               );
@@ -360,22 +440,22 @@ export default function HomePage() {
         </div>
 
         {/* Section Title */}
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-slate-800 pb-4 text-left">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-4 text-left">
           <div>
-            <h2 className="text-lg font-black text-white tracking-tight flex items-center gap-2">
+            <h2 className="text-lg font-black text-slate-800 dark:text-white tracking-tight flex items-center gap-2">
               {selectedStatus === 'now_showing' ? 'Trending Now' : 'Upcoming Blockbusters'}
             </h2>
-            <p className="text-xs text-slate-450 font-bold mt-1">Select showtimes & reserve your seats instantly</p>
+            <p className="text-xs text-slate-500 dark:text-slate-450 font-bold mt-1">Select showtimes & reserve your seats instantly</p>
           </div>
 
           {/* Status Switcher (Now Showing vs Coming Soon) */}
-          <div className="flex items-center gap-1 bg-[#050811] p-1.5 rounded-2xl border border-slate-850 shrink-0">
+          <div className="flex items-center gap-1 bg-slate-100 dark:bg-[#050811] p-1.5 rounded-2xl border border-slate-205 dark:border-slate-850 shrink-0">
             <button
               onClick={() => setSelectedStatus('now_showing')}
               className={`px-4 py-2 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 ${
                 selectedStatus === 'now_showing'
-                  ? 'bg-rose-600 text-white shadow-md shadow-rose-600/20'
-                  : 'text-slate-500 hover:text-white'
+                  ? 'bg-rose-600 text-white shadow-sm'
+                  : 'text-slate-550 dark:text-slate-500 hover:text-slate-850 dark:hover:text-white'
               }`}
             >
               <Film className="w-3.5 h-3.5" /> Now Showing
@@ -384,8 +464,8 @@ export default function HomePage() {
               onClick={() => setSelectedStatus('coming_soon')}
               className={`px-4 py-2 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 ${
                 selectedStatus === 'coming_soon'
-                  ? 'bg-rose-600 text-white shadow-md shadow-rose-600/20'
-                  : 'text-slate-500 hover:text-white'
+                  ? 'bg-rose-600 text-white shadow-sm'
+                  : 'text-slate-550 dark:text-slate-500 hover:text-slate-850 dark:hover:text-white'
               }`}
             >
               <Sparkles className="w-3.5 h-3.5" /> Coming Soon
@@ -401,10 +481,10 @@ export default function HomePage() {
             ))}
           </div>
         ) : movies.length === 0 ? (
-          <div className="text-center py-20 bg-[#070d19]/90 rounded-3xl border border-slate-800 space-y-3 shadow-xl">
-            <Film className="w-12 h-12 text-slate-500 mx-auto animate-pulse" />
-            <h3 className="text-base font-bold text-slate-350">No Movies Found</h3>
-            <p className="text-xs text-slate-500 leading-relaxed font-medium">Try selecting another category or check back later.</p>
+          <div className="text-center py-20 bg-white dark:bg-[#070d19]/90 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-3 shadow-md dark:shadow-xl text-slate-800 dark:text-slate-200">
+            <Film className="w-12 h-12 text-slate-400 dark:text-slate-500 mx-auto animate-pulse" />
+            <h3 className="text-base font-bold text-slate-700 dark:text-slate-350">No Movies Found</h3>
+            <p className="text-xs text-slate-500 dark:text-slate-500 leading-relaxed font-medium">Try selecting another category or check back later.</p>
           </div>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 animate-fade-in">
