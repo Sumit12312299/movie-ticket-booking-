@@ -188,7 +188,7 @@ export default function AuthPage() {
               onClick={() => setIsRegister(false)}
               className={`flex-1 py-2.5 rounded-xl text-xs font-black transition-all ${
                 !isRegister
-                  ? 'bg-gradient-to-r from-red-600 to-rose-500 text-white shadow-md shadow-rose-600/20'
+                  ? 'bg-rose-600 text-white shadow-sm'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
@@ -199,7 +199,7 @@ export default function AuthPage() {
               onClick={() => setIsRegister(true)}
               className={`flex-1 py-2.5 rounded-xl text-xs font-black transition-all ${
                 isRegister
-                  ? 'bg-gradient-to-r from-red-600 to-rose-500 text-white shadow-md shadow-rose-600/20'
+                  ? 'bg-rose-600 text-white shadow-sm'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
@@ -312,7 +312,7 @@ export default function AuthPage() {
             <button
               type="submit"
               disabled={submitting}
-              className="w-full py-4 rounded-2xl bg-gradient-to-r from-red-600 to-rose-500 hover:from-red-500 hover:to-rose-400 text-white font-extrabold text-sm shadow-xl shadow-rose-600/30 flex items-center justify-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 cursor-pointer"
+              className="w-full py-4 rounded-2xl bg-rose-600 hover:bg-rose-500 text-white font-extrabold text-sm shadow-md flex items-center justify-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 cursor-pointer"
             >
               {submitting ? (
                 <div className="flex items-center gap-2">
