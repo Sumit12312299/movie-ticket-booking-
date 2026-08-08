@@ -296,28 +296,28 @@ export default function SeatSelectionPage() {
       
       {/* 🎬 Movie Brief cinematic backdrop banner */}
       {movie && (
-        <div className="relative w-full rounded-3xl overflow-hidden border border-slate-800/80 shadow-2xl bg-[#070d19]/90 p-5 sm:p-6 flex flex-col md:flex-row items-center gap-6">
+        <div className="relative w-full rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-800/80 shadow-md dark:shadow-2xl bg-white dark:bg-[#070d19]/90 p-5 sm:p-6 flex flex-col md:flex-row items-center gap-6">
           {/* Blurred banner cover background */}
           <div 
-            className="absolute inset-0 bg-cover bg-center opacity-10 pointer-events-none scale-105 blur-lg" 
+            className="absolute inset-0 bg-cover bg-center opacity-5 dark:opacity-10 pointer-events-none scale-105 blur-lg" 
             style={{ backgroundImage: `url(${movie.banner_url || movie.poster_url})` }}
           ></div>
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/80 to-transparent pointer-events-none"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-white via-white/80 to-transparent dark:from-slate-950 dark:via-slate-950/80 dark:to-transparent pointer-events-none"></div>
 
           {/* Poster block */}
           <img 
             src={movie.poster_url} 
             alt={movie.title} 
-            className="relative z-10 w-28 h-40 object-cover rounded-2xl border border-slate-800 shadow-2xl shrink-0"
+            className="relative z-10 w-28 h-40 object-cover rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xl shrink-0"
           />
 
           {/* Title & metadata specs */}
           <div className="relative z-10 text-center md:text-left flex-1 min-w-0 space-y-4">
             <div>
-              <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight leading-snug">{movie.title}</h1>
+              <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight leading-snug">{movie.title}</h1>
               
-              <div className="flex flex-wrap items-center justify-center md:justify-start gap-2.5 text-slate-400 font-bold text-xs mt-2">
-                <div className="flex items-center bg-amber-500/20 border border-amber-500/30 text-amber-500 rounded px-1.5 py-0.5 text-[10px] font-black tracking-wide">
+              <div className="flex flex-wrap items-center justify-center md:justify-start gap-2.5 text-slate-500 dark:text-slate-400 font-bold text-xs mt-2">
+                <div className="flex items-center bg-amber-500/20 border border-amber-500/30 text-amber-600 dark:text-amber-550 rounded px-1.5 py-0.5 text-[10px] font-black tracking-wide">
                   IMDb {movie.rating?.toFixed(1) || '8.1'}/10
                 </div>
                 <span>•</span>
@@ -333,7 +333,7 @@ export default function SeatSelectionPage() {
             {movie.trailer_url && (
               <button
                 onClick={() => setActiveTrailerMovie(movie)}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-amber-500/10 hover:bg-amber-500/25 border border-amber-500/30 text-amber-500 font-black text-xs transition-all shadow-sm active:scale-97 cursor-pointer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-amber-500/10 hover:bg-amber-500/25 border border-amber-500/30 text-amber-650 dark:text-amber-500 font-black text-xs transition-all shadow-sm active:scale-97 cursor-pointer"
               >
                 Watch Trailer ▶
               </button>
@@ -343,20 +343,20 @@ export default function SeatSelectionPage() {
       )}
 
       {/* Date, Time, Theater Bar */}
-      <div className="bg-[#070d19]/90 border border-slate-800 rounded-3xl p-4 flex flex-col lg:flex-row items-center justify-between gap-6 shadow-lg">
+      <div className="bg-white dark:bg-[#070d19]/90 border border-slate-200 dark:border-slate-800 rounded-3xl p-4 flex flex-col lg:flex-row items-center justify-between gap-6 shadow-md dark:shadow-lg">
         {/* Date Selector */}
         <div className="flex items-center gap-4 w-full lg:w-auto overflow-x-auto pb-2 lg:pb-0 scrollbar-none">
-          <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest shrink-0">Date</span>
+          <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest shrink-0">Date</span>
           <div className="flex items-center gap-1.5">
-            <button className="p-1 rounded-full text-slate-500 hover:text-white transition-colors cursor-pointer select-none">&lt;</button>
+            <button className="p-1 rounded-full text-slate-400 dark:text-slate-500 hover:text-slate-800 dark:hover:text-white transition-colors cursor-pointer select-none">&lt;</button>
             <div className="flex items-center gap-2">
               {getDatesRange().map((dObj, idx) => (
                 <div
                   key={idx}
                   className={`flex flex-col items-center justify-center py-2 px-3.5 rounded-2xl transition-all select-none min-w-[56px] text-center ${
                     dObj.isOriginal
-                      ? 'bg-blue-600 text-white font-extrabold shadow-lg shadow-blue-600/30'
-                      : 'text-slate-500 font-bold hover:text-slate-350 hover:bg-slate-900/50'
+                      ? 'bg-rose-500 text-white font-extrabold shadow-md'
+                      : 'text-slate-500 dark:text-slate-450 font-bold hover:text-slate-800 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-900/50'
                   }`}
                 >
                   <span className="text-[8px] uppercase tracking-wider font-semibold opacity-80">{dObj.monthName}</span>
@@ -365,39 +365,39 @@ export default function SeatSelectionPage() {
                 </div>
               ))}
             </div>
-            <button className="p-1 rounded-full text-slate-500 hover:text-white transition-colors cursor-pointer select-none">&gt;</button>
+            <button className="p-1 rounded-full text-slate-400 dark:text-slate-500 hover:text-white transition-colors cursor-pointer select-none">&gt;</button>
           </div>
         </div>
 
         {/* Time and Theater Selector */}
-        <div className="flex items-center gap-6 w-full lg:w-auto shrink-0 justify-end text-xs font-bold text-slate-400">
+        <div className="flex items-center gap-6 w-full lg:w-auto shrink-0 justify-end text-xs font-bold text-slate-450 dark:text-slate-400">
           {/* Radial countdown timer embedded */}
-          <div className="flex items-center gap-2 bg-[#050811] px-3.5 py-2 rounded-2xl border border-slate-850 shadow-md">
+          <div className="flex items-center gap-2 bg-slate-50 dark:bg-[#050811] px-3.5 py-2 rounded-2xl border border-slate-200 dark:border-slate-850 shadow-md">
             <Clock className="w-3.5 h-3.5 text-rose-500 animate-pulse" />
             <div className="text-left leading-tight">
-              <span className="text-[8px] text-slate-500 font-bold uppercase tracking-wider block">Lock Expires In</span>
-              <span className="text-xs font-mono font-black text-rose-550">
+              <span className="text-[8px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider block">Lock Expires In</span>
+              <span className="text-xs font-mono font-black text-rose-600 dark:text-rose-550">
                 {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
               </span>
             </div>
           </div>
 
-          <div className="w-[1px] h-8 bg-slate-800"></div>
+          <div className="w-[1px] h-8 bg-slate-205 dark:bg-slate-800"></div>
 
           {/* Time Selector */}
           <div className="flex flex-col text-left">
-            <span className="text-[9px] uppercase tracking-wider text-slate-500 font-black">Time</span>
-            <div className="mt-1 flex items-center gap-1 text-white font-black">
+            <span className="text-[9px] uppercase tracking-wider text-slate-400 dark:text-slate-500 font-black">Time</span>
+            <div className="mt-1 flex items-center gap-1 text-slate-800 dark:text-white font-black">
               <span>{showtime.show_time}</span>
             </div>
           </div>
 
-          <div className="w-[1px] h-8 bg-slate-800"></div>
+          <div className="w-[1px] h-8 bg-slate-205 dark:bg-slate-800"></div>
 
           {/* Theater Selector */}
           <div className="flex flex-col text-left">
-            <span className="text-[9px] uppercase tracking-wider text-slate-500 font-black">Theater</span>
-            <div className="mt-1 flex items-center gap-1 text-white font-black">
+            <span className="text-[9px] uppercase tracking-wider text-slate-400 dark:text-slate-500 font-black">Theater</span>
+            <div className="mt-1 flex items-center gap-1 text-slate-800 dark:text-white font-black">
               <span>{showtime.theater_name.replace('CinePlex ', '')}</span>
             </div>
           </div>
@@ -409,10 +409,10 @@ export default function SeatSelectionPage() {
         
         {/* Left Sidebar Billing & Info */}
         <div className="w-full lg:w-80 shrink-0 space-y-6">
-          <div className="bg-[#070d19]/90 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-6">
+          <div className="bg-white dark:bg-[#070d19]/90 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-md dark:shadow-xl space-y-6">
             <div>
-              <h2 className="text-base font-black text-white">Your Selected Seats</h2>
-              <p className="text-[11px] text-slate-450 font-bold mt-1">
+              <h2 className="text-base font-black text-slate-900 dark:text-white">Your Selected Seats</h2>
+              <p className="text-[11px] text-slate-500 dark:text-slate-455 font-bold mt-1">
                 {selectedSeats.length} {selectedSeats.length === 1 ? 'Seat' : 'Seats'}
               </p>
             </div>
@@ -420,10 +420,10 @@ export default function SeatSelectionPage() {
             {/* Selected Seats Badges */}
             <div className="flex flex-wrap gap-2 min-h-[48px] items-center">
               {selectedSeats.length === 0 ? (
-                <p className="text-xs text-slate-500 italic">No seats selected yet</p>
+                <p className="text-xs text-slate-400 dark:text-slate-550/40 italic font-medium">No seats selected yet</p>
               ) : (
                 selectedSeats.map((s) => (
-                  <span key={s} className="px-3.5 py-1.5 rounded-xl bg-blue-600/10 border border-blue-500/20 text-blue-400 text-xs font-black animate-scale-up">
+                  <span key={s} className="px-3.5 py-1.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 text-xs font-black animate-scale-up">
                     {s}
                   </span>
                 ))
@@ -431,45 +431,68 @@ export default function SeatSelectionPage() {
             </div>
 
             {/* Pricing breakdown table */}
-            <div className="space-y-3.5 pt-4 border-t border-slate-800/80 text-xs text-slate-400 font-bold">
-              <div className="flex justify-between items-center">
-                <span>Normal</span>
-                <span className="font-mono text-slate-300">
-                  {selectedSeatsTiers.Normal.count > 0 
-                    ? `${selectedSeatsTiers.Normal.count} | ₹${selectedSeatsTiers.Normal.subtotal}`
-                    : '- | ₹0'
-                  }
-                </span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span>Deluxe</span>
-                <span className="font-mono text-slate-300">
-                  {selectedSeatsTiers.Deluxe.count > 0 
-                    ? `${selectedSeatsTiers.Deluxe.count} | ₹${selectedSeatsTiers.Deluxe.subtotal}`
-                    : '- | ₹0'
-                  }
-                </span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span>Super</span>
-                <span className="font-mono text-slate-300">
-                  {selectedSeatsTiers.Super.count > 0 
-                    ? `${selectedSeatsTiers.Super.count} | ₹${selectedSeatsTiers.Super.subtotal}`
-                    : '- | ₹0'
-                  }
-                </span>
-              </div>
-              <div className="flex justify-between items-center pt-3 border-t border-slate-800/60 font-black text-sm text-white">
-                <span>Total</span>
-                <span className="font-mono text-emerald-400">₹{totalPrice.toFixed(0)}</span>
-              </div>
+            <div className="space-y-3.5 pt-4 border-t border-slate-100 dark:border-slate-800/80 text-xs text-slate-500 dark:text-slate-400 font-bold">
+              {selectedSeats.length === 0 ? (
+                <div className="py-4 text-center text-slate-400 dark:text-slate-500 space-y-2">
+                  <span className="text-3xl block">🎟️</span>
+                  <p className="text-[10px] uppercase tracking-wider font-extrabold">No Seats Selected</p>
+                  <p className="text-[9px] font-normal leading-normal px-4 text-slate-400/80 dark:text-slate-500">Select seats from the grid to view ticket summary & pricing.</p>
+                </div>
+              ) : (
+                <>
+                  {selectedSeatsTiers.Normal.count > 0 && (
+                    <div className="flex justify-between items-center animate-fade-in text-slate-700 dark:text-slate-350">
+                      <div className="flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-cyan-500"></span>
+                        <span>Normal Class</span>
+                      </div>
+                      <span className="font-mono text-slate-600 dark:text-slate-350 bg-slate-50 dark:bg-slate-900/60 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-800/40">
+                        {selectedSeatsTiers.Normal.count} × ₹{showtime.regular_price.toFixed(0)}
+                      </span>
+                    </div>
+                  )}
+                  {selectedSeatsTiers.Deluxe.count > 0 && (
+                    <div className="flex justify-between items-center animate-fade-in text-slate-700 dark:text-slate-350">
+                      <div className="flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
+                        <span>Deluxe Class</span>
+                      </div>
+                      <span className="font-mono text-slate-600 dark:text-slate-350 bg-slate-50 dark:bg-slate-900/60 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-800/40">
+                        {selectedSeatsTiers.Deluxe.count} × ₹{(showtime.regular_price + 100).toFixed(0)}
+                      </span>
+                    </div>
+                  )}
+                  {selectedSeatsTiers.Super.count > 0 && (
+                    <div className="flex justify-between items-center animate-fade-in text-slate-700 dark:text-slate-350">
+                      <div className="flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                        <span>Super Class</span>
+                      </div>
+                      <span className="font-mono text-slate-600 dark:text-slate-350 bg-slate-50 dark:bg-slate-900/60 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-800/40">
+                        {selectedSeatsTiers.Super.count} × ₹{showtime.vip_price.toFixed(0)}
+                      </span>
+                    </div>
+                  )}
+                  
+                  {/* Convenient Fee or Taxes (adds realism) */}
+                  <div className="flex justify-between items-center text-[10px] text-slate-400 dark:text-slate-550 pt-2 border-t border-slate-100 dark:border-slate-900/40">
+                    <span>Convenience Fee</span>
+                    <span className="font-mono">₹30</span>
+                  </div>
+
+                  <div className="flex justify-between items-center pt-3 border-t border-slate-200 dark:border-slate-800/60 font-black text-sm text-slate-900 dark:text-white">
+                    <span>Est. Total</span>
+                    <span className="font-mono text-emerald-600 dark:text-emerald-400 text-sm">₹{(totalPrice + 30).toFixed(0)}</span>
+                  </div>
+                </>
+              )}
             </div>
 
             {/* Actions */}
             <div className="space-y-3 pt-2">
               <button
                 onClick={() => setShowSnackStep(true)}
-                className="w-full py-3.5 rounded-2xl bg-[#091020] border border-slate-850 hover:bg-slate-800 text-slate-300 font-black text-xs flex items-center justify-center gap-2 cursor-pointer transition-all shadow-sm active:scale-97"
+                className="w-full py-3.5 rounded-2xl bg-slate-50 dark:bg-[#091020] border border-slate-200 dark:border-slate-850 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-black text-xs flex items-center justify-center gap-2 cursor-pointer transition-all shadow-sm active:scale-97"
               >
                 <Utensils className="w-3.5 h-3.5 text-emerald-500" />
                 + Add Foods
@@ -480,8 +503,8 @@ export default function SeatSelectionPage() {
                 disabled={locking || selectedSeats.length === 0}
                 className={`w-full py-3.5 rounded-2xl font-black text-xs flex items-center justify-center gap-2 transition-all shadow-lg select-none cursor-pointer ${
                   selectedSeats.length > 0 && !locking
-                    ? 'bg-amber-505 hover:bg-amber-400 bg-amber-500 text-[#070d19] shadow-amber-500/20 active:scale-97'
-                    : 'bg-slate-800 text-slate-500 border border-slate-800/80 cursor-not-allowed opacity-50'
+                    ? 'bg-rose-600 hover:bg-rose-500 text-white shadow-md border border-rose-500/20 active:scale-97 hover:scale-[1.01]'
+                    : 'bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-555 border border-slate-200 dark:border-slate-800/80 cursor-not-allowed opacity-50'
                 }`}
               >
                 {locking ? 'Locking Seats...' : 'Purchase'}
@@ -522,7 +545,7 @@ export default function SeatSelectionPage() {
                 setTimerSeconds(300);
                 fetchShowtime();
               }}
-              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-rose-600 to-rose-500 text-white font-extrabold text-xs shadow-lg hover:scale-105 active:scale-95 transition-all"
+              className="w-full py-3.5 rounded-2xl bg-rose-600 hover:bg-rose-500 text-white font-extrabold text-xs shadow-lg hover:scale-105 active:scale-95 transition-all"
             >
               Pick Seats Again
             </button>
@@ -532,53 +555,53 @@ export default function SeatSelectionPage() {
 
       {/* Gourmet Snacks Selection Modal */}
       {showSnackStep && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-md animate-fade-in">
-          <div className="relative w-full max-w-xl bg-slate-950 rounded-3xl border border-slate-900 shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-scale-up text-slate-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 dark:bg-slate-950/90 backdrop-blur-md animate-fade-in">
+          <div className="relative w-full max-w-xl bg-white dark:bg-slate-950 rounded-3xl border border-slate-200 dark:border-slate-900 shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-scale-up text-slate-800 dark:text-slate-200">
             {/* Header */}
-            <div className="p-6 border-b border-slate-900 flex items-center justify-between bg-gradient-to-r from-slate-900 via-slate-950 to-slate-900">
+            <div className="p-6 border-b border-slate-200 dark:border-slate-900 flex items-center justify-between bg-slate-55/50 dark:bg-gradient-to-r dark:from-slate-900 dark:via-slate-950 dark:to-slate-900">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-amber-500/10 text-amber-400 border border-amber-500/30 flex items-center justify-center shadow-lg shadow-amber-500/5">
+                <div className="w-10 h-10 rounded-2xl bg-amber-500/10 text-amber-500 dark:text-amber-400 border border-amber-500/30 flex items-center justify-center shadow-md">
                   <Utensils className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="text-base font-black text-white flex items-center gap-2">
-                    Step 1.5: Customize Your Gourmet Experience <Sparkles className="w-4 h-4 text-amber-550 fill-amber-500/10 animate-pulse" />
+                  <h3 className="text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
+                    Step 1.5: Customize Your Gourmet Experience <Sparkles className="w-4 h-4 text-amber-600 dark:text-amber-550 fill-amber-500/10 animate-pulse" />
                   </h3>
-                  <p className="text-xs text-slate-400 font-medium">Skip counter queues! Pre-order and collect at snacks bar.</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">Skip counter queues! Pre-order and collect at snacks bar.</p>
                 </div>
               </div>
             </div>
 
             {/* Snack Items list */}
-            <div className="p-6 space-y-4 overflow-y-auto flex-1 bg-slate-950">
+            <div className="p-6 space-y-4 overflow-y-auto flex-1 bg-white dark:bg-slate-950">
               {SNACK_ITEMS.map((item) => {
                 const qty = selectedSnacks[item.id] || 0;
                 return (
                   <div
                     key={item.id}
-                    className="p-4 rounded-2xl bg-slate-900/60 border border-slate-850/80 flex items-center justify-between gap-4 hover:border-amber-500/30 transition-all duration-300 animate-fade-in"
+                    className="p-4 rounded-2xl bg-slate-50/70 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-850/80 flex items-center justify-between gap-4 hover:border-amber-500/30 transition-all duration-300 animate-fade-in"
                   >
                     <div className="flex items-center gap-3.5 flex-1 min-w-0">
-                      <span className="text-3xl bg-slate-950 p-3 rounded-2xl border border-slate-850 shadow-sm shrink-0">{item.image}</span>
+                      <span className="text-3xl bg-white dark:bg-slate-950 p-3 rounded-2xl border border-slate-200 dark:border-slate-850 shadow-sm shrink-0">{item.image}</span>
                       <div className="min-w-0">
-                        <span className="font-black text-sm text-slate-100 block truncate">{item.name}</span>
-                        <span className="text-[10px] text-slate-450 block truncate font-medium">{item.desc}</span>
-                        <span className="text-xs font-mono font-black text-amber-400 mt-1 inline-block">₹{item.price.toFixed(2)}</span>
+                        <span className="font-black text-sm text-slate-850 dark:text-slate-100 block truncate">{item.name}</span>
+                        <span className="text-[10px] text-slate-500 dark:text-slate-450 block truncate font-medium">{item.desc}</span>
+                        <span className="text-xs font-mono font-black text-amber-600 dark:text-amber-400 mt-1 inline-block">₹{item.price.toFixed(2)}</span>
                       </div>
                     </div>
 
                     {/* Qty controller */}
-                    <div className="flex items-center gap-2 bg-slate-950 px-2.5 py-1.5 rounded-2xl border border-slate-850 shadow-sm shrink-0">
+                    <div className="flex items-center gap-2 bg-white dark:bg-slate-950 px-2.5 py-1.5 rounded-2xl border border-slate-200 dark:border-slate-850 shadow-sm shrink-0">
                       <button
                         onClick={() => updateSnackQty(item.id, -1)}
-                        className="w-7 h-7 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 flex items-center justify-center font-black text-sm transition-all cursor-pointer select-none"
+                        className="w-7 h-7 rounded-xl bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 flex items-center justify-center font-black text-sm transition-all cursor-pointer select-none"
                       >
                         -
                       </button>
-                      <span className="w-6 text-center text-xs font-mono font-black text-white">{qty}</span>
+                      <span className="w-6 text-center text-xs font-mono font-black text-slate-800 dark:text-white">{qty}</span>
                       <button
                         onClick={() => updateSnackQty(item.id, 1)}
-                        className="w-7 h-7 rounded-xl bg-rose-600 hover:bg-rose-500 text-white flex items-center justify-center font-black text-sm transition-all cursor-pointer shadow-md shadow-rose-600/20 select-none"
+                        className="w-7 h-7 rounded-xl bg-rose-600 hover:bg-rose-500 text-white flex items-center justify-center font-black text-sm transition-all cursor-pointer shadow-sm select-none"
                       >
                         +
                       </button>
@@ -589,10 +612,10 @@ export default function SeatSelectionPage() {
             </div>
 
             {/* Footer action bar */}
-            <div className="p-6 border-t border-slate-900 bg-slate-950/95 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="p-6 border-t border-slate-200 dark:border-slate-900 bg-slate-50/95 dark:bg-slate-950/95 flex flex-col sm:flex-row items-center justify-between gap-4">
               <div>
                 <span className="text-[10px] text-slate-500 font-bold uppercase block tracking-wider">Snacks Total</span>
-                <span className="text-2xl font-black text-emerald-400 font-mono">
+                <span className="text-2xl font-black text-emerald-600 dark:text-emerald-400 font-mono">
                   ₹{snacksTotal.toFixed(2)}
                 </span>
               </div>
@@ -600,13 +623,13 @@ export default function SeatSelectionPage() {
               <div className="flex gap-3 w-full sm:w-auto">
                 <button
                   onClick={() => handleProceedToFinalCheckout({})}
-                  className="flex-1 sm:flex-none px-6 py-3.5 rounded-2xl border border-slate-800 hover:bg-slate-900 font-bold text-xs text-slate-300 transition-colors cursor-pointer"
+                  className="flex-1 sm:flex-none px-6 py-3.5 rounded-2xl border border-slate-250 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-900 font-bold text-xs text-slate-650 dark:text-slate-300 transition-colors cursor-pointer"
                 >
                   Skip & Proceed
                 </button>
                 <button
                   onClick={() => handleProceedToFinalCheckout(selectedSnacks)}
-                  className="flex-1 sm:flex-none px-8 py-3.5 rounded-2xl bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-500 text-white font-extrabold text-xs shadow-xl shadow-rose-600/20 hover:scale-105 active:scale-95 transition-all cursor-pointer"
+                  className="flex-1 sm:flex-none px-8 py-3.5 rounded-2xl bg-rose-600 hover:bg-rose-500 text-white font-extrabold text-xs shadow-md hover:scale-105 active:scale-95 transition-all cursor-pointer"
                 >
                   Add & Proceed
                 </button>
