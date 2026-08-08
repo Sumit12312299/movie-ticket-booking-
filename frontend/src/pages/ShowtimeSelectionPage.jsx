@@ -54,7 +54,8 @@ export default function ShowtimeSelectionPage() {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const params = { movie_id: movieId, show_date: selectedDate };
+      const activeCity = localStorage.getItem('bookticket_city') || 'Mumbai';
+      const params = { movie_id: movieId, show_date: selectedDate, city: activeCity };
       const [mRes, stRes] = await Promise.all([
         API.get(`/movies/${movieId}`),
         API.get('/showtimes', { params })
@@ -125,6 +126,22 @@ export default function ShowtimeSelectionPage() {
     }
   };
 
+  const getFormatBadgeStyle = (format) => {
+    if (format.includes('IMAX')) {
+      return 'bg-amber-500/10 border-amber-500/30 text-amber-700 dark:text-amber-300 shadow-md shadow-amber-500/5';
+    } else if (format.includes('Dolby') || format.includes('Atmos')) {
+      return 'bg-indigo-500/10 border-indigo-500/30 text-indigo-700 dark:text-indigo-300 shadow-md shadow-indigo-500/5';
+    } else {
+      return 'bg-rose-500/10 border-rose-500/30 text-rose-700 dark:text-rose-300 shadow-md shadow-rose-500/5';
+    }
+  };
+
+  const getLeftBorderColor = (name) => {
+    if (name.includes('IMAX')) return 'border-l-[5px] border-l-amber-500';
+    if (name.includes('Starlight') || name.includes('Dolby')) return 'border-l-[5px] border-l-indigo-500';
+    return 'border-l-[5px] border-l-rose-500';
+  };
+
   const containerVariants = {
     hidden: { opacity: 0 },
     show: {
@@ -186,7 +203,7 @@ export default function ShowtimeSelectionPage() {
           
           <div className="space-y-4 text-center sm:text-left flex-1">
             <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
-              <span className="px-3 py-1 rounded-full text-[10px] uppercase font-black bg-rose-600/90 text-white shadow-md shadow-rose-600/20 flex items-center gap-1">
+              <span className="px-3 py-1 rounded-full text-[10px] uppercase font-black bg-rose-600/90 text-white shadow-sm flex items-center gap-1">
                 <Sparkles className="w-3 h-3 fill-white" />
                 Select Showtime
               </span>
@@ -240,7 +257,7 @@ export default function ShowtimeSelectionPage() {
                 onClick={() => setSelectedDate(dateVal)}
                 className={`w-20 h-22 shrink-0 rounded-2xl flex flex-col items-center justify-center gap-0.5 transition-all duration-300 cursor-pointer ${
                   isSelected
-                    ? 'bg-gradient-to-tr from-rose-600 to-rose-500 text-white shadow-xl shadow-rose-500/35 border border-rose-400/20 scale-[1.03]'
+                    ? 'bg-rose-600 text-white shadow-md border border-rose-400/20 scale-[1.03]'
                     : 'bg-slate-100/60 dark:bg-slate-900/60 text-slate-550 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 hover:text-slate-900 dark:hover:text-white border border-slate-200/50 dark:border-slate-800/80'
                 }`}
               >
@@ -261,7 +278,7 @@ export default function ShowtimeSelectionPage() {
           {!dateList.includes(selectedDate) && (
             <button
               onClick={() => setSelectedDate(selectedDate)}
-              className="w-20 h-22 shrink-0 rounded-2xl flex flex-col items-center justify-center gap-0.5 transition-all duration-300 bg-gradient-to-tr from-rose-600 to-rose-500 text-white shadow-xl shadow-rose-500/35 border border-rose-400/20 scale-[1.03] cursor-pointer"
+              className="w-20 h-22 shrink-0 rounded-2xl flex flex-col items-center justify-center gap-0.5 transition-all duration-300 bg-rose-600 text-white shadow-md border border-rose-400/20 scale-[1.03] cursor-pointer"
             >
               <span className="text-[10px] font-black uppercase tracking-wider text-white/80">Custom</span>
               <span className="text-lg font-black leading-none">{selectedDate.split('-')[2]}</span>
@@ -300,7 +317,7 @@ export default function ShowtimeSelectionPage() {
                   onClick={() => setSelectedTimeOfDay(timeText)}
                   className={`px-4 py-2.5 rounded-2xl text-xs font-black transition-all cursor-pointer hover:scale-102 active:scale-97 ${
                     selectedTimeOfDay === timeText
-                      ? 'bg-rose-600 text-white shadow-lg shadow-rose-600/25 border border-rose-500/20'
+                      ? 'bg-rose-600 text-white shadow-md border border-rose-500/20'
                       : 'bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white border border-slate-200/85 dark:border-slate-800/85'
                   }`}
                 >
@@ -375,7 +392,7 @@ export default function ShowtimeSelectionPage() {
                 key={theaterName} 
                 variants={itemVariants}
                 layout
-                className="glass-card rounded-3xl p-6 border border-slate-200/70 dark:border-slate-800/80 space-y-5 shadow-xl hover:shadow-2xl hover:border-rose-500/20 dark:hover:border-rose-500/10 transition-all duration-300"
+                className={`glass-card rounded-3xl p-6 border-y border-r border-slate-200/70 dark:border-slate-800/80 space-y-5 shadow-xl hover:shadow-2xl hover:border-rose-500/25 dark:hover:border-rose-500/15 transition-all duration-300 ${getLeftBorderColor(theaterName)}`}
               >
                 {/* Theater Header Details */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-200/60 dark:border-slate-800/60 pb-4 gap-4">
@@ -385,24 +402,24 @@ export default function ShowtimeSelectionPage() {
                       <h3 className="text-lg font-black text-slate-900 dark:text-white tracking-tight">{theaterName}</h3>
                     </div>
                     {/* Amenities list */}
-                    <div className="flex flex-wrap gap-3 items-center pt-0.5">
+                    <div className="flex flex-wrap gap-2.5 items-center pt-0.5">
                       {getTheaterFeatures(theaterName).map((f, i) => (
-                        <span key={i} className="flex items-center gap-1 text-[9px] font-black uppercase text-slate-450 dark:text-slate-500 bg-slate-100 dark:bg-slate-900/60 border border-slate-200/50 dark:border-slate-850 px-2 py-0.5 rounded-md">
-                          {f.icon}
+                        <span key={i} className="flex items-center gap-1.5 text-[9px] font-black uppercase text-slate-550 dark:text-slate-400 bg-slate-100/60 dark:bg-slate-900/65 border border-slate-200/50 dark:border-slate-800/80 px-2.5 py-1 rounded-lg transition-colors">
+                          <span className="text-rose-500/85">{f.icon}</span>
                           {f.label}
                         </span>
                       ))}
                     </div>
                   </div>
 
-                  <span className="px-3.5 py-1.5 rounded-2xl bg-amber-500/15 border border-amber-500/30 text-amber-700 dark:text-amber-300 text-xs font-black self-start sm:self-center flex items-center gap-1.5">
+                  <span className={`px-4 py-2 rounded-2xl border text-xs font-black self-start sm:self-center flex items-center gap-1.5 transition-all ${getFormatBadgeStyle(slots[0]?.screen_type || '2D')}`}>
                     <Tv className="w-3.5 h-3.5" />
                     {slots[0]?.screen_type}
                   </span>
                 </div>
 
                 {/* Showtimes Tickets List */}
-                <div className="flex flex-wrap gap-4 pt-1">
+                <div className="flex flex-wrap gap-5 pt-1">
                   {slots.map((st) => {
                     const totalSeats = 120;
                     const bookedCount = (st.booked_seats || []).length;
@@ -414,45 +431,54 @@ export default function ShowtimeSelectionPage() {
                       <button
                         key={st.id}
                         onClick={() => navigate(`/seats/${st.id}`)}
-                        className="group relative px-6 py-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 hover:bg-gradient-to-tr hover:from-rose-600 hover:to-rose-500 border border-slate-200 dark:border-slate-800/80 hover:border-transparent transition-all duration-300 flex flex-col items-center justify-between min-w-[130px] min-h-[96px] shadow-sm hover:shadow-xl hover:shadow-rose-600/25 hover:-translate-y-1 overflow-hidden"
+                        className="group relative px-5 py-4 rounded-2xl bg-white dark:bg-[#0d1527]/60 hover:bg-rose-600 border border-slate-200 dark:border-slate-800/80 hover:border-transparent transition-all duration-300 flex flex-col items-center justify-between min-w-[142px] shadow-sm hover:shadow-lg hover:-translate-y-1 overflow-hidden"
                       >
                         {/* Occupancy Indicator Color Line (Top of ticket) */}
-                        <div className="absolute top-0 left-0 w-full h-[3px] bg-slate-200 dark:bg-slate-850 group-hover:bg-white/20">
+                        <div className="absolute top-0 left-0 w-full h-[3px] bg-slate-200/50 dark:bg-slate-850 group-hover:bg-white/20">
                           <div 
                             className={`h-full transition-all duration-500 ${isFillingFast ? 'bg-red-500' : 'bg-emerald-500'}`}
                             style={{ width: `${occupancyPercentage}%` }}
                           ></div>
                         </div>
 
+                        {/* Left & Right Ticket Punch Notches */}
+                        <div className="absolute top-1/2 -left-2 -translate-y-1/2 w-4 h-4 rounded-full bg-[#f8fafc] dark:bg-[#060812] border border-slate-200 dark:border-slate-800/80 z-10 transition-colors"></div>
+                        <div className="absolute top-1/2 -right-2 -translate-y-1/2 w-4 h-4 rounded-full bg-[#f8fafc] dark:bg-[#060812] border border-slate-200 dark:border-slate-800/80 z-10 transition-colors"></div>
+
                         {/* Showing Time */}
-                        <span className="text-base font-black text-slate-900 dark:text-white group-hover:text-white transition-colors flex items-center gap-1 mt-1">
-                          <Clock className="w-3.5 h-3.5 text-slate-400 group-hover:text-white/80" />
+                        <span className="text-base font-black text-slate-900 dark:text-white group-hover:text-white transition-colors flex items-center gap-1.5 mt-1">
+                          <Clock className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 group-hover:text-white/80" />
                           {st.show_time}
                         </span>
 
-                        {/* Price Details */}
-                        <span className="text-xs text-emerald-600 dark:text-emerald-400 group-hover:text-amber-200 font-extrabold transition-colors">
-                          ₹{st.regular_price.toFixed(2)}
-                        </span>
+                        {/* Dashed divider line */}
+                        <div className="w-full border-t border-dashed border-slate-200 dark:border-slate-800/60 my-2.5 group-hover:border-white/30 transition-colors"></div>
 
-                        {/* Live Remaining Seats Urgency Badge */}
-                        <span className={`text-[8px] font-black uppercase flex items-center gap-0.5 mt-0.5 px-2 py-0.5 rounded-full ${
-                          isFillingFast 
-                            ? 'bg-red-500/10 text-red-500 border border-red-500/25 group-hover:bg-white/20 group-hover:text-white group-hover:border-transparent animate-pulse'
-                            : 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/25 group-hover:bg-white/20 group-hover:text-white group-hover:border-transparent'
-                        }`}>
-                          {isFillingFast ? (
-                            <>
-                              <Flame className="w-2.5 h-2.5 fill-red-500 group-hover:fill-white" />
-                              {remaining} Seats Left!
-                            </>
-                          ) : (
-                            <>
-                              <CheckCircle2 className="w-2.5 h-2.5 text-emerald-500 group-hover:text-white" />
-                              {remaining} Seats Left
-                            </>
-                          )}
-                        </span>
+                        {/* Details */}
+                        <div className="w-full flex flex-col items-center gap-1">
+                          <span className="text-xs text-emerald-600 dark:text-emerald-400 group-hover:text-amber-200 font-extrabold transition-colors">
+                            ₹{st.regular_price.toFixed(2)}
+                          </span>
+
+                          {/* Live Remaining Seats Urgency Badge */}
+                          <span className={`text-[8px] font-black uppercase flex items-center gap-0.5 px-2 py-0.5 rounded-full ${
+                            isFillingFast 
+                              ? 'bg-red-500/10 text-red-500 border border-red-500/25 group-hover:bg-white/20 group-hover:text-white group-hover:border-transparent animate-pulse'
+                              : 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/25 group-hover:bg-white/20 group-hover:text-white group-hover:border-transparent'
+                          }`}>
+                            {isFillingFast ? (
+                              <>
+                                <Flame className="w-2.5 h-2.5 fill-red-500 group-hover:fill-white" />
+                                {remaining} Left!
+                              </>
+                            ) : (
+                              <>
+                                <CheckCircle2 className="w-2.5 h-2.5 text-emerald-500 group-hover:text-white" />
+                                {remaining} Seats
+                              </>
+                            )}
+                          </span>
+                        </div>
                       </button>
                     );
                   })}
