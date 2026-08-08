@@ -87,7 +87,7 @@ export default function FoodSnacksModal({ isOpen, onClose }) {
         {/* Header */}
         <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-gradient-to-r from-emerald-600/10 to-teal-500/10">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-emerald-500 text-white flex items-center justify-center shadow-lg shadow-emerald-500/30">
+            <div className="w-10 h-10 rounded-2xl bg-emerald-500 text-white flex items-center justify-center shadow-md">
               <Utensils className="w-5 h-5" />
             </div>
             <div>
@@ -163,7 +163,7 @@ export default function FoodSnacksModal({ isOpen, onClose }) {
             disabled={isOrdering || totalCount === 0}
             className={`w-full sm:w-auto px-8 py-3.5 rounded-2xl font-extrabold text-xs flex items-center justify-center gap-2 shadow-xl transition-all ${
               totalCount > 0 && !isOrdering
-                ? 'bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white shadow-emerald-600/30 hover:scale-105 cursor-pointer'
+                ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-md hover:scale-105 cursor-pointer'
                 : 'bg-slate-200 dark:bg-slate-800 text-slate-400 cursor-not-allowed border border-slate-300 dark:border-slate-700'
             }`}
           >
