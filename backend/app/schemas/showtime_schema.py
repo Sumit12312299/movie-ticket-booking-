@@ -9,6 +9,7 @@ class ShowtimeCreate(BaseModel):
     show_time: str  # HH:MM
     regular_price: float = 12.50
     vip_price: float = 18.00
+    city: Optional[str] = "Mumbai"
 
 class ShowtimeResponse(BaseModel):
     id: str
@@ -22,3 +23,4 @@ class ShowtimeResponse(BaseModel):
     vip_price: float
     booked_seats: List[str] = []
     locked_seats: List[str] = []
+    city: Optional[str] = "Mumbai"

@@ -12,7 +12,8 @@ router = APIRouter(prefix="/showtimes", tags=["Showtimes"])
 async def get_showtimes(
     movie_id: Optional[str] = None,
     show_date: Optional[str] = None,
-    theater_name: Optional[str] = None
+    theater_name: Optional[str] = None,
+    city: Optional[str] = None
 ):
     db = get_database()
     showtimes_col = db["showtimes"]
@@ -25,25 +26,48 @@ async def get_showtimes(
         filter_dict["show_date"] = show_date
     if theater_name:
         filter_dict["theater_name"] = theater_name
+    if city:
+        filter_dict["city"] = city
 
     cursor = showtimes_col.find(filter_dict)
     showtimes = await cursor.to_list(length=200)
 
-    # If no showtimes exist for movie & date, generate showtimes on-the-fly
+    # If no showtimes exist for movie, date & city, generate showtimes on-the-fly
     if not showtimes and movie_id:
         movie = await movies_col.find_one({"_id": movie_id})
         if movie:
             from datetime import datetime
             target_date = show_date or datetime.now().strftime("%Y-%m-%d")
-            theaters = [
-                {"name": "CinePlex Grand IMAX", "screen": "IMAX 3D Laser", "reg": 16.50, "vip": 24.00},
-                {"name": "Starlight Cinema 9", "screen": "VIP Dolby Atmos", "reg": 14.00, "vip": 20.00},
-                {"name": "Downtown MoviePlex", "screen": "Standard 2D", "reg": 12.00, "vip": 16.00}
+            target_city = city or "Mumbai"
+
+            city_theaters = {
+                "Mumbai": [
+                    {"name": "CinePlex Grand IMAX", "screen": "IMAX 3D Laser", "reg": 350.00, "vip": 550.00},
+                    {"name": "Starlight Cinema 9", "screen": "VIP Dolby Atmos", "reg": 280.00, "vip": 450.00},
+                    {"name": "Downtown MoviePlex", "screen": "Standard 2D", "reg": 220.00, "vip": 350.00}
+                ],
+                "Delhi NCR": [
+                    {"name": "PVR Director's Cut Delhi", "screen": "IMAX 3D Laser", "reg": 380.00, "vip": 600.00},
+                    {"name": "Starlight Cinema Delhi", "screen": "VIP Dolby Atmos", "reg": 290.00, "vip": 460.00}
+                ],
+                "Bengaluru": [
+                    {"name": "Cinepolis Forum Mall Bengaluru", "screen": "IMAX 3D Laser", "reg": 340.00, "vip": 520.00},
+                    {"name": "Starlight Cinema Bengaluru", "screen": "VIP Dolby Atmos", "reg": 270.00, "vip": 440.00}
+                ],
+                "Phagwara": [
+                    {"name": "Majestic Grand Phagwara", "screen": "VIP Dolby Atmos", "reg": 250.00, "vip": 400.00},
+                    {"name": "PVR Curo Mall Phagwara", "screen": "Standard 2D", "reg": 200.00, "vip": 320.00}
+                ]
+            }
+
+            theaters = city_theaters.get(target_city) or [
+                {"name": f"CinePlex {target_city} Grand", "screen": "Standard 2D", "reg": 220.00, "vip": 350.00},
+                {"name": f"Starlight Cinema {target_city}", "screen": "VIP Dolby Atmos", "reg": 280.00, "vip": 450.00}
             ]
             times = ["10:30 AM", "02:15 PM", "06:00 PM", "09:30 PM"]
 
             for t_idx, th in enumerate(theaters):
-                st_id = f"st_{movie_id}_{target_date}_{t_idx}"
+                st_id = f"st_{movie_id}_{target_date}_{target_city.lower().replace(' ', '_')}_{t_idx}"
                 st_doc = {
                     "_id": st_id,
                     "movie_id": movie_id,
@@ -54,7 +78,8 @@ async def get_showtimes(
                     "show_time": times[t_idx % len(times)],
                     "regular_price": th["reg"],
                     "vip_price": th["vip"],
-                    "booked_seats": ["C5", "C6"] if t_idx == 0 else []
+                    "booked_seats": ["C5", "C6"] if t_idx == 0 else [],
+                    "city": target_city
                 }
                 await showtimes_col.update_one({"_id": st_id}, {"$setOnInsert": st_doc}, upsert=True)
 
