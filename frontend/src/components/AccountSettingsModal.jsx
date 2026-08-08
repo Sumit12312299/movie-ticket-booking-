@@ -30,7 +30,7 @@ export default function AccountSettingsModal({ isOpen, onClose }) {
         {/* Header */}
         <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-gradient-to-r from-sky-600/10 to-blue-500/10">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-sky-600 text-white flex items-center justify-center shadow-lg shadow-sky-600/30">
+            <div className="w-10 h-10 rounded-2xl bg-sky-600 text-white flex items-center justify-center shadow-md">
               <Settings className="w-5 h-5" />
             </div>
             <div>
@@ -89,6 +89,7 @@ export default function AccountSettingsModal({ isOpen, onClose }) {
               <option value="Bengaluru">Bengaluru (IMAX Forum Koramangala)</option>
               <option value="Hyderabad">Hyderabad (Prasads IMAX 4K)</option>
               <option value="Pune">Pune (PVR Phoenix Marketcity)</option>
+              <option value="Phagwara">Phagwara (Majestic Grand & PVR Curo Mall)</option>
             </select>
           </div>
 
@@ -96,7 +97,7 @@ export default function AccountSettingsModal({ isOpen, onClose }) {
             <button
               type="submit"
               disabled={isSaving}
-              className="w-full py-3.5 rounded-2xl bg-sky-600 hover:bg-sky-500 text-white text-xs font-black flex items-center justify-center gap-2 shadow-lg shadow-sky-600/30 transition-all hover:scale-[1.02]"
+              className="w-full py-3.5 rounded-2xl bg-sky-600 hover:bg-sky-500 text-white text-xs font-black flex items-center justify-center gap-2 shadow-md transition-all hover:scale-[1.02]"
             >
               <Save className="w-4 h-4" />
               {isSaving ? 'Saving Changes...' : 'Save Profile Changes'}
