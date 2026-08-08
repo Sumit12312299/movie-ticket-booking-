@@ -100,9 +100,14 @@ export const AuthProvider = ({ children }) => {
 
   const topUpWallet = async (amount) => {
     if (!token) return null;
-    const res = await API.post('/auth/wallet/topup', { amount: Number(amount) });
-    await refreshUser();
-    return res.data;
+    try {
+      const res = await API.post('/auth/wallet/topup', { amount: Number(amount) });
+      await refreshUser();
+      return res.data;
+    } catch (err) {
+      console.error("Wallet topup failed:", err);
+      throw err;
+    }
   };
 
   return (
