@@ -3,6 +3,7 @@ import string
 import qrcode
 import io
 import base64
+import logging
 from datetime import datetime
 from fastapi import APIRouter, HTTPException, Depends, status
 from typing import List
@@ -12,6 +13,7 @@ from app.schemas.user_schema import UserProfile
 from app.services.auth_service import get_current_user
 from app.services.seat_locking_service import seat_lock_service
 
+logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/bookings", tags=["Bookings"])
 
 def generate_booking_ref() -> str:
@@ -51,9 +53,11 @@ async def lock_seats(
         if seat in booked:
             raise HTTPException(status_code=400, detail=f"Seat {seat} has already been booked by another customer")
 
+    logger.info("Locking seats %s for showtime %s by user %s", request.seats, request.showtime_id, current_user.id)
     # Call seat locking service to lock seats for 5 minutes during checkout
     success, msg = seat_lock_service.lock_seats(request.showtime_id, request.seats, current_user.id)
     if not success:
+        logger.warning("Failed to lock seats %s for showtime %s: %s", request.seats, request.showtime_id, msg)
         raise HTTPException(status_code=409, detail=msg)
 
     return {"status": "success", "message": "Seats locked for 5 minutes", "seats": request.seats}
@@ -63,6 +67,7 @@ async def unlock_seats(
     request: SeatLockRequest,
     current_user: UserProfile = Depends(get_current_user)
 ):
+    logger.info("Releasing seat locks on %s for showtime %s by user %s", request.seats, request.showtime_id, current_user.id)
     seat_lock_service.release_seats(request.showtime_id, request.seats, current_user.id)
     return {"status": "success", "message": "Seats unlocked successfully"}
 
