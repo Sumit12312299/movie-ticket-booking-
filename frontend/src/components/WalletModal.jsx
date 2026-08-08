@@ -186,7 +186,7 @@ export default function WalletModal({ isOpen, onClose }) {
                     onClick={() => handleSelectQuick(amt)}
                     className={`py-2.5 rounded-xl border text-xs font-bold tracking-wide transition-all ${
                       Number(customAmount) === amt
-                        ? 'bg-gradient-to-r from-red-600 to-rose-500 text-white border-rose-500 shadow-lg shadow-rose-600/25 scale-[1.05]'
+                        ? 'bg-rose-600 text-white border-rose-500 shadow-md scale-[1.05]'
                         : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700/60 hover:border-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700/80 cursor-pointer'
                     }`}
                   >
@@ -216,7 +216,7 @@ export default function WalletModal({ isOpen, onClose }) {
             <button
               type="submit"
               disabled={isLoading || !customAmount || Number(customAmount) <= 0}
-              className="w-full py-4 rounded-2xl bg-gradient-to-r from-red-600 to-rose-500 hover:from-red-500 hover:to-rose-400 text-white font-extrabold text-sm shadow-xl shadow-rose-600/30 flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
+              className="w-full py-4 rounded-2xl bg-rose-600 hover:bg-rose-500 text-white font-extrabold text-sm shadow-md flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
             >
               {isLoading ? (
                 <span className="flex items-center gap-2">
