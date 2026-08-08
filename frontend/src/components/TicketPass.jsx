@@ -93,7 +93,7 @@ export default function TicketPass({ booking }) {
           <div>
             <span className="text-[10px] text-slate-500 dark:text-slate-400 font-bold uppercase block tracking-wider">Allocated Seats</span>
             <div className="flex flex-wrap gap-1.5 mt-1.5">
-              {booking.seats.map((seat) => (
+              {(booking.seats || []).map((seat) => (
                 <span
                   key={seat}
                   className="px-2.5 py-1 rounded-lg bg-red-600/10 dark:bg-red-950/50 text-red-600 dark:text-rose-400 border border-red-300 dark:border-red-800 text-xs font-black font-mono shadow-sm"
