@@ -10,8 +10,8 @@ class MovieBase(BaseModel):
     synopsis: str
     genre: List[str]
     language: str
-    duration_mins: int
-    rating: float = 0.0
+    duration_mins: int = Field(..., gt=0)
+    rating: float = Field(default=0.0, ge=0.0, le=5.0)
     reviews_count: int = 0
     release_date: str
     poster_url: str
