@@ -40,7 +40,8 @@ export default function AdminDashboard() {
     show_date: new Date().toISOString().split('T')[0],
     show_time: '07:30 PM',
     regular_price: 15.00,
-    vip_price: 22.00
+    vip_price: 22.00,
+    city: 'Mumbai'
   });
 
   useEffect(() => {
@@ -141,7 +142,7 @@ export default function AdminDashboard() {
         <div className="flex items-center gap-3">
           <button
             onClick={() => setShowAddMovie(true)}
-            className="px-4 py-2.5 rounded-2xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs flex items-center gap-2 shadow-lg shadow-rose-600/30 transition-all"
+            className="px-4 py-2.5 rounded-2xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs flex items-center gap-2 shadow-md transition-all"
           >
             <Plus className="w-4 h-4" />
             Add Movie
@@ -149,7 +150,7 @@ export default function AdminDashboard() {
 
           <button
             onClick={() => setShowAddShowtime(true)}
-            className="px-4 py-2.5 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center gap-2 shadow-lg shadow-amber-500/30 transition-all"
+            className="px-4 py-2.5 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center gap-2 shadow-md transition-all"
           >
             <Plus className="w-4 h-4" />
             Schedule Showtime
@@ -398,6 +399,24 @@ export default function AdminDashboard() {
                   {movies.map((m) => (
                     <option key={m.id} value={m.id}>{m.title}</option>
                   ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="font-semibold text-slate-600 dark:text-slate-400 block mb-1">City Location</label>
+                <select
+                  value={newShowtime.city}
+                  onChange={(e) => setNewShowtime({ ...newShowtime, city: e.target.value })}
+                  className="w-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-2.5 text-slate-900 dark:text-white"
+                >
+                  <option value="Mumbai">Mumbai</option>
+                  <option value="Delhi NCR">Delhi NCR</option>
+                  <option value="Bengaluru">Bengaluru</option>
+                  <option value="Pune">Pune</option>
+                  <option value="Hyderabad">Hyderabad</option>
+                  <option value="Ahmedabad">Ahmedabad</option>
+                  <option value="Kolkata">Kolkata</option>
+                  <option value="Phagwara">Phagwara</option>
                 </select>
               </div>
 
