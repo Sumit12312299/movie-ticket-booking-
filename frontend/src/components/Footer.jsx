@@ -150,8 +150,6 @@ export default function Footer() {
         <div className="pt-8 border-t border-slate-100 dark:border-slate-800 text-center text-xs text-slate-500 dark:text-slate-400 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p>© 2026 BookTicket Platform. All rights reserved.</p>
           <div className="flex items-center gap-4 text-xs font-medium text-slate-600 dark:text-slate-400">
-            <span>Security: 256-Bit SSL Encrypted</span>
-            <span>•</span>
             <span className="text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1">
               <CheckCircle2 className="w-3.5 h-3.5" /> Verified Ticketing Gateway
             </span>
