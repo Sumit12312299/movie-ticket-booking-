@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { NotificationProvider } from './context/NotificationContext';
 import MainLayout from './layouts/MainLayout';
+import ScrollToTop from './components/ScrollToTop';
 import HomePage from './pages/HomePage';
 import MovieDetailsPage from './pages/MovieDetailsPage';
 import ShowtimeSelectionPage from './pages/ShowtimeSelectionPage';
@@ -18,6 +19,7 @@ export default function App() {
     <AuthProvider>
       <NotificationProvider>
         <Router>
+          <ScrollToTop />
           <MainLayout>
             <Routes>
               <Route path="/" element={<HomePage />} />
