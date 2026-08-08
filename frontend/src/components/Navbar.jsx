@@ -42,7 +42,7 @@ export default function Navbar({ onSearchChange }) {
     return localStorage.getItem('bookticket_city') || 'Mumbai';
   });
 
-  const CITIES = ['Mumbai', 'Delhi NCR', 'Bengaluru', 'Pune', 'Hyderabad', 'Ahmedabad', 'Kolkata'];
+  const CITIES = ['Mumbai', 'Delhi NCR', 'Bengaluru', 'Pune', 'Hyderabad', 'Ahmedabad', 'Kolkata', 'Phagwara'];
 
   const handleCityChange = (city) => {
     setSelectedCity(city);
@@ -96,7 +96,7 @@ export default function Navbar({ onSearchChange }) {
         const res = await API.get('/movies/', {
           params: { search: searchInput }
         });
-        setSearchResults(res.data || []);
+        setSearchResults(res.data.items || []);
         setShowDropdown(true);
       } catch (err) {
         console.error(err);
@@ -149,14 +149,14 @@ export default function Navbar({ onSearchChange }) {
           <div className="flex items-center gap-4 sm:gap-6 shrink-0">
             {/* Brand Logo with movie tape elements */}
             <Link to="/" className="flex items-center gap-3 group shrink-0">
-              <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-rose-600 via-rose-500 to-amber-500 flex items-center justify-center shadow-lg shadow-rose-600/35 group-hover:scale-105 transition-transform duration-350">
-                <Film className="w-5 h-5 text-white" />
+              <div className="w-10 h-10 rounded-xl overflow-hidden shadow-lg shadow-rose-600/20 group-hover:scale-105 transition-transform duration-350 shrink-0">
+                <img src="/logo.png" alt="BookTicket Logo" className="w-full h-full object-cover" />
               </div>
               <div className="hidden sm:block text-left">
                 <span className="text-xl font-black tracking-tight text-slate-900 dark:text-white group-hover:text-rose-500 transition-colors">
                   BOOK<span className="text-rose-600 dark:text-rose-500">TICKET</span>
                 </span>
-                <span className="text-[9px] block font-bold text-slate-400 dark:text-slate-550 tracking-wider uppercase -mt-1">
+                <span className="text-[9px] block font-bold text-slate-400 dark:text-slate-555 tracking-wider uppercase -mt-1">
                   Cinema Booking Elite
                 </span>
               </div>
