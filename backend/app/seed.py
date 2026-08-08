@@ -336,37 +336,42 @@ async def seed_data():
     day_after = (datetime.now() + timedelta(days=2)).strftime("%Y-%m-%d")
 
     theaters = [
-        {"name": "CinePlex Grand IMAX", "screen": "IMAX 3D Laser", "reg": 350.00, "vip": 550.00},
-        {"name": "Starlight Cinema 9", "screen": "VIP Dolby Atmos", "reg": 280.00, "vip": 450.00},
-        {"name": "Downtown MoviePlex", "screen": "Standard 2D", "reg": 220.00, "vip": 350.00}
+        {"name": "CinePlex Grand IMAX", "screen": "IMAX 3D Laser", "reg": 350.00, "vip": 550.00, "city": "Mumbai"},
+        {"name": "Starlight Cinema 9", "screen": "VIP Dolby Atmos", "reg": 280.00, "vip": 450.00, "city": "Mumbai"},
+        {"name": "Downtown MoviePlex", "screen": "Standard 2D", "reg": 220.00, "vip": 350.00, "city": "Mumbai"},
+        {"name": "PVR Director's Cut Delhi", "screen": "IMAX 3D Laser", "reg": 380.00, "vip": 600.00, "city": "Delhi NCR"},
+        {"name": "Starlight Cinema Delhi", "screen": "VIP Dolby Atmos", "reg": 290.00, "vip": 460.00, "city": "Delhi NCR"},
+        {"name": "Cinepolis Forum Mall Bengaluru", "screen": "IMAX 3D Laser", "reg": 340.00, "vip": 520.00, "city": "Bengaluru"},
+        {"name": "Majestic Grand Phagwara", "screen": "VIP Dolby Atmos", "reg": 250.00, "vip": 400.00, "city": "Phagwara"},
+        {"name": "PVR Curo Mall Phagwara", "screen": "Standard 2D", "reg": 200.00, "vip": 320.00, "city": "Phagwara"}
     ]
 
     times = ["10:30 AM", "02:15 PM", "06:00 PM", "09:30 PM"]
 
-    # Purge past showtimes
-    await showtimes_col.delete_many({"show_date": {"$lt": today}})
+    # Purge all old showtimes for clean seed
+    await showtimes_col.delete_many({})
 
     st_counter = 500
     for m in movies_data:
         for d in [today, tomorrow, day_after]:
-            existing_for_date = await showtimes_col.find_one({"movie_id": m["_id"], "show_date": d})
-            if not existing_for_date:
-                for t_idx, th in enumerate(theaters):
-                    st_counter += 1
-                    time_slot = times[t_idx % len(times)]
-                    pre_booked = ["C5", "C6", "D7"] if st_counter % 3 == 0 else []
-                    await showtimes_col.insert_one({
-                        "_id": f"st_{m['_id']}_{d}_{t_idx}",
-                        "movie_id": m["_id"],
-                        "movie_title": m["title"],
-                        "theater_name": th["name"],
-                        "screen_type": th["screen"],
-                        "show_date": d,
-                        "show_time": time_slot,
-                        "regular_price": th["reg"],
-                        "vip_price": th["vip"],
-                        "booked_seats": pre_booked
-                    })
+            for t_idx, th in enumerate(theaters):
+                st_counter += 1
+                time_slot = times[t_idx % len(times)]
+                pre_booked = ["C5", "C6", "D7"] if st_counter % 3 == 0 else []
+                st_id = f"st_{m['_id']}_{d}_{th['city'].lower().replace(' ', '_')}_{t_idx}"
+                await showtimes_col.insert_one({
+                    "_id": st_id,
+                    "movie_id": m["_id"],
+                    "movie_title": m["title"],
+                    "theater_name": th["name"],
+                    "screen_type": th["screen"],
+                    "show_date": d,
+                    "show_time": time_slot,
+                    "regular_price": th["reg"],
+                    "vip_price": th["vip"],
+                    "booked_seats": pre_booked,
+                    "city": th["city"]
+                })
 
     # 4. Sample Reviews
     sample_revs = [
