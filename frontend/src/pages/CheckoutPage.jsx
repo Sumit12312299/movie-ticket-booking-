@@ -209,10 +209,6 @@ export default function CheckoutPage() {
           <span className="text-xs uppercase font-extrabold text-rose-500 tracking-wider">Step 2 of 3 • Payment Gateway</span>
           <h1 className="text-3xl font-black text-slate-900 dark:text-white mt-1">Complete Checkout</h1>
         </div>
-        <div className="flex items-center gap-1.5 text-xs text-emerald-600 dark:text-emerald-400 font-extrabold bg-emerald-500/10 px-3.5 py-2 rounded-full border border-emerald-500/30 shadow-xs">
-          <Lock className="w-4 h-4" />
-          256-Bit SSL Encrypted
-        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -233,7 +229,7 @@ export default function CheckoutPage() {
                   onClick={() => setPaymentMethod(name)}
                   className={`p-4.5 rounded-2xl border text-left text-sm font-black transition-all flex items-center gap-3 cursor-pointer ${
                     paymentMethod === name
-                      ? 'bg-rose-600/20 border-rose-500 text-rose-600 dark:text-rose-300 shadow-lg shadow-rose-600/20 scale-[1.02]'
+                      ? 'bg-rose-600/20 border-rose-500 text-rose-600 dark:text-rose-300 shadow-md scale-[1.02]'
                       : 'bg-slate-100 dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white'
                   }`}
                 >
@@ -300,7 +296,7 @@ export default function CheckoutPage() {
             <div className="glass-card rounded-3xl p-6 border border-amber-500/30 bg-gradient-to-br from-amber-500/10 via-rose-500/5 to-slate-900/10 space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-11 h-11 rounded-2xl bg-amber-500 text-white flex items-center justify-center shadow-lg shadow-amber-500/30">
+                  <div className="w-11 h-11 rounded-2xl bg-amber-500 text-white flex items-center justify-center shadow-md">
                     <Wallet className="w-5.5 h-5.5" />
                   </div>
                   <div>
@@ -532,7 +528,7 @@ export default function CheckoutPage() {
           <button
             onClick={handleConfirmPayment}
             disabled={isProcessing}
-            className="w-full py-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white font-black text-base shadow-xl shadow-emerald-600/30 flex items-center justify-center gap-2 hover:scale-[1.02] transition-all cursor-pointer"
+            className="w-full py-4 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-base shadow-md flex items-center justify-center gap-2 hover:scale-[1.02] transition-all cursor-pointer"
           >
             <CheckCircle2 className="w-5.5 h-5.5" />
             {isProcessing ? 'Processing Payment...' : 'Pay & Confirm Booking'}
@@ -557,7 +553,7 @@ export default function CheckoutPage() {
                 setIsExpired(false);
                 navigate(`/seats/${showtime.id}`);
               }}
-              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-rose-600 to-rose-500 text-white font-extrabold text-xs shadow-lg hover:scale-105 active:scale-95 transition-all"
+              className="w-full py-3.5 rounded-2xl bg-rose-600 hover:bg-rose-500 text-white font-extrabold text-xs shadow-lg hover:scale-105 active:scale-95 transition-all"
             >
               Return to Seat Map
             </button>
