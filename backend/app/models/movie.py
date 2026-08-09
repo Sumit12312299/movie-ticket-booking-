@@ -22,9 +22,15 @@ class MovieBase(BaseModel):
     director: Optional[str] = ""
 
 class MovieCreate(MovieBase):
+    """
+    Schema representing the payload structure for creating a new movie.
+    """
     pass
 
 class MovieUpdate(BaseModel):
+    """
+    Schema containing partial update properties for modifying an existing movie.
+    """
     title: Optional[str] = None
     synopsis: Optional[str] = None
     genre: Optional[List[str]] = None
