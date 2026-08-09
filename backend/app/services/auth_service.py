@@ -4,6 +4,8 @@ from app.database.db import get_database
 from app.utils.security import decode_access_token
 from app.schemas.user_schema import UserProfile
 
+from app.utils.logger import logger
+
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
 
 async def get_current_user(token: str = Depends(oauth2_scheme)) -> UserProfile:
@@ -13,6 +15,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)) -> UserProfile:
     """
     payload = decode_access_token(token)
     if not payload:
+        logger.warning("Failed to decode JWT access token or token expired")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Could not validate credentials or token expired",
@@ -24,6 +27,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)) -> UserProfile:
     users_col = db["users"]
     user_doc = await users_col.find_one({"_id": user_id})
     if not user_doc:
+        logger.warning(f"User with ID {user_id} not found in database")
         raise HTTPException(status_code=404, detail="User not found")
         
     return UserProfile(
