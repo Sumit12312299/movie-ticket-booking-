@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layers, Cpu, Database, ShieldCheck, Zap, RefreshCw, Server, Lock } from 'lucide-react';
+import { Layers, Database, Zap, RefreshCw, Lock } from 'lucide-react';
 
 export default function SystemDesignPage() {
   return (
