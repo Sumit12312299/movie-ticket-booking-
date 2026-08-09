@@ -6,10 +6,11 @@ from app.services.auth_service import get_current_admin
 
 router = APIRouter(prefix="/admin", tags=["Admin Dashboard"])
 
-@router.get("/stats")
+@router.get("/stats", summary="Retrieve booking analytics and system-wide KPIs")
 async def get_admin_stats(current_admin: UserProfile = Depends(get_current_admin)):
     """
-    Calculate KPI metrics, total revenue, tickets sold, and monthly genre revenue.
+    Calculate system KPI metrics: total revenue, tickets sold, active user count, showtime count,
+    monthly revenue breakdown by movie genre, and retrieve a list of the 10 most recent bookings.
     """
     db = get_database()
 
@@ -54,8 +55,12 @@ async def get_admin_stats(current_admin: UserProfile = Depends(get_current_admin
         "recent_bookings": recent_bookings
     }
 
-@router.get("/bookings")
+@router.get("/bookings", summary="List all bookings across the theater system")
 async def get_all_bookings(current_admin: UserProfile = Depends(get_current_admin)):
+    """
+    Fetch all user bookings registered in the MongoDB system up to a limit of 500 records.
+    Sorts returned bookings by creation timestamp in descending order.
+    """
     db = get_database()
     bookings_col = db["bookings"]
 
