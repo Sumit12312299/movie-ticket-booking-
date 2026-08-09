@@ -12,10 +12,10 @@ class UserRegister(BaseModel):
 
 class UserLogin(BaseModel):
     """
-    User login request payload model.
+    User login request payload model containing email and password credentials.
     """
-    email: str
-    password: str
+    email: str = Field(..., description="The user registration email address")
+    password: str = Field(..., description="The user account password")
 
 class UserResponse(BaseModel):
     """
@@ -29,8 +29,8 @@ class UserResponse(BaseModel):
 
 class TokenResponse(BaseModel):
     """
-    Authentication success token response containing JWT and user profile.
+    Authentication success token response containing JWT and user profile metadata.
     """
-    access_token: str
-    token_type: str = "bearer"
+    access_token: str = Field(..., description="JWT access token string representing user session")
+    token_type: str = Field(default="bearer", description="The token type prefix used in headers")
     user: UserResponse
