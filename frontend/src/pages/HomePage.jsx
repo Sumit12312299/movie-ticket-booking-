@@ -1,24 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useSearchParams, useNavigate } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useNotification } from '../context/NotificationContext';
 import { 
-  Film, Star, Sparkles, Play, ChevronRight, ChevronLeft, 
-  TrendingUp, Flame, Ticket, Crown, Headphones, Tv, Clapperboard, Zap, Heart, ShieldCheck 
+  Film, Star, Sparkles, 
+  TrendingUp, Flame, Ticket, Crown, Clapperboard, Zap, Heart 
 } from 'lucide-react';
 import API from '../services/api';
 import MovieCard from '../components/MovieCard';
 import TrailerModal from '../components/TrailerModal';
 
-const getAutoplayUrl = (url) => {
-  if (!url) return '';
-  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-  const match = url.match(regExp);
-  const videoId = (match && match[2].length === 11) ? match[2] : null;
-  if (videoId) {
-    return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&playlist=${videoId}&loop=1&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&playsinline=1&enablejsapi=1`;
-  }
-  return url;
-};
+
 
 function MovieCardSkeleton() {
   return (
@@ -47,9 +38,7 @@ export default function HomePage() {
   const [heroIndex, setHeroIndex] = useState(0);
   const [searchParams] = useSearchParams();
 
-  const [liveQuery, setLiveQuery] = useState(searchParams.get('search') || '');
-  const [hoveredHeroId, setHoveredHeroId] = useState(null);
-  const [playTrailer, setPlayTrailer] = useState(false);
+  const liveQuery = searchParams.get('search') || '';
 
   const navigate = useNavigate();
   const { addToast } = useNotification();
