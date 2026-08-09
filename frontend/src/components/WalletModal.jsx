@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Wallet, PlusCircle, Sparkles, CheckCircle2, ShieldCheck, ArrowUpRight, X, Zap, CreditCard } from 'lucide-react';
+import { Wallet, PlusCircle, Sparkles, ShieldCheck, ArrowUpRight, X, Zap } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
 
