@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { 
-  Star, Clock, Calendar, Film, Play, User, Send, Heart, Ticket, 
-  Tv, Lightbulb, Sparkles, MessageSquare, ChevronRight, UserCheck, 
-  ThumbsUp, ArrowLeft
+  Star, Clock, Calendar, Film, Play, Send, Heart, Ticket, 
+  Lightbulb, Sparkles, MessageSquare, ArrowLeft
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import API from '../services/api';
@@ -166,7 +165,7 @@ export default function MovieDetailsPage() {
     const stars = Math.min(Math.max(Math.floor(r.rating) - 1, 0), 4);
     ratingDistribution[stars]++;
   });
-  const maxDistributionCount = Math.max(...ratingDistribution, 1);
+
 
   if (loading) {
     return (
