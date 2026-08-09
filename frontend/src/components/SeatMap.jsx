@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Sparkles } from 'lucide-react';
+
 
 /**
  * SeatMap manages the visualization of theater auditorium seat selections.
