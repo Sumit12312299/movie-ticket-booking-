@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { QrCode, Ticket, Calendar, Clock, MapPin, Printer, CheckCircle2, Film, Sparkles, Scan } from 'lucide-react';
+import { QrCode, Calendar, MapPin, Printer, CheckCircle2, Film, Scan } from 'lucide-react';
 
 /**
  * TicketPass renders the printable E-Ticket layout.
