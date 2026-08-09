@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Settings, User, Mail, MapPin, Save, CheckCircle2 } from 'lucide-react';
+import { X, Settings, User, Mail, MapPin, Save } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
 
