@@ -2,6 +2,7 @@ import time
 from typing import List, Dict, Tuple
 from app.database.db import get_database
 from app.config.config import settings
+from app.utils.logger import logger
 
 class SeatLockingService:
     """
@@ -41,6 +42,7 @@ class SeatLockingService:
         for seat in seats:
             st_locks[seat] = (user_id, expiry)
 
+        logger.info(f"Locked seats {seats} for user {user_id} on showtime {showtime_id}")
         return True, "Seats locked successfully"
 
     @classmethod
@@ -51,6 +53,7 @@ class SeatLockingService:
                     lock_user, _ = cls._active_locks[showtime_id][seat]
                     if lock_user == user_id:
                         del cls._active_locks[showtime_id][seat]
+                        logger.info(f"Released seat {seat} for user {user_id} on showtime {showtime_id}")
 
     @classmethod
     def get_locked_seats(cls, showtime_id: str) -> List[str]:
