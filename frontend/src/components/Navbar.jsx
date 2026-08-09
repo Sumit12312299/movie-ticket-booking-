@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { 
-  Film, Search, Heart, User, LogOut, ShieldAlert, Ticket, 
+  Search, Heart, User, LogOut, ShieldAlert, Ticket, 
   Sun, Moon, Star, X, Wallet, Crown, Utensils, Settings, 
   HelpCircle, Gift, MapPin, ChevronDown, Check, Bell
 } from 'lucide-react';
@@ -14,7 +14,7 @@ import VouchersModal from './VouchersModal';
 import AccountSettingsModal from './AccountSettingsModal';
 import SupportModal from './SupportModal';
 
-export default function Navbar({ onSearchChange }) {
+export default function Navbar() {
   const { user, logout, isAdmin } = useAuth();
   const { addToast } = useNotification();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
