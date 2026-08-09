@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { CreditCard, ShieldCheck, Ticket, CheckCircle2, Lock, Tag, DollarSign, Wallet, Plus, Minus, Utensils, Sparkles, Clock } from 'lucide-react';
+import { CreditCard, ShieldCheck, CheckCircle2, Tag, Wallet, Utensils, Sparkles, Clock } from 'lucide-react';
 import API from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
