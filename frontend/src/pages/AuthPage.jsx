@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Film, Lock, Mail, User, ShieldCheck, ArrowRight, Sparkles, Eye, EyeOff, CheckCircle2 } from 'lucide-react';
+import { Film, Lock, Mail, User, ShieldCheck, ArrowRight, Sparkles, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
 import API from '../services/api';
@@ -75,6 +75,7 @@ export default function AuthPage() {
       addToast(`Signed in as ${type === 'admin' ? 'Demo Admin' : 'Demo User'}!`, 'success');
       navigate('/');
     } catch (err) {
+      console.error('Demo login failed:', err);
       addToast('Demo login failed. Please try manual login.', 'error');
     } finally {
       setSubmitting(false);
