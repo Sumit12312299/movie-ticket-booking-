@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { 
-  Calendar, Clock, MapPin, Film, ChevronRight, ShieldCheck, 
+  Calendar, Clock, MapPin, ShieldCheck, 
   Sparkles, Tv, Volume2, Search, ArrowLeft, Coffee, Wifi, 
-  HelpCircle, Star, Flame, Compass, Info, CheckCircle2
+  Star, Flame, Compass, CheckCircle2
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import API from '../services/api';
