@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, HelpCircle, MessageSquare, PhoneCall, ChevronDown, ChevronUp, ShieldCheck, Sparkles } from 'lucide-react';
+import { X, HelpCircle, MessageSquare, PhoneCall, ChevronDown, ChevronUp, Sparkles } from 'lucide-react';
 import { useNotification } from '../context/NotificationContext';
 
 const FAQS = [
