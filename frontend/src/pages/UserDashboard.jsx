@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Ticket, Heart, User, Calendar, Clock, MapPin, XCircle, QrCode, CheckCircle2, ShieldCheck, Film, Sparkles, Crown, ArrowRight, X, Wallet, Settings, Camera, Save, Lock, Eye, EyeOff, Mail, Phone, Award, Upload, Image } from 'lucide-react';
+import { Ticket, Heart, User, Calendar, MapPin, QrCode, Film, Crown, X, Wallet, Settings, Camera, Save, Mail, Phone, Upload } from 'lucide-react';
 import API from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
