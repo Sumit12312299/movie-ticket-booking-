@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { IndianRupee, Ticket, Film, Users, Plus, Trash2, Edit3, ShieldAlert, BarChart3, TrendingUp, Calendar, MapPin } from 'lucide-react';
+import { IndianRupee, Ticket, Film, Users, Plus, Trash2, ShieldAlert, BarChart3, TrendingUp } from 'lucide-react';
 import API from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
@@ -10,8 +10,6 @@ export default function AdminDashboard() {
 
   const [stats, setStats] = useState(null);
   const [movies, setMovies] = useState([]);
-  const [allBookings, setAllBookings] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('analytics');
 
   // Add Movie Modal state
@@ -100,7 +98,8 @@ export default function AdminDashboard() {
       addToast('Movie deleted', 'info');
       fetchAdminData();
     } catch (err) {
-      addToast('Failed to delete movie', 'error');
+      console.error('Failed to delete movie:', err);
+      addToast(err.response?.data?.detail || 'Failed to delete movie', 'error');
     }
   };
 
@@ -116,7 +115,8 @@ export default function AdminDashboard() {
       setShowAddShowtime(false);
       fetchAdminData();
     } catch (err) {
-      addToast('Failed to add showtime', 'error');
+      console.error('Failed to add showtime:', err);
+      addToast(err.response?.data?.detail || 'Failed to add showtime', 'error');
     }
   };
 
