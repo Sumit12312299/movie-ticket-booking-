@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Gift, Copy, Check, Ticket, Sparkles, Percent } from 'lucide-react';
+import { X, Gift, Copy, Check, Sparkles } from 'lucide-react';
 import { useNotification } from '../context/NotificationContext';
 
 const ACTIVE_PROMOS = [
