@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { X, Utensils, Plus, Minus, ShoppingBag, CheckCircle2, Sparkles, Wallet } from 'lucide-react';
-import { useAuth } from '../context/AuthContext';
+import { X, Utensils, Plus, Minus, ShoppingBag, Sparkles } from 'lucide-react';
 import { useNotification } from '../context/NotificationContext';
 
 const SNACK_ITEMS = [
@@ -39,7 +38,6 @@ const SNACK_ITEMS = [
 ];
 
 export default function FoodSnacksModal({ isOpen, onClose }) {
-  const { user } = useAuth();
   const { addToast } = useNotification();
   const [cart, setCart] = useState({});
   const [isOrdering, setIsOrdering] = useState(false);
