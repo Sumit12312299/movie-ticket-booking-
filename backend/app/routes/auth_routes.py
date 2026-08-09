@@ -4,17 +4,20 @@ from app.database.db import get_database
 from app.utils.security import get_password_hash, verify_password, create_access_token
 from app.schemas.user_schema import UserCreate, UserLogin, UserProfile, Token, WalletTopupRequest
 from app.services.auth_service import get_current_user
+from app.utils.logger import logger
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
-@router.post("/register", response_model=Token, status_code=status.HTTP_201_CREATED)
+@router.post("/register", response_model=Token, status_code=status.HTTP_201_CREATED, summary="Register a new user profile")
 async def register(user_data: UserCreate):
     """
     Register a new user account.
     Ensures unique emails, hashes passwords, seeds default wallet balance,
     and returns JWT credentials.
     """
+    """
     db = get_database()
+    logger.info(f"Registering new user with email: {user_data.email.lower()}")
     users_col = db["users"]
     
     existing = await users_col.find_one({"email": user_data.email.lower()})
@@ -49,13 +52,14 @@ async def register(user_data: UserCreate):
     )
     return Token(access_token=access_token, user=user_profile)
 
-@router.post("/login", response_model=Token)
+@router.post("/login", response_model=Token, summary="Authenticate user login credentials")
 async def login(credentials: UserLogin):
     """
     Authenticate a user and return a JWT access token.
     Checks user credentials, matches password hash, and encodes role privileges.
     """
     db = get_database()
+    logger.info(f"Authenticating user email: {credentials.email.lower()}")
     users_col = db["users"]
     
     user_doc = await users_col.find_one({"email": credentials.email.lower()})
@@ -80,8 +84,11 @@ async def login(credentials: UserLogin):
     )
     return Token(access_token=access_token, user=user_profile)
 
-@router.get("/me", response_model=UserProfile)
+@router.get("/me", response_model=UserProfile, summary="Retrieve current authenticated user session profile")
 async def get_me(current_user: UserProfile = Depends(get_current_user)):
+    """
+    Returns profile information of the currently authenticated active session.
+    """
     return current_user
 
 @router.post("/wallet/topup")
