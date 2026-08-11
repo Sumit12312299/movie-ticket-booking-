@@ -173,6 +173,10 @@ class FallbackDatabase:
 
 
 class DatabaseManager:
+    """
+    Manages client connection instance and fallback status for database operations.
+    Supports in-memory mock fallback to achieve high-availability in case MongoDB is down.
+    """
     client: AsyncIOMotorClient = None
     db = None
     is_fallback: bool = False
@@ -199,9 +203,18 @@ async def connect_to_mongo():
         db_manager.is_fallback = True
 
 async def close_mongo_connection():
+    """
+    Closes the active MongoDB client connection if initialized.
+    """
     if db_manager.client:
         db_manager.client.close()
         logger.info("MongoDB connection closed.")
 
 def get_database():
+    """
+    Retrieves the active database handle (either MongoDB or FallbackDatabase).
+
+    Returns:
+        Union[AsyncIOMotorDatabase, FallbackDatabase]: Active database engine
+    """
     return db_manager.db
