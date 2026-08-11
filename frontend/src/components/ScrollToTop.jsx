@@ -2,6 +2,11 @@ import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { ArrowUp } from 'lucide-react';
 
+/**
+ * ScrollToTop component automatically scrolls the window viewport to top
+ * on route/pathname transitions and renders a floating scroll-to-top button
+ * when the page scroll offset is greater than 400px.
+ */
 export default function ScrollToTop() {
   const { pathname } = useLocation();
   const [isVisible, setIsVisible] = useState(false);
