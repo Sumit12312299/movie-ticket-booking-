@@ -1,7 +1,7 @@
 import logging
 import sys
 
-def setup_logger():
+def setup_logger() -> logging.Logger:
     """
     Initializes and configures the application logger for BookTicket.
     Sets up log levels, formatter, and standard output stream handlers.
