@@ -11,6 +11,12 @@ class FallbackCollection:
     Provides High-Availability when connection to the primary database is lost.
     """
     def __init__(self, name: str):
+        """
+        Initializes the fallback in-memory collection.
+
+        Args:
+            name (str): The name of the collection (e.g. 'movies', 'bookings').
+        """
         self.name = name
         self._data = []
         self._id_counter = 1000
