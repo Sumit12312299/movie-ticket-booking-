@@ -25,12 +25,13 @@ app = FastAPI(
     redoc_url="/redoc"
 )
 
-# Compression Middleware for ultra-fast API payloads
+# Compression Middleware for ultra-fast API payloads.
+# Compresses responses larger than 1000 bytes using gzip.
 app.add_middleware(GZipMiddleware, minimum_size=1000)
 
-# CORS Configuration
-# Allowed CORS origins for development, staging, and wildcard fallback.
-# In a strict production environment, wildcard '*' should be restricted to trusted domains.
+# CORS Configuration.
+# Allowed CORS origins for local development, staging servers, and wildcard fallback.
+# WARNING: In a strict production environment, wildcard '*' should be removed and restricted only to verified domains.
 origins = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
@@ -38,6 +39,7 @@ origins = [
     "*"
 ]
 
+# Register CORSMiddleware globally to handle cross-origin AJAX requests from frontend applications.
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
