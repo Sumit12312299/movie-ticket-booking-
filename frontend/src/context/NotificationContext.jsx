@@ -11,6 +11,12 @@ const NotificationContext = createContext();
 export const NotificationProvider = ({ children }) => {
   const [toasts, setToasts] = useState([]);
 
+  /**
+   * Adds a notification toast to the display queue.
+   * Automatically schedules dismissal after 4 seconds.
+   * @param {string} message - Toast message to display
+   * @param {string} [type='info'] - Severity type ('success', 'error', 'warning', 'info')
+   */
   const addToast = (message, type = 'info') => {
     const id = Date.now() + Math.random();
     setToasts((prev) => [...prev, { id, message, type }]);
@@ -19,6 +25,10 @@ export const NotificationProvider = ({ children }) => {
     }, 4000);
   };
 
+  /**
+   * Dismisses and removes a toast notification from the queue.
+   * @param {number} id - Unique numeric identifier of the toast to remove
+   */
   const removeToast = (id) => {
     setToasts((prev) => prev.filter((t) => t.id !== id));
   };
