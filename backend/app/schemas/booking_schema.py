@@ -14,7 +14,7 @@ class BookingCreate(BaseModel):
     show_time: str
     screen_type: str
     seats: List[str]
-    total_amount: float
+    total_amount: float = Field(..., ge=0.0)
     payment_method: str = "Credit Card"  # "Credit Card", "UPI", "Net Banking", "Wallet"
     snacks: Optional[List[str]] = None
 
