@@ -3,12 +3,12 @@ from typing import Optional, List
 
 class UserCreate(BaseModel):
     full_name: str = Field(..., min_length=2, example="Alex Morgan")
-    email: str = Field(..., example="alex@example.com")
+    email: EmailStr = Field(..., example="alex@example.com")
     password: str = Field(..., min_length=6, example="secret123")
     role: Optional[str] = "user"  # "user" or "admin"
 
 class UserLogin(BaseModel):
-    email: str
+    email: EmailStr
     password: str
 
 class UserProfile(BaseModel):
