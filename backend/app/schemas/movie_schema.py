@@ -37,7 +37,7 @@ class MovieResponse(MovieCreate):
 
 class ReviewCreate(BaseModel):
     user_name: str
-    rating: float
+    rating: float = Field(..., ge=0.0, le=10.0, example=8.5)
     comment: str
 
 class ReviewResponse(ReviewCreate):
