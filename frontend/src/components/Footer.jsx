@@ -10,6 +10,11 @@ export default function Footer() {
   const { addToast } = useNotification();
   const [email, setEmail] = useState('');
 
+  /**
+   * Handles user submission of email address for newsletter subscription.
+   * Validates standard string structure and fires visual toast notifications.
+   * @param {React.FormEvent} e - HTML Form Submission Event
+   */
   const handleSubscribe = (e) => {
     e.preventDefault();
     if (!email.trim() || !email.includes('@')) {
