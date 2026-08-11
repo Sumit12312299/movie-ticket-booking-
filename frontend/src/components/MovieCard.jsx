@@ -6,7 +6,9 @@ import { useNotification } from '../context/NotificationContext';
 
 /**
  * MovieCard displays details of a movie styled with the IMDb grid card template.
- * @param {object} props.movie - Movie catalog item dataset
+ * 
+ * @param {object} props
+ * @param {object} props.movie - Movie catalog item dataset containing rating, release date, duration, etc.
  * @param {function} props.onOpenTrailer - Event handler trigger to load youtube video trailer modal
  */
 export default function MovieCard({ movie, onOpenTrailer }) {
