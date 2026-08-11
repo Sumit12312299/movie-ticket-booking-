@@ -7,8 +7,8 @@ class ShowtimeCreate(BaseModel):
     screen_type: str = "Standard 2D"  # "Standard 2D", "IMAX 3D", "VIP Dolby"
     show_date: str  # YYYY-MM-DD
     show_time: str  # HH:MM
-    regular_price: float = 12.50
-    vip_price: float = 18.00
+    regular_price: float = Field(12.50, gt=0.0)
+    vip_price: float = Field(18.00, gt=0.0)
     city: Optional[str] = "Mumbai"
 
 class ShowtimeResponse(BaseModel):
