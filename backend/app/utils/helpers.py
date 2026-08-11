@@ -3,9 +3,14 @@ from typing import Optional
 
 def format_datetime(dt: Optional[datetime]) -> str:
     """
-    Formats datetime object to standard format.
-    Standard pattern used: YYYY-MM-DD HH:MM:SS.
-    Returns empty string if datetime object is None.
+    Formats a datetime object to a standard string representation.
+
+    Args:
+        dt (Optional[datetime]): The datetime object to format.
+
+    Returns:
+        str: Standard pattern formatted string 'YYYY-MM-DD HH:MM:SS',
+             or an empty string if input dt is None.
     """
     if dt is None:
         return ""
@@ -13,8 +18,14 @@ def format_datetime(dt: Optional[datetime]) -> str:
 
 def parse_datetime(dt_str: Optional[str]) -> Optional[datetime]:
     """
-    Parses standard string representation to datetime object.
-    Returns None if parsed string is empty, invalid, or None.
+    Parses a standard string representation back into a datetime object.
+
+    Args:
+        dt_str (Optional[str]): Standard formatted date string 'YYYY-MM-DD HH:MM:SS'.
+
+    Returns:
+        Optional[datetime]: Parsed datetime object, or None if the input
+                            string is empty, invalid, or None.
     """
     if not dt_str:
         return None
