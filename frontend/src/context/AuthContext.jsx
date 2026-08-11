@@ -42,6 +42,12 @@ export const AuthProvider = ({ children }) => {
     }
   }, [token]);
 
+  /**
+   * Authenticats a user with email and password.
+   * @param {string} email
+   * @param {string} password
+   * @returns {Promise<object>} Authenticated user profile data
+   */
   const login = async (email, password) => {
     const res = await API.post('/auth/login', { email, password });
     const { access_token, user: userData } = res.data;
@@ -52,6 +58,14 @@ export const AuthProvider = ({ children }) => {
     return userData;
   };
 
+  /**
+   * Registers a new user account profile.
+   * @param {string} fullName
+   * @param {string} email
+   * @param {string} password
+   * @param {string} role - User access role (e.g. 'user' or 'admin')
+   * @returns {Promise<object>} Newly created user profile dataset
+   */
   const register = async (fullName, email, password, role = 'user') => {
     const res = await API.post('/auth/register', { full_name: fullName, email, password, role });
     const { access_token, user: userData } = res.data;
@@ -62,6 +76,9 @@ export const AuthProvider = ({ children }) => {
     return userData;
   };
 
+  /**
+   * Logs out the current user, clearing state and localStorage credentials.
+   */
   const logout = () => {
     setToken(null);
     setUser(null);
@@ -69,6 +86,11 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('bookticket_user');
   };
 
+  /**
+   * Toggles a movie in the user's wishlist catalog.
+   * @param {string} movieId
+   * @returns {Promise<string|null>} Action type ('added' or 'removed')
+   */
   const toggleFavorite = async (movieId) => {
     if (!token) return false;
     try {
@@ -85,6 +107,10 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  /**
+   * Refreshes the current user profile metadata from the server.
+   * @returns {Promise<object|null>} Refreshed user profile data
+   */
   const refreshUser = async () => {
     if (!token) return null;
     try {
@@ -98,6 +124,11 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  /**
+   * Tops up the user's digital wallet balance.
+   * @param {number|string} amount
+   * @returns {Promise<object>} Top up response dataset
+   */
   const topUpWallet = async (amount) => {
     if (!token) return null;
     try {
