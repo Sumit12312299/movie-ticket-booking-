@@ -15,7 +15,6 @@ async def register(user_data: UserCreate):
     Ensures unique emails, hashes passwords, seeds default wallet balance,
     and returns JWT credentials.
     """
-    """
     db = get_database()
     logger.info(f"Registering new user with email: {user_data.email.lower()}")
     users_col = db["users"]
