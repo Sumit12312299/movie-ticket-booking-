@@ -8,10 +8,9 @@ class SeatLockingService:
     """
     SeatLockingService manages temporary leases on theater seats.
     Prevents race conditions and double-booking during concurrently busy showtimes.
-    """
-    """
-    In-memory / DB state manager for temporary seat locks during checkout.
-    Provides atomic verification to prevent concurrent double-booking.
+    
+    Provides an in-memory/DB state manager for temporary seat locks during checkout
+    with atomic verification to prevent concurrent double-booking.
     """
     _active_locks: Dict[str, Dict[str, Tuple[str, float]]] = {}  # showtime_id -> { seat_id: (user_id, expiry_timestamp) }
 
