@@ -7,7 +7,10 @@ const API = axios.create({
   }
 });
 
-// Request interceptor to attach JWT token
+/**
+ * Request interceptor to attach JWT token to outgoing Axios requests.
+ * Reads the token from localStorage and appends it to Authorization headers.
+ */
 API.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('bookticket_token');
@@ -19,8 +22,11 @@ API.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response interceptor for handling 401 unauth
-// Clear authentication tokens and evicts session if credentials decay
+/**
+ * Response interceptor for handling 401 unauthorized errors globally.
+ * Clears the authentication token and evicts user session datasets from
+ * localStorage if credentials expire or become invalid.
+ */
 API.interceptors.response.use(
   (response) => response,
   (error) => {
