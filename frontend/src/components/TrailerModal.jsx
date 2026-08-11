@@ -16,6 +16,10 @@ const getEmbedUrl = (url) => {
 /**
  * TrailerModal displays movie video trailer content in an overlay modal.
  * Leverages YouTube embedding API helpers to parse URLs and render iframes.
+ * 
+ * @param {object} props
+ * @param {object} props.movie - Catalog movie record containing trailer_url and title
+ * @param {function} props.onClose - Close callback handler function
  */
 export default function TrailerModal({ movie, onClose }) {
   if (!movie || !movie.trailer_url) return null;
