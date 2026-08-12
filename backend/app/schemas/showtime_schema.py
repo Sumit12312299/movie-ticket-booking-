@@ -1,3 +1,6 @@
+"""
+Pydantic Data Schemas for Theater Showtime and Screening Schedules.
+"""
 from pydantic import BaseModel, Field
 from typing import List, Optional
 
