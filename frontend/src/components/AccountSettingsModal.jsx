@@ -3,6 +3,12 @@ import { X, Settings, User, Mail, MapPin, Save } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
 
+/**
+ * AccountSettingsModal provides interface for updating user profile settings and location preferences.
+ * @param {object} props
+ * @param {boolean} props.isOpen - Visibility flag for modal
+ * @param {function} props.onClose - Modal close handler function
+ */
 export default function AccountSettingsModal({ isOpen, onClose }) {
   const { user } = useAuth();
   const { addToast } = useNotification();
