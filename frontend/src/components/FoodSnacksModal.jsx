@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { X, Utensils, Plus, Minus, ShoppingBag, Sparkles } from 'lucide-react';
 import { useNotification } from '../context/NotificationContext';
 
+/**
+ * Pre-orderable concession food and beverage items inventory list.
+ */
 const SNACK_ITEMS = [
   {
     id: 1,
