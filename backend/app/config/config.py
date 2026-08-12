@@ -1,3 +1,6 @@
+"""
+Application environment settings and configuration constants module.
+"""
 import os
 from pydantic_settings import BaseSettings
 
