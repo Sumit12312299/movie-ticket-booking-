@@ -1,6 +1,11 @@
 import React from 'react';
 import { X, Play } from 'lucide-react';
 
+/**
+ * Extracts standard 11-character YouTube video ID from various URL formats.
+ * @param {string} url - Raw YouTube URL string
+ * @returns {string|null} Video ID or null if unparseable
+ */
 const parseYoutubeId = (url) => {
   if (!url) return null;
   const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
@@ -8,6 +13,11 @@ const parseYoutubeId = (url) => {
   return (match && match[2].length === 11) ? match[2] : null;
 };
 
+/**
+ * Constructs clean YouTube iframe embed URL.
+ * @param {string} url - Raw YouTube URL string
+ * @returns {string} YouTube embed URL
+ */
 const getEmbedUrl = (url) => {
   const videoId = parseYoutubeId(url);
   return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
