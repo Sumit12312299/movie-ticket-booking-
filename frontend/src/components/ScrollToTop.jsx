@@ -33,6 +33,9 @@ export default function ScrollToTop() {
     return () => window.removeEventListener('scroll', toggleVisibility);
   }, []);
 
+  /**
+   * Smoothly scrolls the active window viewport back to y-index 0.
+   */
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
