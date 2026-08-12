@@ -20,6 +20,11 @@ export default function SeatMap({
   const seatsPerRow = 12;
   const [hoveredSeat, setHoveredSeat] = useState(null);
 
+  /**
+   * Resolves the current state of a given seat identifier (booked, locked, selected, or available).
+   * @param {string} seatId - Unique identifier of target seat (e.g. 'A5')
+   * @returns {string} Seat status descriptor
+   */
   const getSeatStatus = (seatId) => {
     if (bookedSeats.includes(seatId)) return 'booked';
     if (lockedSeats.includes(seatId)) return 'locked';
