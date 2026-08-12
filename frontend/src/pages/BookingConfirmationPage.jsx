@@ -3,6 +3,10 @@ import { useLocation, Link } from 'react-router-dom';
 import { CheckCircle2, Ticket, ArrowLeft, Sparkles, PartyPopper } from 'lucide-react';
 import TicketPass from '../components/TicketPass';
 
+/**
+ * BookingConfirmationPage presents ticket purchase success receipt,
+ * renders interactive TicketPass E-Ticket component, and triggers celebration canvas confetti.
+ */
 export default function BookingConfirmationPage() {
   const location = useLocation();
   const booking = location.state?.booking;
