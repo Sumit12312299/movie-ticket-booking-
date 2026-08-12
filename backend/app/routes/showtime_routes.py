@@ -8,13 +8,17 @@ from app.services.seat_locking_service import seat_lock_service
 
 router = APIRouter(prefix="/showtimes", tags=["Showtimes"])
 
-@router.get("", response_model=List[ShowtimeResponse])
+@router.get("", response_model=List[ShowtimeResponse], summary="Query showtimes with on-the-fly seed fallback")
 async def get_showtimes(
     movie_id: Optional[str] = None,
     show_date: Optional[str] = None,
     theater_name: Optional[str] = None,
     city: Optional[str] = None
 ):
+    """
+    Retrieve available showtime screening slots filtered by movie, date, theater, or city.
+    Generates realistic dynamic showtime schedules on-the-fly if no matching records exist.
+    """
     db = get_database()
     showtimes_col = db["showtimes"]
     movies_col = db["movies"]
