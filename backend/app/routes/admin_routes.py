@@ -1,3 +1,6 @@
+"""
+Admin Dashboard Metrics & Analytics API Endpoints.
+"""
 from fastapi import APIRouter, Depends, HTTPException
 from typing import List
 from app.database.db import get_database
