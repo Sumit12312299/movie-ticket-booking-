@@ -88,6 +88,13 @@ async def get_movie(movie_id: str):
     movies_col = db["movies"]
     
     movie = await movies_col.find_one({"_id": movie_id})
+    if not movie and len(str(movie_id)) == 24:
+        try:
+            from bson import ObjectId
+            movie = await movies_col.find_one({"_id": ObjectId(movie_id)})
+        except Exception:
+            pass
+
     if not movie:
         raise HTTPException(status_code=404, detail="Movie not found")
         

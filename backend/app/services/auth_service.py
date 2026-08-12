@@ -26,6 +26,13 @@ async def get_current_user(token: str = Depends(oauth2_scheme)) -> UserProfile:
     db = get_database()
     users_col = db["users"]
     user_doc = await users_col.find_one({"_id": user_id})
+    if not user_doc and len(str(user_id)) == 24:
+        try:
+            from bson import ObjectId
+            user_doc = await users_col.find_one({"_id": ObjectId(user_id)})
+        except Exception:
+            pass
+
     if not user_doc:
         logger.warning(f"User with ID {user_id} not found in database")
         raise HTTPException(status_code=404, detail="User not found")
