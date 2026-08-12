@@ -2,6 +2,9 @@ import React from 'react';
 import { X, Gift, Copy, Check, Sparkles } from 'lucide-react';
 import { useNotification } from '../context/NotificationContext';
 
+/**
+ * Available promotional discount vouchers configuration list.
+ */
 const ACTIVE_PROMOS = [
   {
     code: 'CINEMA10',
