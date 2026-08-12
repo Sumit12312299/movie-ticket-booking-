@@ -1,11 +1,16 @@
+"""
+Pydantic Schemas for Seat Lock and Ticket Booking operations.
+"""
 from pydantic import BaseModel, Field
 from typing import List, Optional
 
 class SeatLockRequest(BaseModel):
+    """Payload model for temporary seat lock and release requests."""
     showtime_id: str
     seats: List[str]
 
 class BookingCreate(BaseModel):
+    """Payload model for creating a ticket booking transaction."""
     showtime_id: str
     movie_id: str
     movie_title: str
