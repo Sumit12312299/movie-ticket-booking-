@@ -1,3 +1,6 @@
+"""
+Pydantic Data Models for User Authentication, Profiles, and Wallet Operations.
+"""
 from pydantic import BaseModel, Field, EmailStr
 from typing import Optional, List
 
