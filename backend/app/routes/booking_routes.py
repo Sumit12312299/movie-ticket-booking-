@@ -36,11 +36,15 @@ def generate_qr_code_base64(data_string: str) -> str:
         # Fallback simple QR representation if qrcode module issue
         return f"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100'><text x='10' y='50' font-size='10'>QR-{data_string[-6:]}</text></svg>"
 
-@router.post("/lock-seats")
+@router.post("/lock-seats", summary="Temporarily lock seats for checkout")
 async def lock_seats(
     request: SeatLockRequest,
     current_user: UserProfile = Depends(get_current_user)
 ):
+    """
+    Acquire temporary lock leases on requested seats for 5 minutes during checkout.
+    Prevents race conditions and double bookings.
+    """
     db = get_database()
     showtimes_col = db["showtimes"]
 
@@ -62,11 +66,14 @@ async def lock_seats(
 
     return {"status": "success", "message": "Seats locked for 5 minutes", "seats": request.seats}
 
-@router.post("/unlock-seats")
+@router.post("/unlock-seats", summary="Release temporary seat locks")
 async def unlock_seats(
     request: SeatLockRequest,
     current_user: UserProfile = Depends(get_current_user)
 ):
+    """
+    Manually release active temporary seat locks when user cancels or leaves checkout page.
+    """
     logger.info("Releasing seat locks on %s for showtime %s by user %s", request.seats, request.showtime_id, current_user.id)
     seat_lock_service.release_seats(request.showtime_id, request.seats, current_user.id)
     return {"status": "success", "message": "Seats unlocked successfully"}
