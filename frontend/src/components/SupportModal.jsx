@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { X, HelpCircle, MessageSquare, PhoneCall, ChevronDown, ChevronUp, Sparkles } from 'lucide-react';
 import { useNotification } from '../context/NotificationContext';
 
+/**
+ * Frequently Asked Questions (FAQ) repository data.
+ */
 const FAQS = [
   {
     q: 'How do I cancel my booking and get a refund?',
