@@ -12,6 +12,9 @@ export default function TicketPass({ booking }) {
 
   if (!booking) return null;
 
+  /**
+   * Calculates 3D tilt perspective transformation based on mouse cursor coordinate offsets.
+   */
   const handleMouseMove = (e) => {
     const card = e.currentTarget;
     const rect = card.getBoundingClientRect();
@@ -21,6 +24,9 @@ export default function TicketPass({ booking }) {
     setRotateY((x / rect.width) * 12);
   };
 
+  /**
+   * Resets card 3D tilt rotation parameters on mouse cursor leave event.
+   */
   const handleMouseLeave = () => {
     setRotateX(0);
     setRotateY(0);
