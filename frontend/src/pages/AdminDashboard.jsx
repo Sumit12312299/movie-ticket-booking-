@@ -10,6 +10,8 @@ export default function AdminDashboard() {
 
   const [stats, setStats] = useState(null);
   const [movies, setMovies] = useState([]);
+  const [allBookings, setAllBookings] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('analytics');
 
   // Add Movie Modal state
