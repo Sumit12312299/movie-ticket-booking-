@@ -6,6 +6,7 @@
 [![React](https://img.shields.io/badge/Frontend-React_19-61DAFB.svg?style=flat&logo=react)](https://react.dev/)
 [![TailwindCSS](https://img.shields.io/badge/Styling-Tailwind_CSS-06B6D4.svg?style=flat&logo=tailwindcss)](https://tailwindcss.com/)
 [![JWT Auth](https://img.shields.io/badge/Security-JWT_Auth-000000.svg?style=flat&logo=jsonwebtokens)](https://jwt.io/)
+[![Code Quality](https://img.shields.io/badge/Code_Quality-Verified-success.svg?style=flat&logo=githubactions)](https://github.com/Sumit12312299/movie-ticket-booking-.git)
 
 🔗 **GitHub Repository Link**: [https://github.com/Sumit12312299/movie-ticket-booking-.git](https://github.com/Sumit12312299/movie-ticket-booking-.git)
 
