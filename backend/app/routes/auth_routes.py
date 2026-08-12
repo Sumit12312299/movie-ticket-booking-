@@ -114,8 +114,12 @@ async def topup_wallet(
         "wallet_balance": new_balance
     }
 
-@router.post("/favorites/{movie_id}")
+@router.post("/favorites/{movie_id}", summary="Toggle user favorite movie")
 async def toggle_favorite(movie_id: str, current_user: UserProfile = Depends(get_current_user)):
+    """
+    Toggles a movie in the authenticated user's favorites list.
+    Adds the movie ID if not present, otherwise removes it.
+    """
     db = get_database()
     users_col = db["users"]
     

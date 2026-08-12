@@ -1,3 +1,7 @@
+"""
+BookTicket Utility Helpers.
+Provides date/time formatting and parsing utilities for backend API endpoints.
+"""
 from datetime import datetime
 from typing import Optional
 
