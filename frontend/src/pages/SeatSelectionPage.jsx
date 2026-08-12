@@ -92,14 +92,11 @@ export default function SeatSelectionPage() {
         setShowtime((prev) => {
           if (!prev) return newShowtime;
 
-          // Check if any seat currently selected by this user got locked or booked by someone else
+          // Check if any seat currently selected by this user got confirmed/booked by another user
           const latestBooked = newShowtime.booked_seats || [];
-          const latestLocked = newShowtime.locked_seats || [];
 
           setSelectedSeats((currentSelected) => {
-            const conflictSeats = currentSelected.filter(
-              (s) => latestBooked.includes(s) || latestLocked.includes(s)
-            );
+            const conflictSeats = currentSelected.filter((s) => latestBooked.includes(s));
             if (conflictSeats.length > 0) {
               addToast(`Seat(s) ${conflictSeats.join(', ')} were just reserved by another user!`, 'warning');
               return currentSelected.filter((s) => !conflictSeats.includes(s));
