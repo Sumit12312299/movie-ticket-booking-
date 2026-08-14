@@ -3,6 +3,14 @@ import { Wallet, PlusCircle, Sparkles, ShieldCheck, ArrowUpRight, X, Zap } from 
 import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
 
+/**
+ * WalletModal — slide-in panel displaying the user's digital wallet.
+ * Supports preset top-up amounts and a custom amount input. Shows a live
+ * simulated transaction history feed and current wallet balance.
+ *
+ * @param {boolean} isOpen  - Controls visibility of the modal overlay
+ * @param {function} onClose - Callback to close the modal
+ */
 export default function WalletModal({ isOpen, onClose }) {
   const { user, topUpWallet } = useAuth();
   const { addToast } = useNotification();
