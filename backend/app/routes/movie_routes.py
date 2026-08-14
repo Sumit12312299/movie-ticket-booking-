@@ -1,3 +1,15 @@
+"""
+movie_routes.py
+---------------
+FastAPI router for all movie catalog and review endpoints:
+  - GET    /movies              — Paginated list with search and genre filters
+  - GET    /movies/{id}         — Single movie detail lookup
+  - POST   /movies              — Create a new movie entry (admin only)
+  - PUT    /movies/{id}         — Update movie metadata (admin only)
+  - DELETE /movies/{id}         — Remove a movie from catalog (admin only)
+  - GET    /movies/{id}/reviews — List all reviews for a movie
+  - POST   /movies/{id}/reviews — Submit a new user review
+"""
 from fastapi import APIRouter, HTTPException, Depends, Query, status
 from typing import List, Optional
 from datetime import datetime
