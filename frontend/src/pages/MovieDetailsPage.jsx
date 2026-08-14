@@ -79,6 +79,12 @@ function StarryBackground() {
   );
 }
 
+/**
+ * MovieDetailsPage — displays comprehensive details for a single selected movie.
+ * Renders an animated interactive starry background, trailer video preview button,
+ * overall movie metadata (cast, crew, run duration, genre tags, synopsis),
+ * showtime booking link redirection, and user community rating/review lists.
+ */
 export default function MovieDetailsPage() {
   const { id } = useParams();
   const { user, toggleFavorite } = useAuth();
