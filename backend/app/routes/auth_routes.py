@@ -1,3 +1,13 @@
+"""
+auth_routes.py
+--------------
+FastAPI router for user authentication and account management:
+  - POST /auth/register          — Create a new user account with wallet seeding
+  - POST /auth/login             — Authenticate and obtain a JWT access token
+  - GET  /auth/me                — Return the current authenticated user's profile
+  - POST /auth/wallet/topup      — Add funds to the authenticated user's wallet
+  - POST /auth/favorites/{id}    — Toggle a movie in the user's favorites list
+"""
 from fastapi import APIRouter, HTTPException, Depends, status
 from datetime import datetime
 from app.database.db import get_database
