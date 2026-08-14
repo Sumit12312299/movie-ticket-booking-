@@ -40,6 +40,14 @@ const SNACK_ITEMS = [
   }
 ];
 
+/**
+ * FoodSnacksModal — in-app concession ordering dialog.
+ * Displays a pre-defined snack and beverage menu with quantity controls.
+ * Users can add or remove items from the cart and place a simulated order.
+ *
+ * @param {boolean} isOpen  - Controls visibility of the modal
+ * @param {function} onClose - Callback invoked when the modal is dismissed
+ */
 export default function FoodSnacksModal({ isOpen, onClose }) {
   const { addToast } = useNotification();
   const [cart, setCart] = useState({});
