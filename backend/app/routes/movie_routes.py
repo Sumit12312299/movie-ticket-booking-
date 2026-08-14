@@ -132,12 +132,16 @@ async def create_movie(
     new_movie["id"] = str(res.inserted_id)
     return MovieResponse(**new_movie)
 
-@router.put("/{movie_id}", response_model=MovieResponse)
+@router.put("/{movie_id}", response_model=MovieResponse, summary="Update movie catalog entry")
 async def update_movie(
     movie_id: str,
     movie_update: MovieUpdate,
     current_admin: UserProfile = Depends(get_current_admin)
 ):
+    """
+    Partially update an existing movie's catalog fields.
+    Only supplied (non-None) fields are overwritten. Admin credentials required.
+    """
     db = get_database()
     movies_col = db["movies"]
     
@@ -154,11 +158,15 @@ async def update_movie(
     updated_dict["id"] = str(updated_dict["_id"])
     return MovieResponse(**updated_dict)
 
-@router.delete("/{movie_id}")
+@router.delete("/{movie_id}", summary="Remove a movie from catalog")
 async def delete_movie(
     movie_id: str,
     current_admin: UserProfile = Depends(get_current_admin)
 ):
+    """
+    Permanently delete a movie catalog entry by its ID. Admin credentials required.
+    Returns 404 if the movie does not exist.
+    """
     db = get_database()
     movies_col = db["movies"]
     
