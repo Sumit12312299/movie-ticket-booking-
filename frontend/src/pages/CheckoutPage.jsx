@@ -11,6 +11,12 @@ const AVAILABLE_COUPONS = [
   { code: 'VIPWALLETPASS', discount: '15%', desc: '15% Off Subtotal', value: 0.15 }
 ];
 
+/**
+ * CheckoutPage — final purchase confirmation step in the movie booking flow.
+ * Receives seat selections, showtime, and snack data from router location state.
+ * Handles coupon/discount code application, payment method selection (wallet or card),
+ * order summary display, and triggers the booking API call to confirm the reservation.
+ */
 export default function CheckoutPage() {
   const location = useLocation();
   const navigate = useNavigate();
