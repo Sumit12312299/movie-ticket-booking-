@@ -1,3 +1,8 @@
+"""
+Database Connection Manager and fallback service.
+Handles AsyncIOMotorClient connections to MongoDB database and implements an
+in-memory FallbackDatabase in case the MongoDB instance is unreachable.
+"""
 import logging
 import asyncio
 from motor.motor_asyncio import AsyncIOMotorClient
