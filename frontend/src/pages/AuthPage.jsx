@@ -5,6 +5,12 @@ import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
 import API from '../services/api';
 
+/**
+ * AuthPage — user registration and sign-in split screen component.
+ * Allows new users to register and existing users to log in securely.
+ * Fetches now showing movie catalog details to showcase dynamic trending background cards
+ * during the authorization flow.
+ */
 export default function AuthPage() {
   const [isRegister, setIsRegister] = useState(false);
   const [fullName, setFullName] = useState('');
