@@ -166,8 +166,12 @@ async def create_booking(
 
     return BookingResponse(**booking_doc)
 
-@router.get("/my-bookings", response_model=List[BookingResponse])
+@router.get("/my-bookings", response_model=List[BookingResponse], summary="Retrieve current user booking history")
 async def get_user_bookings(current_user: UserProfile = Depends(get_current_user)):
+    """
+    Fetch all bookings belonging to the currently authenticated user.
+    Results are sorted by booking time in descending order (newest first).
+    """
     db = get_database()
     bookings_col = db["bookings"]
 
