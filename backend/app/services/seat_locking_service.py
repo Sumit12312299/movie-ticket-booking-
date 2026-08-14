@@ -16,6 +16,12 @@ class SeatLockingService:
 
     @classmethod
     def lock_seats(cls, showtime_id: str, seats: List[str], user_id: str) -> Tuple[bool, str]:
+        """
+        Acquire temporary lease locks on the given seats for the specified showtime.
+        Expired locks from other users are cleaned up before validation.
+        Returns (True, success_msg) on success or (False, error_msg) if any seat
+        is already locked by a different active user.
+        """
         now = time.time()
         # Calculate seat lock lease duration based on configuration (typically 5 minutes)
         expiry = now + (settings.SEAT_LOCK_EXPIRATION_MINUTES * 60)
@@ -46,6 +52,10 @@ class SeatLockingService:
 
     @classmethod
     def release_seats(cls, showtime_id: str, seats: List[str], user_id: str):
+        """
+        Release lock leases owned by the given user for the specified seats.
+        Only removes locks that belong to the requesting user; other users' locks are untouched.
+        """
         if showtime_id in cls._active_locks:
             for seat in seats:
                 if seat in cls._active_locks[showtime_id]:
@@ -56,6 +66,10 @@ class SeatLockingService:
 
     @classmethod
     def get_locked_seats(cls, showtime_id: str) -> List[str]:
+        """
+        Return the list of currently locked (not yet expired) seat IDs for a given showtime.
+        Expired lock entries are automatically purged during this read.
+        """
         now = time.time()
         if showtime_id not in cls._active_locks:
             return []
