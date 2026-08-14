@@ -177,8 +177,12 @@ async def delete_movie(
     return {"message": "Movie deleted successfully"}
 
 # Reviews
-@router.get("/{movie_id}/reviews", response_model=List[ReviewResponse])
+@router.get("/{movie_id}/reviews", response_model=List[ReviewResponse], summary="List all reviews for a movie")
 async def get_reviews(movie_id: str):
+    """
+    Return all user-submitted reviews for the specified movie.
+    Each review includes rating, comment, reviewer name, and timestamp.
+    """
     db = get_database()
     reviews_col = db["reviews"]
     cursor = reviews_col.find({"movie_id": movie_id})
@@ -190,12 +194,17 @@ async def get_reviews(movie_id: str):
         res.append(ReviewResponse(**r_dict))
     return res
 
-@router.post("/{movie_id}/reviews", response_model=ReviewResponse)
+@router.post("/{movie_id}/reviews", response_model=ReviewResponse, summary="Submit a review for a movie")
 async def add_review(
     movie_id: str,
     review: ReviewCreate,
     current_user: UserProfile = Depends(get_current_user)
 ):
+    """
+    Submit a new user review for a given movie.
+    Persists the review, then recalculates and updates the movie's average rating.
+    Authenticated user required.
+    """
     db = get_database()
     movies_col = db["movies"]
     reviews_col = db["reviews"]
