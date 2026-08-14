@@ -16,6 +16,12 @@ const AVATAR_PRESETS = [
   { id: 6, icon: '🔥', name: 'Star Cinephile', url: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=300&q=80' }
 ];
 
+/**
+ * UserDashboard — authenticated user profile and booking management page.
+ * Displays tabs for Bookings, Favorites, and Profile settings.
+ * Allows users to view and cancel bookings, toggle movie favorites,
+ * update profile details, change avatar presets, and access their wallet.
+ */
 export default function UserDashboard() {
   const { user, refreshUser } = useAuth();
   const { addToast } = useNotification();
