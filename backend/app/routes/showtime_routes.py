@@ -116,8 +116,12 @@ async def get_showtimes(
 
     return result
 
-@router.get("/{showtime_id}", response_model=ShowtimeResponse)
+@router.get("/{showtime_id}", response_model=ShowtimeResponse, summary="Fetch single showtime details by ID")
 async def get_showtime_details(showtime_id: str):
+    """
+    Return detailed information for a single showtime screening slot.
+    Also merges currently active seat locks for real-time seat map rendering.
+    """
     db = get_database()
     showtimes_col = db["showtimes"]
     movies_col = db["movies"]
@@ -135,11 +139,16 @@ async def get_showtime_details(showtime_id: str):
     st_dict["locked_seats"] = seat_lock_service.get_locked_seats(showtime_id)
     return ShowtimeResponse(**st_dict)
 
-@router.post("", response_model=ShowtimeResponse, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=ShowtimeResponse, status_code=status.HTTP_201_CREATED, summary="Create a new showtime screening slot")
 async def create_showtime(
     showtime_data: ShowtimeCreate,
     current_admin: UserProfile = Depends(get_current_admin)
 ):
+    """
+    Create a new showtime screening schedule for an existing movie.
+    Validates target movie existence and initializes with empty booked and locked seat lists.
+    Admin credentials required.
+    """
     db = get_database()
     showtimes_col = db["showtimes"]
     movies_col = db["movies"]
