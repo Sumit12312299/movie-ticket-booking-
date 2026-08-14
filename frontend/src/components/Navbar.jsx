@@ -14,6 +14,12 @@ import VouchersModal from './VouchersModal';
 import AccountSettingsModal from './AccountSettingsModal';
 import SupportModal from './SupportModal';
 
+/**
+ * Navbar component — persistent top navigation bar for the BookTicket application.
+ * Features city selector, real-time movie search, theme toggle (dark/light),
+ * user profile dropdown with wallet, food, vouchers, account settings, and support modals.
+ * Adapts its content for authenticated users vs. guests, and admin vs. regular users.
+ */
 export default function Navbar() {
   const { user, logout, isAdmin } = useAuth();
   const { addToast } = useNotification();
