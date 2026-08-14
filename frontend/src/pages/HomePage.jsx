@@ -29,6 +29,12 @@ function MovieCardSkeleton() {
   );
 }
 
+/**
+ * HomePage — main landing page of the BookTicket application.
+ * Displays a rotating hero banner, quick booking widget, genre filter tabs,
+ * and a paginated movie grid with Now Showing / Coming Soon toggle.
+ * Integrates search via URL query params and opens a YouTube trailer modal on demand.
+ */
 export default function HomePage() {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
