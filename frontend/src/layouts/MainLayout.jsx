@@ -4,6 +4,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
+/**
+ * MainLayout — top-level shell layout wrapping all BookTicket pages.
+ * Renders Navbar at the top, Footer at the bottom, and animates page transitions
+ * using Framer Motion. Also tracks mouse position for a subtle cursor-glow ambient effect.
+ *
+ * @param {React.ReactNode} children - Page content to render in the layout body
+ * @param {function} [onSearchChange] - Optional callback to propagate Navbar search input
+ */
 export default function MainLayout({ children, onSearchChange }) {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
