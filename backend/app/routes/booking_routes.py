@@ -88,11 +88,17 @@ async def unlock_seats(
     seat_lock_service.release_seats(request.showtime_id, request.seats, current_user.id)
     return {"status": "success", "message": "Seats unlocked successfully"}
 
-@router.post("", response_model=BookingResponse, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=BookingResponse, status_code=status.HTTP_201_CREATED, summary="Confirm and finalize a booking")
 async def create_booking(
     booking_data: BookingCreate,
     current_user: UserProfile = Depends(get_current_user)
 ):
+    """
+    Create a confirmed booking after successful checkout.
+    Validates seat availability, handles wallet payment deduction (if applicable),
+    generates a unique booking reference code and QR code, persists the booking
+    document, updates showtime booked_seats, and releases seat locks.
+    """
     db = get_database()
     showtimes_col = db["showtimes"]
     bookings_col = db["bookings"]
