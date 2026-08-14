@@ -1,3 +1,7 @@
+"""
+Application Logger configuration.
+Defines logging settings and formatters used across the BookTicket backend.
+"""
 import logging
 import sys
 
