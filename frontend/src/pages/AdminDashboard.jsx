@@ -4,6 +4,12 @@ import API from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
 
+/**
+ * AdminDashboard — administration control panel for the BookTicket application.
+ * Restricts access to authorized administrators. Provides high-level business analytics,
+ * including revenue tracking, active ticket counts, and user enrollment counts.
+ * Supports CRUD operations on the movie catalog and lists all bookings in real time.
+ */
 export default function AdminDashboard() {
   const { isAdmin } = useAuth();
   const { addToast } = useNotification();
