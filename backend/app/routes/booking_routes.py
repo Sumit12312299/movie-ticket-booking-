@@ -1,3 +1,13 @@
+"""
+booking_routes.py
+-----------------
+FastAPI router handling all booking-related endpoints:
+  - POST /bookings/lock-seats    — Temporary seat reservation during checkout
+  - POST /bookings/unlock-seats  — Manual release of seat locks
+  - POST /bookings               — Create a confirmed booking
+  - GET  /bookings/my-bookings   — Fetch current user's booking history
+  - DELETE /bookings/{id}/cancel — Cancel an existing booking and issue wallet refund
+"""
 import random
 import string
 import qrcode
