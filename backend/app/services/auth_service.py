@@ -1,3 +1,8 @@
+"""
+Authentication services module.
+Provides FastAPI dependencies for verifying authenticated user sessions
+and enforcing administrator role constraints.
+"""
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from app.database.db import get_database
