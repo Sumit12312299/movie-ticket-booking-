@@ -1,3 +1,12 @@
+"""
+showtime_routes.py
+------------------
+FastAPI router for showtime screening slot management:
+  - GET  /showtimes              — Query available showtimes with on-the-fly seeding
+  - GET  /showtimes/{id}         — Fetch details for a single showtime
+  - POST /showtimes              — Create a new showtime slot (admin only)
+Seat lock status is merged into every response for real-time seat mapping.
+"""
 from fastapi import APIRouter, HTTPException, Depends, Query, status
 from typing import List, Optional
 from app.database.db import get_database
