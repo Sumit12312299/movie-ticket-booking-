@@ -1,3 +1,8 @@
+"""
+Security services module.
+Provides password hashing utilities and JWT token operations (creation and decoding)
+for handling user authentication securely.
+"""
 import hashlib
 from datetime import datetime, timedelta, timezone
 from typing import Optional, Union, Any
