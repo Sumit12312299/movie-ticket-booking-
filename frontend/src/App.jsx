@@ -14,6 +14,12 @@ import UserDashboard from './pages/UserDashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import AuthPage from './pages/AuthPage';
 
+/**
+ * App — root component of the BookTicket React application.
+ * Wraps the entire tree with AuthProvider (user session) and NotificationProvider (toasts),
+ * then defines the client-side routing table using React Router v6.
+ * ScrollToTop ensures the page scrolls to the top on every route transition.
+ */
 export default function App() {
   return (
     <AuthProvider>
