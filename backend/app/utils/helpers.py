@@ -37,3 +37,16 @@ def parse_datetime(dt_str: Optional[str]) -> Optional[datetime]:
         return datetime.strptime(dt_str.strip(), "%Y-%m-%d %H:%M:%S")
     except ValueError:
         return None
+
+def format_currency(amount: float) -> str:
+    """
+    Formats a numeric amount as currency string (INR).
+
+    Args:
+        amount (float): The numeric amount to format.
+
+    Returns:
+        str: Formatted currency string with rupee symbol.
+    """
+    return f"₹{amount:,.2f}"
+
