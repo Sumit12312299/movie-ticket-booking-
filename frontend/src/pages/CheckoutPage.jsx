@@ -5,6 +5,7 @@ import API from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
 import WalletModal from '../components/WalletModal';
+import { formatCurrency } from '../utils/formatters';
 
 const AVAILABLE_COUPONS = [
   { code: 'CINEMA10', discount: '10%', desc: '10% Off Subtotal', value: 0.1 },
@@ -272,7 +273,7 @@ export default function CheckoutPage() {
                       </div>
                     </div>
                     <div className="flex items-center gap-3.5 shrink-0">
-                      <span className="font-black text-emerald-600 dark:text-emerald-400 font-mono text-base">₹{item.price}</span>
+                      <span className="font-black text-emerald-600 dark:text-emerald-400 font-mono text-base">{formatCurrency(item.price)}</span>
                       <div className="flex items-center gap-1.5 bg-white dark:bg-slate-800 px-1.5 py-1 rounded-xl border border-slate-200 dark:border-slate-700">
                         <button
                           type="button"
@@ -313,7 +314,7 @@ export default function CheckoutPage() {
                 <div className="text-right">
                   <span className="text-xs text-slate-400 uppercase font-black block">Available Balance</span>
                   <span className="text-xl font-black font-mono text-amber-600 dark:text-amber-400">
-                    ₹{(user?.wallet_balance ?? 1500.00).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    {formatCurrency(user?.wallet_balance ?? 1500.00)}
                   </span>
                 </div>
               </div>
@@ -500,18 +501,18 @@ export default function CheckoutPage() {
           <div className="pt-4 border-t border-slate-200 dark:border-slate-800 space-y-2 text-sm font-semibold">
             <div className="flex justify-between text-slate-600 dark:text-slate-450">
               <span>Subtotal</span>
-              <span className="font-mono">₹{totalPrice.toFixed(2)}</span>
+              <span className="font-mono">{formatCurrency(totalPrice)}</span>
             </div>
             {discount > 0 && (
               <div className="flex justify-between text-emerald-600 dark:text-emerald-400 font-bold">
                 <span>Promo Discount</span>
-                <span className="font-mono">-₹{discount.toFixed(2)}</span>
+                <span className="font-mono">-{formatCurrency(discount)}</span>
               </div>
             )}
             {snacksTotal > 0 && (
               <div className="flex justify-between text-slate-650 dark:text-slate-450">
                 <span>Snacks Add-on</span>
-                <span className="font-mono">₹{snacksTotal.toFixed(2)}</span>
+                <span className="font-mono">{formatCurrency(snacksTotal)}</span>
               </div>
             )}
             <div className="flex justify-between text-slate-600 dark:text-slate-450">
@@ -526,7 +527,7 @@ export default function CheckoutPage() {
             <div className="pt-2 border-t border-slate-200 dark:border-slate-800 flex justify-between items-center">
               <span className="text-base font-black text-slate-900 dark:text-white">Final Total</span>
               <span className="text-3xl font-black text-emerald-600 dark:text-emerald-400 font-mono">
-                ₹{finalAmount.toFixed(2)}
+                {formatCurrency(finalAmount)}
               </span>
             </div>
           </div>
