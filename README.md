@@ -324,3 +324,12 @@ All changes are integrated incrementally via small, atomic commits to track modu
 ## 🛠️ Developer Mode & High Availability
 
 The backend includes logging utilities that trace database and application health. If database connections decay, the server remains fully operational under local test scenarios.
+
+---
+
+## 🧪 Testing Guidelines
+
+For local verification of the backend API and helper libraries, the application leverages `pytest`:
+- **Unit Tests**: Located inside `backend/tests/` directory to verify endpoints and business helper functions.
+- **Run Tests**: Run `pytest` within the `backend` folder to verify the health and correctness of the backend API.
+
