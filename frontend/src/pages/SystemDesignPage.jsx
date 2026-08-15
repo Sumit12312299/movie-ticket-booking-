@@ -2,7 +2,7 @@ import React from 'react';
 import { Layers, Database, Zap, RefreshCw, Lock } from 'lucide-react';
 
 /**
- * SystemDesignPage renders technical architectural specifications for scalable分布式 seat locking,
+ * SystemDesignPage renders technical architectural specifications for scalable distributed seat locking,
  * concurrency management, caching strategies, and database sharding patterns.
  */
 export default function SystemDesignPage() {
