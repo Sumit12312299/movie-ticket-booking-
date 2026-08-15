@@ -29,7 +29,10 @@ export default function ScrollToTop() {
       }
     };
 
+    // Attach scroll listener to window
     window.addEventListener('scroll', toggleVisibility);
+    
+    // Clean up event listener on component unmount to prevent memory leaks
     return () => window.removeEventListener('scroll', toggleVisibility);
   }, []);
 
