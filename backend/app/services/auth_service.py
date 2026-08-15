@@ -57,9 +57,22 @@ async def get_current_admin(current_user: UserProfile = Depends(get_current_user
     Dependency to assert that the current authenticated user has administrative privileges.
     Checks the resolved role flag in user profile and raises HTTP 403 if unauthorized.
     """
-    if current_user.role != "admin":
+    if not is_admin_user(current_user):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Admin privileges required"
         )
     return current_user
+
+def is_admin_user(user: UserProfile) -> bool:
+    """
+    Checks if the user has administrative privileges.
+
+    Args:
+        user (UserProfile): The user profile object.
+
+    Returns:
+        bool: True if user role is admin, False otherwise.
+    """
+    return user.role == "admin"
+
