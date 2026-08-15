@@ -75,7 +75,12 @@ html {
   }
 }
 
-/* Custom Color Theme Variables */
+/* Custom Color Theme Variables
+ * Design System Palette mapping:
+ * - --bg: Deep space dark background
+ * - --surface: Raised card container/panel background
+ * - --primary: Vibrant coral/rose for CTA triggers and booking targets
+ */
 :root {
   /* Background */
   --bg: #0B0B0F;
