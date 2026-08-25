@@ -1,3 +1,6 @@
+"""
+BookTicket Backend Dev Server Launcher.
+"""
 import uvicorn
 
 if __name__ == "__main__":
