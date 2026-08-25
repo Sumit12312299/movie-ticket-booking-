@@ -46,7 +46,7 @@ def format_currency(amount: float) -> str:
         amount (float): The numeric amount to format.
 
     Returns:
-        str: Formatted currency string with rupee symbol.
+        str: Formatted currency string with rupee symbol (e.g. ₹150.00).
     """
     return f"₹{amount:,.2f}"
 
