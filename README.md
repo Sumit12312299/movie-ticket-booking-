@@ -318,6 +318,7 @@ Pre-seeded out-of-the-box demo accounts for testing:
 All changes are integrated incrementally via small, atomic commits to track modular improvements. To contribute:
 1. Ensure the code conforms to standard PEP 8 styling.
 2. Run tests to confirm zero regressions before committing.
+3. Submit a pull request with a descriptive title summarizing changes.
 3. Code comments, Pydantic docstrings, and React JSDocs have been standardized across components to improve codebase maintainability.
 
 ---
