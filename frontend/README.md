@@ -11,6 +11,13 @@ Currently, two official plugins are available:
 
 The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
+## Scripts
+
+- `npm run dev`: Starts the local development server with Vite HMR
+- `npm run build`: Bundles production assets into `dist/`
+- `npm run preview`: Previews the local production build
+- `npm run lint`: Runs Oxlint linter check
+
 ## Expanding the Oxlint configuration
 
 If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
