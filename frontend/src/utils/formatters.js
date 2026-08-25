@@ -7,6 +7,7 @@ export const formatCurrency = (amount) => {
   if (typeof amount !== 'number') {
     return '₹0.00';
   }
+  // Standard Intl formatting for INR currency with 2 decimal precision
   return new Intl.NumberFormat('en-IN', {
     style: 'currency',
     currency: 'INR',
