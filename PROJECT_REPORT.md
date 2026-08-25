@@ -416,3 +416,4 @@ The development of **BookTicket** demonstrates how asynchronous API frameworks a
 2. **FastAPI Documentation:** [https://fastapi.tiangolo.com/](https://fastapi.tiangolo.com/)
 3. **MongoDB Manual:** [https://www.mongodb.com/docs/](https://www.mongodb.com/docs/)
 4. **Tailwind CSS Guides:** [https://tailwindcss.com/docs](https://tailwindcss.com/docs)
+5. **Vite Build Tool:** [https://vite.dev/](https://vite.dev/)
