@@ -25,4 +25,5 @@ def setup_logger() -> logging.Logger:
         
     return logger
 
+# Singleton logger instance available across the application modules
 logger = setup_logger()
