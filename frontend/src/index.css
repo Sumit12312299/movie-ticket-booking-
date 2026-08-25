@@ -1,3 +1,4 @@
+/* BookTicket Custom CSS & Theme Design System */
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
