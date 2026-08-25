@@ -85,5 +85,6 @@ async def root():
         "status": "online",
         "service": settings.PROJECT_NAME,
         "version": settings.VERSION,
-        "docs": "/docs"
+        "docs": "/docs",
+        "api_v1": settings.API_V1_STR
     }
