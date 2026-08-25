@@ -1,3 +1,6 @@
+"""
+Unit tests for BookTicket backend helper utility functions.
+"""
 from datetime import datetime
 from app.utils.helpers import format_datetime, parse_datetime, format_currency
 
