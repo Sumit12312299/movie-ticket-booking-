@@ -406,7 +406,7 @@ The application was tested through the following test cases to ensure correct ex
 
 ### **19. Conclusion**
 
-The development of **BookTicket** demonstrates how asynchronous API frameworks and document-based databases can support complex transactions. The integration of React 19 and FastAPI establishes an application architecture suited for concurrent bookings, seat locking, and live admin panels. Developing this project offered hands-on experience in resolving concurrency challenges, modeling complex databases, and designing intuitive interfaces.
+The development of **BookTicket** demonstrates how asynchronous API frameworks and document-based databases can support complex transactional operations. The integration of React 19 and FastAPI establishes a robust application architecture suited for concurrent bookings, seat locking, and live admin metrics dashboards. Developing this project offered hands-on experience in resolving concurrency challenges, modeling document database schemas, and designing intuitive web interfaces.
 
 ---
 
