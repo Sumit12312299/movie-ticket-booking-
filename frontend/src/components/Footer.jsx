@@ -1,3 +1,4 @@
+// Application footer component
 import React, { useState } from 'react';
 import { Film, Mail, Phone, ShieldCheck, Send, CheckCircle2, Smartphone, CreditCard, Download } from 'lucide-react';
 import { useNotification } from '../context/NotificationContext';
