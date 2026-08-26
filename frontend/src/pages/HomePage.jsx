@@ -1,3 +1,4 @@
+// Application main home page
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useNotification } from '../context/NotificationContext';
