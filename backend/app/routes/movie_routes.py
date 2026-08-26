@@ -1,3 +1,4 @@
+# Movie catalog endpoints
 """
 movie_routes.py
 ---------------
