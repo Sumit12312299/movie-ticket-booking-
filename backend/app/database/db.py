@@ -1,3 +1,4 @@
+# Database connection and session management
 """
 Database Connection Manager and fallback service.
 Handles AsyncIOMotorClient connections to MongoDB database and implements an
