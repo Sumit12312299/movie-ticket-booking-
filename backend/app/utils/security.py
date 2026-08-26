@@ -1,3 +1,4 @@
+# Security and password hashing utilities
 """
 Security services module.
 Provides password hashing utilities and JWT token operations (creation and decoding)
