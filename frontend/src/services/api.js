@@ -1,3 +1,4 @@
+// Axios API service configuration
 /**
  * Axios API Service Client Instance.
  * Configures base API route path `/api`, auth token interceptors, and error handling.
