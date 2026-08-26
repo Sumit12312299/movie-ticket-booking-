@@ -1,3 +1,4 @@
+# User authentication endpoints
 """
 auth_routes.py
 --------------
