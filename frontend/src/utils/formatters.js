@@ -1,3 +1,4 @@
+// Utility formatting functions
 /**
  * Formats a numeric value into an Indian Rupee (INR) currency format.
  * @param {number} amount - The numeric amount to format.
