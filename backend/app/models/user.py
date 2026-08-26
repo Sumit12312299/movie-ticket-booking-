@@ -1,3 +1,4 @@
+# User ORM model definition
 from pydantic import BaseModel, EmailStr, Field
 from typing import Optional
 
