@@ -1,3 +1,4 @@
+# Configuration management module
 """
 Application environment settings and configuration constants module.
 """
