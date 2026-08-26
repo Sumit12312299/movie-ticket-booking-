@@ -1,3 +1,4 @@
+// Interactive seat selection page
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Clock, ArrowRight, ShieldAlert, Sparkles, Utensils } from 'lucide-react';
