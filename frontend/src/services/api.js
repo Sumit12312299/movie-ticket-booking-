@@ -7,6 +7,7 @@ import axios from 'axios';
 
 const API = axios.create({
   baseURL: '/api',
+  // 15-second timeout to handle slow network connections gracefully
   timeout: 15000,
   headers: {
     'Content-Type': 'application/json'
