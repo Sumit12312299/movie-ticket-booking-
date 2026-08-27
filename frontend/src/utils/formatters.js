@@ -56,3 +56,15 @@ export const truncateText = (text, maxLength = 100) => {
   if (text.length <= maxLength) return text;
   return `${text.slice(0, maxLength).trimEnd()}...`;
 };
+
+/**
+ * Validates an email address format using standard regex.
+ * @param {string} email - Email address string to test.
+ * @returns {boolean} True if valid email format.
+ */
+export const isValidEmail = (email) => {
+  if (!email || typeof email !== 'string') return false;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email.trim());
+};
+
