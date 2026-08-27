@@ -154,7 +154,8 @@ export const AuthProvider = ({ children }) => {
         toggleFavorite,
         refreshUser,
         topUpWallet,
-        isAdmin: user?.role === 'admin'
+        isAdmin: user?.role === 'admin',
+        isAuthenticated: !!token,
       }}
     >
       {children}
