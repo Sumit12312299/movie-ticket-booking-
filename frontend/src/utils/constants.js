@@ -29,3 +29,19 @@ export const API_TIMEOUT_MS = 15000;
 
 /** Wallet top-up denomination options in INR */
 export const WALLET_TOPUP_OPTIONS = [100, 250, 500, 1000, 2000];
+
+/** Supported movie genre categories */
+export const DEFAULT_GENRES = [
+  'Action',
+  'Adventure',
+  'Animation',
+  'Comedy',
+  'Crime',
+  'Drama',
+  'Horror',
+  'Mystery',
+  'Romance',
+  'Sci-Fi',
+  'Thriller',
+];
+
