@@ -33,8 +33,15 @@ export const NotificationProvider = ({ children }) => {
     setToasts((prev) => prev.filter((t) => t.id !== id));
   };
 
+  /**
+   * Clears all active toast notifications from display.
+   */
+  const clearAllToasts = () => {
+    setToasts([]);
+  };
+
   return (
-    <NotificationContext.Provider value={{ addToast }}>
+    <NotificationContext.Provider value={{ addToast, clearAllToasts }}>
       {children}
       <div className="fixed bottom-5 right-5 z-50 flex flex-col gap-3 max-w-sm w-full">
         {toasts.map((toast) => (
