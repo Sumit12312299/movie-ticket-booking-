@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }) => {
   }, [token]);
 
   /**
-   * Authenticats a user with email and password.
+   * Authenticates a user with email and password.
    * @param {string} email
    * @param {string} password
    * @returns {Promise<object>} Authenticated user profile data
