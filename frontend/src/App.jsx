@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { NotificationProvider } from './context/NotificationContext';
 import MainLayout from './layouts/MainLayout';
@@ -37,6 +37,8 @@ export default function App() {
               <Route path="/dashboard" element={<UserDashboard />} />
               <Route path="/admin" element={<AdminDashboard />} />
               <Route path="/auth" element={<AuthPage />} />
+              {/* Redirect unknown routes to homepage */}
+              <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </MainLayout>
         </Router>
