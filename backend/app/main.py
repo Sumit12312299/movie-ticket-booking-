@@ -89,3 +89,9 @@ async def root():
         "docs": "/docs",
         "api_v1": settings.API_V1_STR
     }
+
+@app.get("/health")
+async def health_check():
+    """Health check endpoint for container monitoring and uptime checks."""
+    return {"status": "healthy", "service": settings.PROJECT_NAME}
+
