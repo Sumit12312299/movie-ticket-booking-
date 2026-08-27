@@ -68,3 +68,19 @@ export const isValidEmail = (email) => {
   return emailRegex.test(email.trim());
 };
 
+/**
+ * Converts a string into a URL-friendly slug.
+ * @param {string} text - The raw text string.
+ * @returns {string} - URL safe slug.
+ */
+export const slugify = (text) => {
+  if (!text || typeof text !== 'string') return '';
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/[\s_-]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+};
+
+
