@@ -44,3 +44,15 @@ export const formatTime = (date) => {
     hour12: true,
   }).format(new Date(date));
 };
+
+/**
+ * Truncates a string to a given maximum length and appends an ellipsis.
+ * @param {string} text - The text to truncate.
+ * @param {number} [maxLength=100] - Maximum character count before truncation.
+ * @returns {string} - Truncated string with '...' appended if needed.
+ */
+export const truncateText = (text, maxLength = 100) => {
+  if (!text || typeof text !== 'string') return '';
+  if (text.length <= maxLength) return text;
+  return `${text.slice(0, maxLength).trimEnd()}...`;
+};
