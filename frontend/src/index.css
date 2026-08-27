@@ -295,3 +295,12 @@ html.dark .shimmer-bg {
   background-color: var(--accent) !important;
   background-image: none !important;
 }
+
+/* Hide scrollbar utility for scrollable carousels and containers */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
