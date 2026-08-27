@@ -9,6 +9,7 @@
 [![JWT Auth](https://img.shields.io/badge/Security-JWT_Auth-000000.svg?style=flat&logo=jsonwebtokens)](https://jwt.io/)
 [![Status](https://img.shields.io/badge/Status-Active-brightgreen.svg)](https://github.com/Sumit12312299/movie-ticket-booking-.git)
 [![Code Quality](https://img.shields.io/badge/Code_Quality-Verified-success.svg?style=flat&logo=githubactions)](https://github.com/Sumit12312299/movie-ticket-booking-.git)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 🔗 **GitHub Repository Link**: [https://github.com/Sumit12312299/movie-ticket-booking-.git](https://github.com/Sumit12312299/movie-ticket-booking-.git)
 
