@@ -45,3 +45,17 @@ export const DEFAULT_GENRES = [
   'Thriller',
 ];
 
+/** Supported audio/subtitle language filter options */
+export const SUPPORTED_LANGUAGES = [
+  'Hindi',
+  'English',
+  'Telugu',
+  'Tamil',
+  'Malayalam',
+  'Kannada',
+  'Marathi',
+  'Gujarati',
+  'Bengali',
+];
+
+
