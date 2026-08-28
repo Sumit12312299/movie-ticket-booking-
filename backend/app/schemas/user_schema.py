@@ -31,3 +31,7 @@ class Token(BaseModel):
     token_type: str = "bearer"
     user: UserProfile
 
+class PhoneValidationRequest(BaseModel):
+    phone_number: str = Field(..., pattern=r"^[6-9]\d{9}$", description="10-digit Indian mobile number starting with 6-9")
+
+
