@@ -121,6 +121,17 @@ export const maskCardNumber = (cardNumber) => {
   return `•••• •••• •••• ${last4}`;
 };
 
+/**
+ * Formats IMDb / movie rating value into standard string (e.g. 8.5 -> "8.5 / 10").
+ * @param {number} rating - Rating score.
+ * @returns {string} Formatted rating label.
+ */
+export const formatRating = (rating) => {
+  if (typeof rating !== 'number' || isNaN(rating)) return 'N/A';
+  return `${rating.toFixed(1)} / 10`;
+};
+
+
 
 
 
