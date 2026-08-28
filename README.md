@@ -20,7 +20,19 @@ BookTicket implements a dual-mode database manager. If MongoDB is unavailable du
 
 ---
 
+## ⚙️ System Requirements & Dependencies
+
+| Component | Minimum Version | Description |
+| :--- | :--- | :--- |
+| **Node.js** | `>= 18.0.0` | JavaScript Runtime for Vite/React frontend |
+| **Python** | `>= 3.10` | Python runtime for FastAPI backend server |
+| **MongoDB** | `>= 6.0` (Optional) | MongoDB instance or automatic fallback in-memory store |
+| **npm** | `>= 9.0.0` | Package manager for frontend dependencies |
+
+---
+
 ## 📄 Project Documentation
+
 
 ### 1. Problem Statement
 Online ticket booking platforms frequently face challenges regarding concurrent seat reservations, dynamic screening schedules, double-booking prevention, real-time metrics for theater managers, and responsive user experience across devices. **BookTicket** addresses these challenges by implementing an asynchronous backend with temporary seat locking mechanisms, role-based access control, digital E-ticket generation with QR codes, and analytical dashboard metrics.
