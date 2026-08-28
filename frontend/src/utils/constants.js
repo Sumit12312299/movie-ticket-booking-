@@ -58,4 +58,13 @@ export const SUPPORTED_LANGUAGES = [
   'Bengali',
 ];
 
+/** Payment method options for checkout flow */
+export const PAYMENT_METHODS = [
+  { id: 'upi', label: 'UPI / QR Code', icon: '📱' },
+  { id: 'card', label: 'Credit / Debit Card', icon: '💳' },
+  { id: 'wallet', label: 'CineWallet Balance', icon: '👛' },
+  { id: 'netbanking', label: 'Net Banking', icon: '🏦' },
+];
+
+
 
