@@ -51,3 +51,20 @@ def format_currency(amount: float) -> str:
     """
     return f"₹{amount:,.2f}"
 
+def sanitize_string(input_str: Optional[str]) -> str:
+    """
+    Strips raw HTML tags and surrounding whitespace from string input.
+
+    Args:
+        input_str (Optional[str]): Unsanitized raw string.
+
+    Returns:
+        str: Cleaned string with HTML stripped.
+    """
+    import re
+    if not input_str:
+        return ""
+    clean = re.sub(r'<[^>]*>', '', input_str)
+    return clean.strip()
+
+
