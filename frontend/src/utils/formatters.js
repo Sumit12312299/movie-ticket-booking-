@@ -97,5 +97,17 @@ export const formatDuration = (minutes) => {
   return `${hrs}h ${mins}m`;
 };
 
+/**
+ * Validates standard 10-digit Indian phone numbers.
+ * @param {string} phone - Phone number string.
+ * @returns {boolean} True if valid 10-digit phone.
+ */
+export const isValidPhoneNumber = (phone) => {
+  if (!phone || typeof phone !== 'string') return false;
+  const cleaned = phone.replace(/[\s-]/g, '');
+  return /^[6-9]\d{9}$/.test(cleaned);
+};
+
+
 
 
