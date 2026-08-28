@@ -83,4 +83,19 @@ export const slugify = (text) => {
     .replace(/^-+|-+$/g, '');
 };
 
+/**
+ * Formats duration in minutes to a human-readable string (e.g. 142 -> "2h 22m").
+ * @param {number} minutes - Duration in minutes.
+ * @returns {string} Formatted duration string.
+ */
+export const formatDuration = (minutes) => {
+  if (typeof minutes !== 'number' || minutes <= 0 || isNaN(minutes)) return '0m';
+  const hrs = Math.floor(minutes / 60);
+  const mins = minutes % 60;
+  if (hrs === 0) return `${mins}m`;
+  if (mins === 0) return `${hrs}h`;
+  return `${hrs}h ${mins}m`;
+};
+
+
 
