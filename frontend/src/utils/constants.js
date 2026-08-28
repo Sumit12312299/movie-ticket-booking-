@@ -66,5 +66,13 @@ export const PAYMENT_METHODS = [
   { id: 'netbanking', label: 'Net Banking', icon: '🏦' },
 ];
 
+/** Base pricing rates per seat type category in INR */
+export const SEAT_PRICING = {
+  [SEAT_TYPES.SILVER]: 180,
+  [SEAT_TYPES.GOLD]: 250,
+  [SEAT_TYPES.PLATINUM]: 350,
+};
+
+
 
 
