@@ -73,6 +73,14 @@ export const SEAT_PRICING = {
   [SEAT_TYPES.PLATINUM]: 350,
 };
 
+/** UI Badge color variants for booking status */
+export const TICKET_STATUS_BADGES = {
+  [BOOKING_STATUS.PENDING]: 'warning',
+  [BOOKING_STATUS.CONFIRMED]: 'success',
+  [BOOKING_STATUS.CANCELLED]: 'danger',
+};
+
+
 
 
 
