@@ -108,6 +108,20 @@ export const isValidPhoneNumber = (phone) => {
   return /^[6-9]\d{9}$/.test(cleaned);
 };
 
+/**
+ * Masks payment card number showing only last 4 digits.
+ * @param {string} cardNumber - Raw card number.
+ * @returns {string} Masked card string (e.g. "•••• •••• •••• 1234").
+ */
+export const maskCardNumber = (cardNumber) => {
+  if (!cardNumber || typeof cardNumber !== 'string') return '•••• •••• •••• ••••';
+  const clean = cardNumber.replace(/\D/g, '');
+  if (clean.length < 4) return '•••• •••• •••• ••••';
+  const last4 = clean.slice(-4);
+  return `•••• •••• •••• ${last4}`;
+};
+
+
 
 
 
