@@ -304,3 +304,8 @@ html.dark .shimmer-bg {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Glassmorphism interactive card styling helper */
+.glass-card-interactive {
+  @apply glass-card hover:border-[#FF5F45]/50 hover:shadow-lg hover:-translate-y-1 transition-all duration-300;
+}
