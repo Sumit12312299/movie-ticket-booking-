@@ -131,6 +131,25 @@ export const formatRating = (rating) => {
   return `${rating.toFixed(1)} / 10`;
 };
 
+/**
+ * Copies a given text to user's system clipboard using Async Clipboard API with fallback.
+ * @param {string} text - Text to copy.
+ * @returns {Promise<boolean>} Resolves to true if copy succeeded.
+ */
+export const copyToClipboard = async (text) => {
+  if (!text || typeof text !== 'string') return false;
+  try {
+    if (navigator?.clipboard?.writeText) {
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+    return false;
+  } catch {
+    return false;
+  }
+};
+
+
 
 
 
