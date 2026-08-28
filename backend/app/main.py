@@ -18,13 +18,23 @@ BookTicket Entrypoint Module.
 Sets up the FastAPI application instance, registers global middlewares (CORS, GZip compression),
 registers startup/shutdown lifecycle hooks, and hooks up the routing endpoints.
 """
+tags_metadata = [
+    {"name": "Auth", "description": "Authentication and user identity endpoints."},
+    {"name": "Movies", "description": "Catalog management and movie search endpoints."},
+    {"name": "Showtimes", "description": "Cinema hall showtime schedule endpoints."},
+    {"name": "Bookings", "description": "Ticket booking and seat reservation endpoints."},
+    {"name": "Admin", "description": "Administrative metrics and platform controls."},
+]
+
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version=settings.VERSION,
     description="Production-Ready Movie Ticket Booking API with JWT Auth, Seat Locking, and Admin Analytics",
+    openapi_tags=tags_metadata,
     docs_url="/docs",
     redoc_url="/redoc"
 )
+
 
 # Compression Middleware for ultra-fast API payloads.
 # Compresses responses larger than 1000 bytes using gzip.
