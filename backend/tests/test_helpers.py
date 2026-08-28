@@ -2,7 +2,13 @@
 Unit tests for BookTicket backend helper utility functions.
 """
 from datetime import datetime
-from app.utils.helpers import format_datetime, parse_datetime, format_currency
+from app.utils.helpers import (
+    format_datetime,
+    parse_datetime,
+    format_currency,
+    sanitize_string,
+    format_duration_mins,
+)
 
 def test_format_currency():
     """Verify that ticket pricing is formatted correctly as INR."""
@@ -26,3 +32,17 @@ def test_parse_datetime():
     assert dt.day == 15
     assert parse_datetime(None) is None
     assert parse_datetime("invalid") is None
+
+def test_sanitize_string():
+    """Verify HTML stripping and trimming from string inputs."""
+    assert sanitize_string("<script>alert('xss')</script>Hello") == "alert('xss')Hello"
+    assert sanitize_string("  <b>Movie Title</b>  ") == "Movie Title"
+    assert sanitize_string(None) == ""
+
+def test_format_duration_mins():
+    """Verify runtime duration conversion in minutes."""
+    assert format_duration_mins(150) == "2h 30m"
+    assert format_duration_mins(45) == "45m"
+    assert format_duration_mins(120) == "2h"
+    assert format_duration_mins(0) == "0m"
+
