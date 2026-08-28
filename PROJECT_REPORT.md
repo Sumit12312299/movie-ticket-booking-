@@ -17,8 +17,9 @@
   * **Professor / Sir Name:** [Insert Professor Name Here]
   * **Designation:** Department of Computer Science & Engineering
 * **Institution:** [Insert College/University Name Here]
-* **System Release Version:** v1.0.4 Enterprise
+* **System Release Version:** v1.0.5 Enterprise
 * **Maintenance & Integrity Status:** Verified & Production Ready
+
 
 
 ---
