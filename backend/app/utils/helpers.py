@@ -67,4 +67,25 @@ def sanitize_string(input_str: Optional[str]) -> str:
     clean = re.sub(r'<[^>]*>', '', input_str)
     return clean.strip()
 
+def format_duration_mins(minutes: int) -> str:
+    """
+    Formats integer minutes into a formatted display string (e.g. 150 -> '2h 30m').
+
+    Args:
+        minutes (int): Duration in minutes.
+
+    Returns:
+        str: Formatted duration string.
+    """
+    if not isinstance(minutes, int) or minutes <= 0:
+        return "0m"
+    hours = minutes // 60
+    rem_mins = minutes % 60
+    if hours == 0:
+        return f"{rem_mins}m"
+    if rem_mins == 0:
+        return f"{hours}h"
+    return f"{hours}h {rem_mins}m"
+
+
 
