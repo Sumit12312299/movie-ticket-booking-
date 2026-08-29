@@ -123,3 +123,22 @@ def truncate_text(text: Optional[str], max_length: int = 100) -> str:
     if len(text) <= max_length:
         return text
     return text[:max_length].rstrip() + "..."
+
+def slugify(text: Optional[str]) -> str:
+    """
+    Converts a string to a URL-friendly slug (lowercase, hyphen-separated).
+
+    Args:
+        text (Optional[str]): Input string to slugify.
+
+    Returns:
+        str: URL-safe slug string.
+    """
+    import re
+    if not text:
+        return ""
+    text = text.lower().strip()
+    text = re.sub(r'[^\w\s-]', '', text)
+    text = re.sub(r'[\s_]+', '-', text)
+    text = re.sub(r'-+', '-', text)
+    return text
