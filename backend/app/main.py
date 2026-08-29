@@ -105,3 +105,8 @@ async def health_check():
     """Health check endpoint for container monitoring and uptime checks."""
     return {"status": "healthy", "service": settings.PROJECT_NAME}
 
+
+@app.get("/ping", tags=["Health"])
+async def ping():
+    """Simple ping endpoint for lightweight liveness probes."""
+    return {"ping": "pong"}
