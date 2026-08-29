@@ -142,3 +142,17 @@ def slugify(text: Optional[str]) -> str:
     text = re.sub(r'[\s_]+', '-', text)
     text = re.sub(r'-+', '-', text)
     return text
+
+def capitalize_words(text: Optional[str]) -> str:
+    """
+    Capitalizes the first letter of each word in the given string.
+
+    Args:
+        text (Optional[str]): Input string.
+
+    Returns:
+        str: Title-cased string.
+    """
+    if not text:
+        return ""
+    return text.strip().title()
