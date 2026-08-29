@@ -156,3 +156,19 @@ def capitalize_words(text: Optional[str]) -> str:
     if not text:
         return ""
     return text.strip().title()
+
+def get_greeting() -> str:
+    """
+    Returns a time-based greeting string (Morning, Afternoon, Evening).
+
+    Returns:
+        str: Appropriate greeting based on current server time.
+    """
+    from datetime import datetime
+    hour = datetime.now().hour
+    if hour < 12:
+        return "Good Morning"
+    elif hour < 17:
+        return "Good Afternoon"
+    else:
+        return "Good Evening"
