@@ -83,3 +83,11 @@ def test_slugify_special_chars():
 def test_slugify_none():
     from app.utils.helpers import slugify
     assert slugify(None) == ""
+
+def test_capitalize_words_basic():
+    from app.utils.helpers import capitalize_words
+    assert capitalize_words("avengers infinity war") == "Avengers Infinity War"
+
+def test_capitalize_words_empty():
+    from app.utils.helpers import capitalize_words
+    assert capitalize_words("") == ""
