@@ -106,3 +106,20 @@ def is_valid_email(email: Optional[str]) -> bool:
         return False
     pattern = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
     return bool(re.match(pattern, email.strip()))
+
+def truncate_text(text: Optional[str], max_length: int = 100) -> str:
+    """
+    Truncates a string to the specified max length, appending ellipsis if needed.
+
+    Args:
+        text (Optional[str]): Input string to truncate.
+        max_length (int): Maximum allowed length. Defaults to 100.
+
+    Returns:
+        str: Truncated string with ellipsis, or original if within limit.
+    """
+    if not text:
+        return ""
+    if len(text) <= max_length:
+        return text
+    return text[:max_length].rstrip() + "..."
