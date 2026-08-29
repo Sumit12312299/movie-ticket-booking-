@@ -71,3 +71,15 @@ def test_truncate_text_exceeds_limit():
 def test_truncate_text_none():
     from app.utils.helpers import truncate_text
     assert truncate_text(None) == ""
+
+def test_slugify_basic():
+    from app.utils.helpers import slugify
+    assert slugify("Hello World") == "hello-world"
+
+def test_slugify_special_chars():
+    from app.utils.helpers import slugify
+    assert slugify("Movie & Theater!") == "movie-theater"
+
+def test_slugify_none():
+    from app.utils.helpers import slugify
+    assert slugify(None) == ""
