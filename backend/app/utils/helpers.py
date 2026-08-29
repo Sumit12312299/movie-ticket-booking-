@@ -172,3 +172,15 @@ def get_greeting() -> str:
         return "Good Afternoon"
     else:
         return "Good Evening"
+
+def is_positive_int(value) -> bool:
+    """
+    Checks whether a value is a positive integer (greater than zero).
+
+    Args:
+        value: The value to check.
+
+    Returns:
+        bool: True if value is a positive integer, False otherwise.
+    """
+    return isinstance(value, int) and not isinstance(value, bool) and value > 0
