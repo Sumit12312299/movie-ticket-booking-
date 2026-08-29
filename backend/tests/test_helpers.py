@@ -46,3 +46,15 @@ def test_format_duration_mins():
     assert format_duration_mins(120) == "2h"
     assert format_duration_mins(0) == "0m"
 
+
+def test_is_valid_email_valid():
+    from app.utils.helpers import is_valid_email
+    assert is_valid_email("user@example.com") is True
+
+def test_is_valid_email_invalid():
+    from app.utils.helpers import is_valid_email
+    assert is_valid_email("not-an-email") is False
+
+def test_is_valid_email_none():
+    from app.utils.helpers import is_valid_email
+    assert is_valid_email(None) is False
