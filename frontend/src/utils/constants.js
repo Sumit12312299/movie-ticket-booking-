@@ -84,3 +84,25 @@ export const TICKET_STATUS_BADGES = {
 
 
 
+
+/** Application display name used across UI and meta tags */
+export const APP_NAME = 'BookTicket';
+
+/** Application tagline */
+export const APP_TAGLINE = 'Your Premium Movie Booking Experience';
+
+/** Standard CSS transition durations (in ms) for UI animations */
+export const ANIMATION_DURATION = {
+  FAST: 150,
+  NORMAL: 300,
+  SLOW: 500,
+};
+
+/** Seat lock expiry warning threshold in seconds */
+export const SEAT_LOCK_WARNING_SECS = 60;
+
+/** Maximum allowed voucher code length */
+export const MAX_VOUCHER_CODE_LENGTH = 20;
+
+/** Snackbar / toast auto-dismiss duration in milliseconds */
+export const TOAST_DURATION_MS = 3500;
