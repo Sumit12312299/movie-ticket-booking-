@@ -110,3 +110,12 @@ async def health_check():
 async def ping():
     """Simple ping endpoint for lightweight liveness probes."""
     return {"ping": "pong"}
+
+@app.get("/version", tags=["Health"])
+async def version():
+    """Returns the current API version and service name."""
+    return {
+        "service": settings.PROJECT_NAME,
+        "version": settings.VERSION,
+        "status": "stable"
+    }
