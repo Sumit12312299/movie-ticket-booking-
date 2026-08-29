@@ -58,3 +58,16 @@ def test_is_valid_email_invalid():
 def test_is_valid_email_none():
     from app.utils.helpers import is_valid_email
     assert is_valid_email(None) is False
+
+def test_truncate_text_within_limit():
+    from app.utils.helpers import truncate_text
+    assert truncate_text("short text", 100) == "short text"
+
+def test_truncate_text_exceeds_limit():
+    from app.utils.helpers import truncate_text
+    result = truncate_text("a" * 200, 100)
+    assert result.endswith("...") and len(result) <= 103
+
+def test_truncate_text_none():
+    from app.utils.helpers import truncate_text
+    assert truncate_text(None) == ""
