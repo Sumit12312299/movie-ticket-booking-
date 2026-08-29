@@ -1,0 +1,11 @@
+# CODEOWNERS - Defines code reviewers for specific paths
+# See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Global owners
+* @Sumit12312299
+
+# Backend
+/backend/ @Sumit12312299
+
+# Frontend
+/frontend/ @Sumit12312299
