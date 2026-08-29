@@ -155,3 +155,40 @@ export const copyToClipboard = async (text) => {
 
 
 
+
+/**
+ * Returns a relative time string (e.g. "2 hours ago", "just now").
+ * @param {string|Date} date - The date to compare against current time.
+ * @returns {string} Human-friendly relative time label.
+ */
+export const getRelativeTime = (date) => {
+  if (!date) return '';
+  const now = new Date();
+  const target = new Date(date);
+  const diffMs = now - target;
+  const diffSecs = Math.floor(diffMs / 1000);
+  const diffMins = Math.floor(diffSecs / 60);
+  const diffHrs = Math.floor(diffMins / 60);
+  const diffDays = Math.floor(diffHrs / 24);
+
+  if (diffSecs < 60) return 'just now';
+  if (diffMins < 60) return ${diffMins} minute ago;
+  if (diffHrs < 24) return ${diffHrs} hour ago;
+  if (diffDays < 7) return ${diffDays} day ago;
+  return formatDate(date);
+};
+
+/**
+ * Formats a date into a long-form string (e.g. "Saturday, 29 August 2026").
+ * @param {string|Date} date - The date to format.
+ * @returns {string} Long formatted date string.
+ */
+export const formatDateLong = (date) => {
+  if (!date) return '';
+  return new Intl.DateTimeFormat('en-IN', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  }).format(new Date(date));
+};
