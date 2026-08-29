@@ -12,7 +12,7 @@ def setup_logger() -> logging.Logger:
     Sets up log levels, formatter, and standard output stream handlers.
     """
     logger = logging.getLogger("bookticket")
-    logger.setLevel(logging.DEBUG)
+    logger.setLevel(logging.INFO)
     
     formatter = logging.Formatter(
         "[%(asctime)s] [%(levelname)s] in %(module)s: %(message)s"
