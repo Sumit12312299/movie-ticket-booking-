@@ -90,3 +90,19 @@ def format_duration_mins(minutes: int) -> str:
 
 
 
+
+def is_valid_email(email: Optional[str]) -> bool:
+    """
+    Validates whether the given string is a properly formatted email address.
+
+    Args:
+        email (Optional[str]): The email string to validate.
+
+    Returns:
+        bool: True if valid email format, False otherwise.
+    """
+    import re
+    if not email:
+        return False
+    pattern = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
+    return bool(re.match(pattern, email.strip()))
