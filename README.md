@@ -349,3 +349,8 @@ For local verification of the backend API and helper libraries, the application 
 - **Unit Tests**: Located inside `backend/tests/` directory to verify endpoints and business helper functions.
 - **Run Tests**: Run `pytest` within the `backend` folder to verify the health and correctness of the backend API.
 
+
+---
+
+## Component Library & Hooks
+Added 11 new UI components and 6 new custom hooks for optimized performance and user experience.
