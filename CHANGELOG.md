@@ -27,3 +27,10 @@ Format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 - Enterprise release with full seat locking, admin analytics, and JWT auth
+
+## [Unreleased]
+
+### Added
+- React hooks: useThrottle, usePrevious, useWindowSize, useOnlineStatus, useClipboard, useLockBodyScroll
+- UI components: LoadingDots, EmptyState, ProgressBar, Avatar, Divider, Tooltip, Tag, CountdownTimer, RatingStars, CopyButton, Skeleton
+- Backend utilities: RateLimiter, email_utils, pagination helpers, slug generation
