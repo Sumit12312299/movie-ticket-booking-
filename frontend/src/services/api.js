@@ -46,3 +46,22 @@ API.interceptors.response.use(
 );
 
 export default API;
+
+export const get = async (path, params = {}) => {
+  const qs = Object.keys(params).length ? '?' + new URLSearchParams(params).toString() : '';
+  const res = await fetch((import.meta.env.VITE_API_URL || '') + path + qs, {
+    headers: { Authorization: 'Bearer ' + (localStorage.getItem('token') || '') },
+  });
+  if (!res.ok) throw new Error('GET ' + path + ' failed: ' + res.status);
+  return res.json();
+};
+
+export const post = async (path, body = {}) => {
+  const res = await fetch((import.meta.env.VITE_API_URL || '') + path, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + (localStorage.getItem('token') || '') },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) throw new Error('POST ' + path + ' failed: ' + res.status);
+  return res.json();
+};
