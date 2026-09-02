@@ -354,3 +354,53 @@ For local verification of the backend API and helper libraries, the application 
 
 ## Component Library & Hooks
 Added 11 new UI components and 6 new custom hooks for optimized performance and user experience.
+
+### Additional Utilities & UI Components
+- **Hooks**: useEventListener, useToggle, useAsync, useMediaQuery
+- **Components**: Stepper, Switch, Tabs, NotificationToast, RatingPicker
+- **Backend Utilities**: datetime_utils, alidator_utils, jwt_utils, ile_utils
+"@
+Make-Commit "docs(readme): update feature list and utility references in README"
+
+# 19. GitHub CI Workflow
+New-Item -ItemType Directory -Force ".github\workflows" | Out-Null
+Set-Content ".github\workflows\ci.yml" @"
+name: Continuous Integration
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f backend/requirements.txt ]; then pip install -r backend/requirements.txt; fi
+          pip install pytest
+      - name: Run Pytest
+        run: |
+          cd backend
+          pytest
+
+  test-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - name: Install & Lint Frontend
+        run: |
+          cd frontend
+          npm ci || npm install
