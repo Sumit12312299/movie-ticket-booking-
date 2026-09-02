@@ -34,3 +34,8 @@ Format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - React hooks: useThrottle, usePrevious, useWindowSize, useOnlineStatus, useClipboard, useLockBodyScroll
 - UI components: LoadingDots, EmptyState, ProgressBar, Avatar, Divider, Tooltip, Tag, CountdownTimer, RatingStars, CopyButton, Skeleton
 - Backend utilities: RateLimiter, email_utils, pagination helpers, slug generation
+
+- Added new hooks: useEventListener, useToggle, useAsync, useMediaQuery
+- Added new UI components: Stepper, Switch, Tabs, NotificationToast, RatingPicker
+- Added backend utility modules: datetime_utils, validator_utils, jwt_utils, file_utils
+- Added analyticsService and backend unit tests
