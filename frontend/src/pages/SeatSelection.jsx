@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { getShowSeats } from '../services/api';
 import SeatLayout from '../components/SeatLayout';
 import BookingSummary from '../components/BookingSummary';
+import { ArrowLeft, Film, Clock, MapPin, Sparkles, Ticket } from 'lucide-react';
 
 export default function SeatSelection() {
   const { showId } = useParams();
@@ -47,52 +48,80 @@ export default function SeatSelection() {
 
   if (loading) {
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh' }}>
-        <div style={{ width: '40px', height: '40px', border: '3px solid rgba(229,57,53,0.2)', borderTop: '3px solid var(--red)', borderRadius: '50%', animation: 'mh-spin 0.8s linear infinite' }} />
+      <div className="min-h-[60vh] flex flex-col items-center justify-center space-y-3">
+        <div className="w-12 h-12 border-4 border-[#E50914]/20 border-t-[#E50914] rounded-full animate-spin"></div>
+        <p className="font-bebas text-lg text-gray-400">Loading Cinema Seat Layout...</p>
       </div>
     );
   }
 
+  const showTimeFormatted = show?.show_time
+    ? new Date(show.show_time).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' }) +
+      ' • ' +
+      new Date(show.show_time).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })
+    : '';
+
   return (
-    <div className="animate-fadeIn">
-      {/* Header Info */}
-      <div style={{ marginBottom: '40px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '20px' }}>
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{ width: '4px', height: '26px', background: 'var(--red)', borderRadius: '2px' }} />
-            <h1 style={{ fontSize: '26px', fontWeight: 900, color: '#fff', margin: 0 }}>{show?.movie_title}</h1>
+    <div className="animate-fadeIn max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8">
+      
+      {/* Back Button */}
+      <button
+        onClick={() => navigate(-1)}
+        className="inline-flex items-center gap-2 text-xs font-bold text-gray-400 hover:text-white transition-colors bg-transparent border-0 cursor-pointer"
+      >
+        <ArrowLeft className="w-4 h-4" />
+        <span>BACK TO SHOWTIMES</span>
+      </button>
+
+      {/* Show Details Header Banner */}
+      <div className="bg-[#0F111A] border border-white/15 rounded-3xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-2xl">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2">
+            <span className="bg-[#E50914] text-white text-[10px] font-extrabold px-2.5 py-0.5 rounded">
+              INTERACTIVE SEAT SELECTION
+            </span>
+            <span className="text-xs font-semibold text-[#FFD700]">Screen {show?.screen_number || 1}</span>
           </div>
-          <p style={{ fontSize: '13px', color: 'var(--text-mid)', marginTop: '6px', marginLeft: '16px' }}>
-            {show?.theatre_name} • Screen {show?.screen_number}
+          <h1 className="font-bebas text-3xl sm:text-4xl text-white tracking-wide">{show?.movie_title}</h1>
+          <p className="text-xs text-gray-400 flex items-center gap-2">
+            <MapPin className="w-3.5 h-3.5 text-[#E50914]" />
+            <span>{show?.theatre_name}</span>
+            <span>•</span>
+            <Clock className="w-3.5 h-3.5 text-[#FFD700]" />
+            <span>{showTimeFormatted}</span>
           </p>
         </div>
-        <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-mid)' }}>
-          Available Seats: <span style={{ color: 'var(--red)', fontWeight: 800 }}>{show?.available_seats}</span> / {show?.total_seats}
+
+        <div className="flex items-center gap-3 bg-[#131624] border border-white/10 px-4 py-3 rounded-2xl">
+          <div className="text-right">
+            <span className="block text-[10px] text-gray-400 uppercase tracking-widest font-bold">Seats Left</span>
+            <span className="font-bebas text-2xl text-[#E50914] leading-none">{show?.available_seats}</span>
+          </div>
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: '32px', alignItems: 'start' }}>
-        {/* Seat Map */}
-        <div className="card" style={{ padding: '32px 24px', overflowX: 'hidden' }}>
-          <SeatLayout seatLayout={show?.seat_layout || []} selectedSeats={selectedSeats} onSeatToggle={handleSeatToggle} />
+      {/* Seat Map & Booking Summary Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        {/* Seat Layout Grid */}
+        <div className="lg:col-span-8 bg-[#0F111A] border border-white/15 rounded-3xl p-6 shadow-2xl">
+          <SeatLayout
+            seatLayout={show?.seat_layout || []}
+            selectedSeats={selectedSeats}
+            onSeatToggle={handleSeatToggle}
+          />
         </div>
 
-        {/* Booking Summary Panel */}
-        <div style={{ position: 'sticky', top: '80px' }}>
-          <BookingSummary show={show} selectedSeats={selectedSeats} onProceed={handleProceed} />
+        {/* Booking Summary Floating Card */}
+        <div className="lg:col-span-4 lg:sticky lg:top-24">
+          <BookingSummary
+            show={show}
+            selectedSeats={selectedSeats}
+            onProceed={handleProceed}
+          />
         </div>
       </div>
 
-      <style>{`
-        @media (max-width: 992px) {
-          div[style*="gridTemplateColumns: '1fr 340px'"] {
-            grid-template-columns: 1fr !important;
-          }
-          div[style*="position: 'sticky'"] {
-            position: relative !important; top: 0 !important;
-          }
-        }
-      `}</style>
     </div>
   );
 }
