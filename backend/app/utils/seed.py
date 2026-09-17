@@ -3,7 +3,12 @@ Seed script: Populates the database with sample movies, theatres, screens, shows
 Run: python -m app.utils.seed
 """
 import asyncio
+import sys
 from datetime import datetime, timedelta, timezone
+
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8')
+
 from motor.motor_asyncio import AsyncIOMotorClient
 from app.config.settings import settings
 from app.auth.password import hash_password
