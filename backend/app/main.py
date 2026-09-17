@@ -1,5 +1,5 @@
 import logging
-from fastapi import FastAPI
+from fastapi import FastAPI, status
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from app.config.settings import settings
@@ -62,4 +62,14 @@ async def root():
         "message": "Welcome to the Movie Ticket Booking API",
         "docs": "/docs",
         "version": "1.0.0",
+    }
+
+
+@app.get("/health", tags=["Health"], status_code=status.HTTP_200_OK)
+async def health_check():
+    """Health check endpoint to verify backend operational readiness."""
+    return {
+        "status": "healthy",
+        "service": settings.PROJECT_NAME,
+        "database": "connected" if mongodb.client else "disconnected"
     }
