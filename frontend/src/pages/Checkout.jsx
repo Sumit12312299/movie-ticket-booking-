@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { createBooking, processPayment } from '../services/api';
-import { CreditCard, Smartphone, Building2, ShieldCheck, Ticket, AlertCircle } from 'lucide-react';
+import { CreditCard, Smartphone, Building2, ShieldCheck, Ticket, AlertCircle, Sparkles, ArrowLeft } from 'lucide-react';
 
 export default function Checkout() {
   const location = useLocation();
@@ -15,8 +15,8 @@ export default function Checkout() {
 
   if (!show || !selectedSeats || selectedSeats.length === 0) {
     return (
-      <div style={{ textAlign: 'center', padding: '60px', color: 'var(--text-muted)' }}>
-        No booking session found. Please select your seats again.
+      <div className="text-center py-20 text-gray-400 font-bebas text-2xl">
+        No booking session found. Please select your seats again from the catalog.
       </div>
     );
   }
@@ -47,98 +47,138 @@ export default function Checkout() {
   const PaymentOption = ({ id, icon: Icon, title, desc }) => {
     const isSelected = paymentMethod === id;
     return (
-      <label style={{
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '16px', borderRadius: '10px', border: `1px solid ${isSelected ? 'rgba(229,57,53,0.5)' : 'var(--border)'}`,
-        background: isSelected ? 'rgba(229,57,53,0.06)' : 'var(--bg-input)', cursor: 'pointer',
-        transition: 'all 0.2s', marginBottom: '12px',
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div style={{ width: '40px', height: '40px', borderRadius: '8px', background: isSelected ? 'rgba(229,57,53,0.1)' : 'rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Icon size={20} color={isSelected ? 'var(--red)' : 'var(--text-mid)'} />
+      <label
+        className={`flex items-center justify-between p-4 rounded-2xl border transition-all duration-300 cursor-pointer ${
+          isSelected
+            ? 'bg-[#E50914]/15 border-[#E50914] shadow-lg shadow-[#E50914]/20'
+            : 'bg-[#131624] border-white/10 hover:border-white/30'
+        }`}
+      >
+        <div className="flex items-center gap-4">
+          <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+            isSelected ? 'bg-[#E50914] text-white shadow-md' : 'bg-white/5 text-gray-400'
+          }`}>
+            <Icon className="w-6 h-6" />
           </div>
           <div>
-            <p style={{ fontSize: '15px', fontWeight: 700, color: '#fff', margin: '0 0 2px' }}>{title}</p>
-            <p style={{ fontSize: '12px', color: 'var(--text-muted)', margin: 0 }}>{desc}</p>
+            <h4 className="font-bebas text-xl text-white tracking-wide">{title}</h4>
+            <p className="text-xs text-gray-400">{desc}</p>
           </div>
         </div>
         <input
-          type="radio" name="payment" value={id} checked={isSelected}
+          type="radio"
+          name="payment"
+          value={id}
+          checked={isSelected}
           onChange={(e) => setPaymentMethod(e.target.value)}
-          style={{ width: '18px', height: '18px', accentColor: 'var(--red)', cursor: 'pointer' }}
+          className="w-5 h-5 accent-[#E50914] cursor-pointer"
         />
       </label>
     );
   };
 
   return (
-    <div className="animate-fadeIn" style={{ maxWidth: '960px', margin: '0 auto' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '28px' }}>
-        <ShieldCheck size={28} color="var(--red)" />
-        <h1 style={{ fontSize: '24px', fontWeight: 900, color: '#fff', margin: 0 }}>Secure Checkout</h1>
+    <div className="animate-fadeIn max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8">
+      
+      {/* Back Link */}
+      <button
+        onClick={() => navigate(-1)}
+        className="inline-flex items-center gap-2 text-xs font-bold text-gray-400 hover:text-white transition-colors bg-transparent border-0 cursor-pointer"
+      >
+        <ArrowLeft className="w-4 h-4" />
+        <span>BACK TO SEAT SELECTION</span>
+      </button>
+
+      {/* Title Banner */}
+      <div className="flex items-center justify-between border-b border-white/10 pb-4">
+        <div className="flex items-center gap-3">
+          <ShieldCheck className="w-8 h-8 text-[#E50914]" />
+          <div>
+            <h1 className="font-bebas text-4xl text-white tracking-wide">CINEMA GATEWAY CHECKOUT</h1>
+            <p className="text-xs text-gray-400">256-bit Encrypted SSL Payment Transaction</p>
+          </div>
+        </div>
+        <div className="hidden sm:flex items-center gap-2 text-xs font-bold text-[#FFD700] bg-[#FFD700]/10 px-3 py-1.5 rounded-full border border-[#FFD700]/30">
+          <Sparkles className="w-4 h-4" />
+          <span>GUARANTEED SEAT RESERVATION</span>
+        </div>
       </div>
 
       {error && (
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: 'rgba(229,57,53,0.08)', border: '1px solid rgba(229,57,53,0.3)', borderRadius: '8px', padding: '14px', marginBottom: '24px' }}>
-          <AlertCircle size={18} color="var(--red)" />
-          <span style={{ fontSize: '14px', color: 'var(--red)' }}>{error}</span>
+        <div className="p-4 rounded-2xl bg-red-500/10 border border-red-500/30 text-red-400 text-sm flex items-center gap-3">
+          <AlertCircle className="w-5 h-5 shrink-0" />
+          <span>{error}</span>
         </div>
       )}
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: '32px', alignItems: 'start' }}>
-        {/* Payment Options */}
-        <div className="card" style={{ padding: '32px' }}>
-          <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#fff', borderBottom: '1px solid var(--border)', paddingBottom: '16px', marginBottom: '24px' }}>
-            Select Payment Method
+      {/* Grid Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        {/* Left: Payment Method Selection */}
+        <div className="lg:col-span-7 bg-[#0F111A] border border-white/15 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6">
+          <h2 className="font-bebas text-2xl text-white tracking-wide border-b border-white/10 pb-3">
+            SELECT PAYMENT METHOD
           </h2>
 
-          <PaymentOption id="upi" icon={Smartphone} title="UPI / GPay / PhonePe" desc="Instant approval via UPI ID or QR" />
-          <PaymentOption id="credit_card" icon={CreditCard} title="Credit / Debit Card" desc="Visa, MasterCard, RuPay" />
-          <PaymentOption id="net_banking" icon={Building2} title="Net Banking" desc="All major Indian Banks" />
+          <div className="space-y-3">
+            <PaymentOption id="upi" icon={Smartphone} title="UPI / GPay / PhonePe / Paytm" desc="Instant 1-Tap Authorization" />
+            <PaymentOption id="credit_card" icon={CreditCard} title="Credit / Debit Card" desc="Visa, MasterCard, RuPay, Amex" />
+            <PaymentOption id="net_banking" icon={Building2} title="Internet Banking" desc="All Indian Banks Supported" />
+          </div>
 
-          <button onClick={handlePayAndBook} disabled={loading} className="btn-red" style={{ width: '100%', justifyContent: 'center', padding: '16px', fontSize: '16px', marginTop: '16px', opacity: loading ? 0.7 : 1 }}>
-            {loading ? 'Processing Payment...' : `Pay ₹${totalAmount} & Confirm Booking`}
+          <button
+            onClick={handlePayAndBook}
+            disabled={loading}
+            className="btn-cinema w-full py-4 text-base rounded-2xl flex items-center justify-center gap-2 shadow-2xl mt-4"
+          >
+            <Ticket className="w-5 h-5" />
+            <span>{loading ? 'Authorizing Payment...' : `PAY ₹${totalAmount} & INSTANTLY ISSUED TICKET`}</span>
           </button>
         </div>
 
-        {/* Order Summary */}
-        <div className="card" style={{ padding: '24px' }}>
-          <h2 style={{ fontSize: '16px', fontWeight: 800, color: '#fff', borderBottom: '1px solid var(--border)', paddingBottom: '14px', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Ticket size={18} color="var(--red)" /> Order Summary
-          </h2>
-
-          <div style={{ marginBottom: '20px' }}>
-            <p style={{ fontSize: '15px', fontWeight: 700, color: '#fff', margin: '0 0 4px' }}>{show.movie_title}</p>
-            <p style={{ fontSize: '13px', color: 'var(--text-mid)', margin: '0 0 12px' }}>{show.theatre_name}</p>
-            <p style={{ fontSize: '13px', color: 'var(--text-muted)', margin: 0 }}>
-              Seats: <span style={{ fontWeight: 700, color: 'var(--text-light)' }}>{selectedSeats.join(', ')}</span>
-            </p>
+        {/* Right: Order Ticket Summary */}
+        <div className="lg:col-span-5 bg-[#0F111A] border border-white/15 rounded-3xl p-6 shadow-2xl space-y-6">
+          <div className="flex items-center justify-between border-b border-white/10 pb-3">
+            <h3 className="font-bebas text-2xl text-white tracking-wide">ORDER TICKET SUMMARY</h3>
+            <Ticket className="w-5 h-5 text-[#FFD700]" />
           </div>
 
-          <div style={{ borderTop: '1px solid var(--border-sm)', paddingTop: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: 'var(--text-mid)' }}>
-              <span>Tickets ({selectedSeats.length})</span>
-              <span>₹{subtotal}</span>
+          <div className="space-y-3">
+            <div>
+              <h4 className="font-bebas text-2xl text-white tracking-wide">{show.movie_title}</h4>
+              <p className="text-xs text-gray-400">{show.theatre_name}</p>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: 'var(--text-mid)' }}>
-              <span>Convenience Fee</span>
-              <span>₹{convenienceFee}</span>
+
+            <div className="bg-[#131624] border border-white/10 rounded-2xl p-4 space-y-2 text-xs">
+              <div className="flex justify-between text-gray-300">
+                <span className="font-semibold text-gray-500">Selected Seats:</span>
+                <span className="font-extrabold text-[#E50914]">{selectedSeats.join(', ')}</span>
+              </div>
+              <div className="flex justify-between text-gray-300">
+                <span className="font-semibold text-gray-500">Screen:</span>
+                <span className="font-bold text-white">Screen {show.screen_number || 1}</span>
+              </div>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', borderTop: '1px solid var(--border-sm)', paddingTop: '12px', marginTop: '6px' }}>
-              <span style={{ fontSize: '14px', fontWeight: 700, color: '#fff' }}>Amount Due</span>
-              <span style={{ fontSize: '18px', fontWeight: 900, color: 'var(--red)' }}>₹{totalAmount}</span>
+          </div>
+
+          <div className="border-t border-white/10 pt-4 space-y-2 text-xs">
+            <div className="flex justify-between text-gray-400">
+              <span>Tickets Cost ({selectedSeats.length} Seats)</span>
+              <span className="text-white font-bold">₹{subtotal}</span>
+            </div>
+            <div className="flex justify-between text-gray-400">
+              <span>Convenience & Screen Fee</span>
+              <span className="text-white font-bold">₹{convenienceFee}</span>
+            </div>
+            <div className="flex justify-between items-center border-t border-white/10 pt-3 text-sm">
+              <span className="font-bebas text-xl text-white tracking-wide">TOTAL AMOUNT DUE</span>
+              <span className="font-bebas text-3xl text-[#E50914] text-glow-red">₹{totalAmount}</span>
             </div>
           </div>
         </div>
+
       </div>
 
-      <style>{`
-        @media (max-width: 768px) {
-          div[style*="gridTemplateColumns: '1fr 340px'"] {
-            grid-template-columns: 1fr !important;
-          }
-        }
-      `}</style>
     </div>
   );
 }
