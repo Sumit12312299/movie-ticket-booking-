@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Path
 from motor.motor_asyncio import AsyncIOMotorDatabase
 from app.dependencies.auth import get_db, get_current_user, get_current_admin
 from app.repositories.booking_repo import BookingRepository
@@ -21,53 +21,53 @@ def _get_service(db: AsyncIOMotorDatabase) -> BookingService:
     )
 
 
-@router.post("/", response_model=BookingResponse, status_code=201)
+@router.post("/", response_model=BookingResponse, status_code=201, summary="Create Ticket Reservation")
 async def create_booking(
     data: BookingCreate,
     current_user: dict = Depends(get_current_user),
     db: AsyncIOMotorDatabase = Depends(get_db),
 ):
-    """Book tickets for a show (Customer)."""
+    """Reserve selected show seats and initiate ticket order creation for the authenticated customer."""
     service = _get_service(db)
     return await service.create_booking(current_user["_id"], data)
 
 
-@router.get("/me", response_model=List[BookingResponse])
+@router.get("/me", response_model=List[BookingResponse], summary="Get Customer Bookings")
 async def get_my_bookings(
     current_user: dict = Depends(get_current_user),
     db: AsyncIOMotorDatabase = Depends(get_db),
 ):
-    """Get current user's booking history."""
+    """Retrieve full chronological booking history with digital ticket codes for the logged-in user."""
     service = _get_service(db)
     return await service.get_user_bookings(current_user["_id"])
 
 
-@router.get("/all", response_model=List[BookingResponse])
+@router.get("/all", response_model=List[BookingResponse], summary="Get All System Bookings (Admin)")
 async def get_all_bookings(
     db: AsyncIOMotorDatabase = Depends(get_db),
     admin: dict = Depends(get_current_admin),
 ):
-    """Get all bookings (Admin only)."""
+    """Retrieve system-wide reservation logs and transaction records (Admin only)."""
     service = _get_service(db)
     return await service.get_all_bookings()
 
 
-@router.post("/{booking_id}/cancel", response_model=BookingResponse)
+@router.post("/{booking_id}/cancel", response_model=BookingResponse, summary="Cancel Reservation")
 async def cancel_booking(
-    booking_id: str,
+    booking_id: str = Path(..., description="Unique booking ID to cancel"),
     current_user: dict = Depends(get_current_user),
     db: AsyncIOMotorDatabase = Depends(get_db),
 ):
-    """Cancel a booking."""
+    """Cancel an active booking, release reserved seats back to the hall, and process refund simulation."""
     service = _get_service(db)
     return await service.cancel_booking(booking_id, current_user["_id"])
 
 
-@router.get("/revenue")
+@router.get("/revenue", summary="Get Revenue Statistics (Admin)")
 async def get_revenue(
     db: AsyncIOMotorDatabase = Depends(get_db),
     admin: dict = Depends(get_current_admin),
 ):
-    """Get revenue statistics (Admin only)."""
+    """Aggregate total ticket sales revenue, booking counts, and average order values (Admin only)."""
     service = _get_service(db)
     return await service.get_revenue()
