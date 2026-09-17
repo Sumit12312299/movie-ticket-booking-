@@ -21,21 +21,21 @@ def _get_service(db: AsyncIOMotorDatabase) -> AdminService:
     )
 
 
-@router.get("/dashboard")
+@router.get("/dashboard", summary="Admin Analytics Dashboard")
 async def dashboard(
     db: AsyncIOMotorDatabase = Depends(get_db),
     admin: dict = Depends(get_current_admin),
 ):
-    """Get admin dashboard statistics."""
+    """Retrieve executive KPIs including total revenue, active tickets, registered users, and active screenings."""
     service = _get_service(db)
     return await service.get_dashboard_stats()
 
 
-@router.get("/users")
+@router.get("/users", summary="List Registered Users")
 async def list_users(
     db: AsyncIOMotorDatabase = Depends(get_db),
     admin: dict = Depends(get_current_admin),
 ):
-    """Get all registered users (Admin only)."""
+    """Retrieve full roster of registered user accounts and customer metadata (Admin only)."""
     service = _get_service(db)
     return await service.get_all_users()
