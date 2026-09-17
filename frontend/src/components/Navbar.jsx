@@ -1,23 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Search, Bell, LogOut, Ticket, Shield, Menu, X, ChevronDown } from 'lucide-react';
-import { getNotifications, markAllNotificationsRead } from '../services/api';
+import { Search, Bell, LogOut, Ticket, Shield, Menu, X, Film, Sparkles, User, Clapperboard } from 'lucide-react';
+import { getNotifications, markAllNotificationsRead, searchMovies } from '../services/api';
 
 const Logo = () => (
-  <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px' }}>
-    {/* Red play icon */}
-    <div style={{
-      width: '32px', height: '32px', background: 'var(--red)', borderRadius: '6px',
-      display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-    }}>
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-        <polygon points="3,2 12,7 3,12" fill="white" />
-      </svg>
+  <Link to="/" className="flex items-center gap-3 group text-decoration-none">
+    <div className="relative w-10 h-10 rounded-xl bg-gradient-to-br from-[#E50914] via-[#B80710] to-[#700207] flex items-center justify-center shadow-lg shadow-[#E50914]/40 group-hover:scale-105 transition-all duration-300 border border-white/20">
+      <Film className="w-5 h-5 text-white animate-pulse" />
+      <span className="absolute -top-1 -right-1 flex h-3 w-3">
+        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FFD700] opacity-75"></span>
+        <span className="relative inline-flex rounded-full h-3 w-3 bg-[#FFD700]"></span>
+      </span>
     </div>
-    <span style={{ fontSize: '18px', fontWeight: 900, color: '#fff', letterSpacing: '-0.3px' }}>
-      Movie<span style={{ color: 'var(--red)' }}>Hub</span>
-    </span>
+    <div className="flex flex-col">
+      <span className="font-bebas text-2xl tracking-wider text-white flex items-center gap-1 leading-none">
+        CINE<span className="text-[#E50914] text-glow-red">PASS</span>
+      </span>
+      <span className="text-[9px] font-semibold tracking-widest text-[#FFD700] uppercase -mt-1 opacity-90">
+        IMAX & Dolby Screen
+      </span>
+    </div>
   </Link>
 );
 
@@ -25,14 +28,45 @@ export default function Navbar() {
   const { user, isAuthenticated, isAdmin, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+
   const [mobileOpen, setMobileOpen] = useState(false);
   const [notifOpen, setNotifOpen]   = useState(false);
   const [notifs, setNotifs]         = useState([]);
   const [unread, setUnread]         = useState(0);
 
+  // Search State
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [showSearchModal, setShowSearchModal] = useState(false);
+
   useEffect(() => {
     if (isAuthenticated) fetchNotifs();
   }, [isAuthenticated, location.pathname]);
+
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      if (searchQuery.trim().length >= 2) {
+        performSearch(searchQuery);
+      } else {
+        setSearchResults([]);
+        setIsSearching(false);
+      }
+    }, 300);
+    return () => clearTimeout(delayDebounce);
+  }, [searchQuery]);
+
+  const performSearch = async (query) => {
+    setIsSearching(true);
+    try {
+      const res = await searchMovies(query);
+      setSearchResults(res.data || []);
+    } catch {
+      setSearchResults([]);
+    } finally {
+      setIsSearching(false);
+    }
+  };
 
   const fetchNotifs = async () => {
     try {
@@ -53,193 +87,249 @@ export default function Navbar() {
   const handleLogout = () => { logout(); navigate('/login'); };
 
   const navItems = [
-    { to: '/', label: 'Home' },
-    { to: '/', label: 'Movies' },
-    { to: '/', label: 'Theatres' },
-    { to: '/', label: 'Offers' },
-    ...(isAdmin ? [{ to: '/admin', label: 'Admin' }] : []),
+    { to: '/', label: 'Spotlight' },
+    { to: '/#movies', label: 'Now Showing' },
+    { to: '/my-bookings', label: 'My Tickets', requireAuth: true },
+    ...(isAdmin ? [{ to: '/admin', label: 'Admin Studio', isBadge: true }] : []),
   ];
 
   return (
     <>
-      <nav style={{
-        position: 'sticky', top: 0, zIndex: 1000,
-        background: 'var(--bg-nav)',
-        borderBottom: '1px solid var(--border)',
-        height: '64px', display: 'flex', alignItems: 'center',
-        padding: '0 32px',
-      }}>
-        <div style={{
-          maxWidth: '1280px', width: '100%', margin: '0 auto',
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '20px',
-        }}>
-          {/* Logo */}
+      <header className="sticky top-0 z-50 bg-[#07080e]/90 backdrop-blur-xl border-b border-white/10 shadow-2xl transition-all duration-300">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+          
+          {/* Brand Logo */}
           <Logo />
 
-          {/* Desktop Nav Links */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', flex: 1, justifyContent: 'center' }} className="hide-mobile">
-            {navItems.map(item => (
-              <Link key={item.label} to={item.to}
-                style={{
-                  padding: '8px 14px', borderRadius: '6px',
-                  fontSize: '14px', fontWeight: 600, textDecoration: 'none',
-                  color: location.pathname === item.to && item.to !== '/' ? '#fff' : item.to === '/' && location.pathname === '/' ? '#fff' : 'var(--text-mid)',
-                  background: location.pathname === item.to ? 'rgba(229,57,53,0.1)' : 'transparent',
-                  transition: 'all 0.2s',
-                }}
-                onMouseOver={e => { e.currentTarget.style.color = '#fff'; e.currentTarget.style.background = 'var(--bg-hover)'; }}
-                onMouseOut={e => {
-                  const active = (location.pathname === item.to);
-                  e.currentTarget.style.color = active ? '#fff' : 'var(--text-mid)';
-                  e.currentTarget.style.background = active ? 'rgba(229,57,53,0.1)' : 'transparent';
-                }}
-              >
-                {item.label}
-              </Link>
-            ))}
+          {/* Search Bar with Instant Cinema Dropdown */}
+          <div className="relative flex-1 max-w-md hidden md:block">
+            <div className="relative">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8c93b3]" />
+              <input
+                type="text"
+                placeholder="Search movies, genres, languages..."
+                value={searchQuery}
+                onFocus={() => setShowSearchModal(true)}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-[#131624] text-sm text-white placeholder-[#5d6480] pl-10 pr-4 py-2.5 rounded-full border border-white/10 focus:outline-none focus:border-[#E50914] focus:ring-2 focus:ring-[#E50914]/20 transition-all duration-200"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[#8c93b3] hover:text-white"
+                >
+                  Clear
+                </button>
+              )}
+            </div>
+
+            {/* Quick Autocomplete Search Results Drawer */}
+            {showSearchModal && searchQuery.trim().length >= 2 && (
+              <div className="absolute top-full left-0 right-0 mt-2 bg-[#0F111A] border border-white/15 rounded-2xl p-3 shadow-2xl z-50 backdrop-blur-2xl">
+                <div className="flex items-center justify-between text-xs font-semibold text-[#8c93b3] px-2 pb-2 border-b border-white/10">
+                  <span>Search Results</span>
+                  {isSearching && <span className="text-[#FFD700] animate-pulse">Searching catalog...</span>}
+                </div>
+                <div className="max-h-64 overflow-y-auto mt-2 space-y-1">
+                  {searchResults.length === 0 && !isSearching ? (
+                    <div className="text-center py-4 text-xs text-gray-400">No movies found matching "{searchQuery}"</div>
+                  ) : (
+                    searchResults.map((m) => (
+                      <Link
+                        key={m.id}
+                        to={`/movie/${m.id}`}
+                        onClick={() => { setShowSearchModal(false); setSearchQuery(''); }}
+                        className="flex items-center gap-3 p-2 rounded-xl hover:bg-[#E50914]/15 transition-all text-decoration-none group"
+                      >
+                        <img
+                          src={m.poster_url || 'https://via.placeholder.com/60x90'}
+                          alt={m.title}
+                          className="w-10 h-14 object-cover rounded-lg border border-white/10 group-hover:border-[#E50914]"
+                        />
+                        <div className="flex-1 min-w-0">
+                          <h4 className="text-sm font-bold text-white group-hover:text-[#E50914] truncate">{m.title}</h4>
+                          <p className="text-xs text-gray-400 truncate">{m.language} • {m.duration_mins} Mins</p>
+                        </div>
+                        <span className="text-xs font-bold text-[#FFD700] bg-[#FFD700]/10 px-2 py-1 rounded-md">
+                          Book
+                        </span>
+                      </Link>
+                    ))
+                  )}
+                </div>
+              </div>
+            )}
           </div>
 
-          {/* Right Actions */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }} className="hide-mobile">
+          {/* Desktop Nav Items */}
+          <div className="hidden lg:flex items-center gap-1">
+            {navItems.map((item) => {
+              if (item.requireAuth && !isAuthenticated) return null;
+              const active = location.pathname === item.to;
+              return (
+                <Link
+                  key={item.label}
+                  to={item.to}
+                  className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all text-decoration-none flex items-center gap-2 ${
+                    active
+                      ? 'bg-[#E50914]/15 text-[#E50914] border border-[#E50914]/30 shadow-lg shadow-[#E50914]/10'
+                      : 'text-[#9c9eb9] hover:text-white hover:bg-white/5'
+                  }`}
+                >
+                  {item.isBadge && <Sparkles className="w-3.5 h-3.5 text-[#FFD700]" />}
+                  {item.label}
+                </Link>
+              );
+            })}
+          </div>
+
+          {/* User & Action Buttons */}
+          <div className="hidden md:flex items-center gap-4">
             {isAuthenticated ? (
-              <>
-                {/* Bell */}
-                <div style={{ position: 'relative' }}>
-                  <button onClick={() => setNotifOpen(p => !p)} style={{
-                    background: 'rgba(255,255,255,0.06)', border: '1px solid var(--border)',
-                    borderRadius: '8px', width: '38px', height: '38px',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    cursor: 'pointer', color: 'var(--text-mid)', position: 'relative',
-                    transition: 'all 0.2s',
-                  }}
-                    onMouseOver={e => { e.currentTarget.style.color = '#fff'; e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; }}
-                    onMouseOut={e => { e.currentTarget.style.color = 'var(--text-mid)'; e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; }}
+              <div className="flex items-center gap-3">
+                {/* Notifications */}
+                <div className="relative">
+                  <button
+                    onClick={() => setNotifOpen((p) => !p)}
+                    className="relative w-10 h-10 rounded-full bg-[#131624] border border-white/10 flex items-center justify-center text-[#9c9eb9] hover:text-white hover:border-white/30 transition-all"
                   >
-                    <Bell size={17} />
+                    <Bell className="w-4 h-4" />
                     {unread > 0 && (
-                      <span style={{
-                        position: 'absolute', top: '-4px', right: '-4px', width: '16px', height: '16px',
-                        background: 'var(--red)', borderRadius: '50%', fontSize: '9px', fontWeight: 800,
-                        color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        border: '2px solid var(--bg-nav)',
-                      }}>{unread > 9 ? '9+' : unread}</span>
+                      <span className="absolute -top-1 -right-1 w-5 h-5 bg-[#E50914] text-white text-[10px] font-extrabold rounded-full flex items-center justify-center border-2 border-[#07080e]">
+                        {unread > 9 ? '9+' : unread}
+                      </span>
                     )}
                   </button>
 
+                  {/* Notification Dropdown */}
                   {notifOpen && (
-                    <div style={{
-                      position: 'absolute', right: 0, top: 'calc(100% + 10px)',
-                      width: '320px', background: 'var(--bg-card2)',
-                      border: '1px solid var(--border)', borderRadius: '10px', padding: '16px',
-                      boxShadow: '0 16px 48px rgba(0,0,0,0.6)', zIndex: 100,
-                    }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px', paddingBottom: '10px', borderBottom: '1px solid var(--border)' }}>
-                        <span style={{ fontSize: '13px', fontWeight: 700, color: '#fff' }}>Notifications</span>
+                    <div className="absolute right-0 top-12 w-80 bg-[#0F111A] border border-white/15 rounded-2xl p-4 shadow-2xl z-50 backdrop-blur-xl">
+                      <div className="flex items-center justify-between pb-3 border-b border-white/10">
+                        <span className="text-xs font-extrabold tracking-wider text-white uppercase flex items-center gap-2">
+                          <Bell className="w-3.5 h-3.5 text-[#FFD700]" /> Notifications
+                        </span>
                         {unread > 0 && (
-                          <button onClick={handleMarkRead} style={{ fontSize: '11px', color: 'var(--red)', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600 }}>
+                          <button
+                            onClick={handleMarkRead}
+                            className="text-xs text-[#E50914] font-semibold hover:underline bg-transparent border-0 cursor-pointer"
+                          >
                             Mark all read
                           </button>
                         )}
                       </div>
-                      <div style={{ maxHeight: '260px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                      <div className="max-h-60 overflow-y-auto mt-2 space-y-2">
                         {notifs.length === 0 ? (
-                          <p style={{ textAlign: 'center', fontSize: '13px', color: 'var(--text-muted)', padding: '20px' }}>No notifications</p>
-                        ) : notifs.map(n => (
-                          <div key={n.id} style={{
-                            padding: '10px 12px', borderRadius: '6px',
-                            background: n.is_read ? 'rgba(255,255,255,0.03)' : 'rgba(229,57,53,0.06)',
-                            borderLeft: n.is_read ? '2px solid transparent' : '2px solid var(--red)',
-                          }}>
-                            <p style={{ fontSize: '12px', fontWeight: 700, color: '#f0f0f0' }}>{n.title}</p>
-                            <p style={{ fontSize: '11px', color: 'var(--text-mid)', marginTop: '3px' }}>{n.message}</p>
-                          </div>
-                        ))}
+                          <div className="text-center py-6 text-xs text-gray-500">No new notifications</div>
+                        ) : (
+                          notifs.map((n) => (
+                            <div
+                              key={n.id}
+                              className={`p-3 rounded-xl border-l-4 ${
+                                n.is_read ? 'bg-white/5 border-transparent' : 'bg-[#E50914]/10 border-[#E50914]'
+                              }`}
+                            >
+                              <h5 className="text-xs font-bold text-white">{n.title}</h5>
+                              <p className="text-xs text-gray-400 mt-1">{n.message}</p>
+                            </div>
+                          ))
+                        )}
                       </div>
                     </div>
                   )}
                 </div>
 
-                {/* User avatar */}
-                <Link to="/profile" style={{
-                  display: 'flex', alignItems: 'center', gap: '10px',
-                  textDecoration: 'none', padding: '5px 12px 5px 6px',
-                  background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border)',
-                  borderRadius: '24px', transition: 'all 0.2s',
-                }}
-                  onMouseOver={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
-                  onMouseOut={e => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}
+                {/* Profile Pill */}
+                <Link
+                  to="/profile"
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#131624] border border-white/15 hover:border-[#FFD700]/50 transition-all text-decoration-none"
                 >
-                  <div style={{
-                    width: '28px', height: '28px', borderRadius: '50%',
-                    background: 'linear-gradient(135deg, var(--red), #ff6b6b)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    color: '#fff', fontWeight: 800, fontSize: '13px',
-                  }}>
+                  <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-[#E50914] to-[#FFD700] flex items-center justify-center text-xs font-extrabold text-white">
                     {user?.name?.[0]?.toUpperCase() || 'U'}
                   </div>
-                  <span style={{ fontSize: '13px', fontWeight: 600, color: '#f0f0f0', maxWidth: '100px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                    {user?.name}
-                  </span>
+                  <span className="text-xs font-bold text-white max-w-[100px] truncate">{user?.name}</span>
                 </Link>
 
-                <button onClick={handleLogout}
-                  style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', transition: 'color 0.2s' }}
-                  onMouseOver={e => e.currentTarget.style.color = 'var(--red)'}
-                  onMouseOut={e => e.currentTarget.style.color = 'var(--text-muted)'}
+                {/* Signout */}
+                <button
+                  onClick={handleLogout}
+                  className="p-2 text-gray-400 hover:text-[#E50914] transition-colors bg-transparent border-0 cursor-pointer"
                   title="Sign Out"
                 >
-                  <LogOut size={18} />
+                  <LogOut className="w-5 h-5" />
                 </button>
-              </>
+              </div>
             ) : (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <Link to="/login" className="btn-outline" style={{ padding: '8px 20px', fontSize: '13px' }}>Login</Link>
-                <Link to="/register" className="btn-red" style={{ padding: '8px 20px', fontSize: '13px' }}>Register</Link>
+              <div className="flex items-center gap-3">
+                <Link to="/login" className="btn-cinema-glass text-xs px-5 py-2">
+                  Sign In
+                </Link>
+                <Link to="/register" className="btn-cinema text-xs px-5 py-2">
+                  Book Now
+                </Link>
               </div>
             )}
           </div>
 
-          {/* Mobile toggle */}
-          <button onClick={() => setMobileOpen(p => !p)} className="show-mobile"
-            style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-mid)', display: 'none' }}
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setMobileOpen((p) => !p)}
+            className="md:hidden text-gray-300 hover:text-white p-2"
           >
-            {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+            {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
-      </nav>
 
-      {/* Mobile menu */}
-      {mobileOpen && (
-        <div style={{
-          background: 'var(--bg-nav)', borderBottom: '1px solid var(--border)',
-          padding: '16px 24px', display: 'flex', flexDirection: 'column', gap: '4px',
-        }}>
-          {navItems.map(item => (
-            <Link key={item.label} to={item.to} onClick={() => setMobileOpen(false)}
-              style={{ padding: '10px 0', borderBottom: '1px solid var(--border-sm)', color: 'var(--text-mid)', textDecoration: 'none', fontSize: '15px', fontWeight: 600 }}
-            >{item.label}</Link>
-          ))}
-          {isAuthenticated ? (
-            <>
-              <Link to="/my-bookings" onClick={() => setMobileOpen(false)} style={{ padding: '10px 0', color: 'var(--text-mid)', textDecoration: 'none', fontSize: '15px', fontWeight: 600 }}>My Bookings</Link>
-              <button onClick={() => { handleLogout(); setMobileOpen(false); }}
-                style={{ textAlign: 'left', padding: '10px 0', color: 'var(--red)', fontSize: '15px', fontWeight: 700, background: 'none', border: 'none', cursor: 'pointer' }}>
+        {/* Mobile Navigation Drawer */}
+        {mobileOpen && (
+          <div className="md:hidden bg-[#0F111A] border-b border-white/10 px-6 py-4 space-y-3">
+            <div className="relative mb-3">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search movies..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-[#181a28] text-sm text-white placeholder-gray-500 pl-9 pr-3 py-2 rounded-xl border border-white/10"
+              />
+            </div>
+            {navItems.map((item) => (
+              <Link
+                key={item.label}
+                to={item.to}
+                onClick={() => setMobileOpen(false)}
+                className="block text-sm font-semibold text-gray-300 hover:text-white py-2 border-b border-white/5"
+              >
+                {item.label}
+              </Link>
+            ))}
+            {isAuthenticated ? (
+              <button
+                onClick={() => { handleLogout(); setMobileOpen(false); }}
+                className="w-full text-left text-sm font-bold text-[#E50914] py-2 bg-transparent border-0 cursor-pointer"
+              >
                 Sign Out
               </button>
-            </>
-          ) : (
-            <div style={{ display: 'flex', gap: '10px', paddingTop: '10px' }}>
-              <Link to="/login" onClick={() => setMobileOpen(false)} className="btn-outline" style={{ flex: 1, justifyContent: 'center' }}>Login</Link>
-              <Link to="/register" onClick={() => setMobileOpen(false)} className="btn-red" style={{ flex: 1, justifyContent: 'center' }}>Register</Link>
-            </div>
-          )}
-        </div>
-      )}
+            ) : (
+              <div className="flex gap-2 pt-2">
+                <Link to="/login" onClick={() => setMobileOpen(false)} className="btn-cinema-glass text-center flex-1 py-2 text-xs">
+                  Login
+                </Link>
+                <Link to="/register" onClick={() => setMobileOpen(false)} className="btn-cinema text-center flex-1 py-2 text-xs">
+                  Register
+                </Link>
+              </div>
+            )}
+          </div>
+        )}
+      </header>
 
-      <style>{`
-        @media (max-width: 768px) { .hide-mobile { display: none !important; } .show-mobile { display: flex !important; } }
-        @media (min-width: 769px) { .show-mobile { display: none !important; } }
-      `}</style>
+      {/* Backdrop overlay when search dropdown is active */}
+      {showSearchModal && searchQuery && (
+        <div
+          onClick={() => setShowSearchModal(false)}
+          className="fixed inset-0 z-40 bg-black/50 backdrop-blur-xs"
+        />
+      )}
     </>
   );
 }
