@@ -15,22 +15,22 @@ def _get_service(db: AsyncIOMotorDatabase) -> PaymentService:
     return PaymentService(PaymentRepository(db), BookingRepository(db), NotificationRepository(db))
 
 
-@router.post("/", response_model=PaymentResponse, status_code=201)
+@router.post("/", response_model=PaymentResponse, status_code=201, summary="Process Ticket Payment")
 async def process_payment(
     data: PaymentCreate,
     current_user: dict = Depends(get_current_user),
     db: AsyncIOMotorDatabase = Depends(get_db),
 ):
-    """Process payment for a booking."""
+    """Execute simulated payment gateway transaction (UPI/Card/NetBanking) and confirm ticket booking."""
     service = _get_service(db)
     return await service.process_payment(current_user["_id"], data)
 
 
-@router.get("/history", response_model=List[PaymentResponse])
+@router.get("/history", response_model=List[PaymentResponse], summary="Get Payment History")
 async def payment_history(
     current_user: dict = Depends(get_current_user),
     db: AsyncIOMotorDatabase = Depends(get_db),
 ):
-    """Get current user's payment history."""
+    """Retrieve transaction invoices and payment receipts for the authenticated user."""
     service = _get_service(db)
     return await service.get_payment_history(current_user["_id"])
