@@ -1,16 +1,31 @@
-# React + Vite
+# Frontend - CINEPASS Movie Booking Experience
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A modern, cinematic React single-page application crafted with Tailwind CSS, Lucide icons, and responsive layouts.
 
-Currently, two official plugins are available:
+## ✨ Highlights
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Cinematic UI/UX**: Dark mode aesthetic, neon gradients, glassmorphism, and smooth animations.
+- **Interactive Seat Layout**: Dynamic visual seat map with real-time selection, VIP/Premium/Standard tiers, and seat countdown timers.
+- **Movie Discovery**: Search, genre filters, language chips, trailer modals, and cast highlights.
+- **Checkout & E-Tickets**: Promo code validation, multi-payment options, digital boarding pass QR codes, and booking history.
 
-## React Compiler
+## 🛠️ Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **React 18**: UI component library.
+- **Vite**: Rapid build tool and dev server.
+- **Tailwind CSS**: Utility-first responsive styling.
+- **Lucide React**: Modern icon set.
+- **React Router v6**: Client-side routing.
 
-## Expanding the Oxlint configuration
+## 🏁 Quickstart
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+```bash
+# 1. Install dependencies
+npm install
+
+# 2. Setup environment variables
+cp .env.example .env
+
+# 3. Start development server
+npm run dev
+```
