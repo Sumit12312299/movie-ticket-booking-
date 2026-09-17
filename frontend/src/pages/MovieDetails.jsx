@@ -2,22 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { getMovie, getMovieReviews, createReview } from '../services/api';
 import { useAuth } from '../context/AuthContext';
-import { Star, Clock, Calendar, Ticket, Send, CheckCircle, AlertCircle, ArrowLeft } from 'lucide-react';
-
-const S = {
-  page: { paddingBottom: '60px' },
-  back: { display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#8a9bb0', fontSize: '13px', fontWeight: 600, textDecoration: 'none', marginBottom: '24px', transition: 'color 0.2s' },
-  hero: { display: 'flex', gap: '40px', alignItems: 'flex-start', flexWrap: 'wrap', marginBottom: '48px', background: 'rgba(21,32,43,0.7)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '12px', padding: '36px', backdropFilter: 'blur(10px)' },
-  poster: { width: '240px', minHeight: '340px', borderRadius: '10px', overflow: 'hidden', boxShadow: '0 20px 50px rgba(0,0,0,0.7)', border: '1px solid rgba(255,255,255,0.1)', flexShrink: 0 },
-  info: { flex: 1, minWidth: '260px' },
-  badge: { display: 'inline-block', fontSize: '11px', fontWeight: 700, padding: '3px 10px', borderRadius: '3px', border: '1px solid rgba(0,168,225,0.3)', background: 'rgba(0,168,225,0.1)', color: '#00a8e1', marginRight: '6px', marginBottom: '6px' },
-  genreBadge: { display: 'inline-block', fontSize: '11px', fontWeight: 600, padding: '3px 10px', borderRadius: '3px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.06)', color: '#8a9bb0', marginRight: '6px', marginBottom: '6px' },
-  title: { fontSize: '38px', fontWeight: 900, color: '#fff', lineHeight: 1.1, margin: '12px 0 16px', letterSpacing: '-0.5px' },
-  stats: { display: 'flex', flexWrap: 'wrap', gap: '20px', marginBottom: '20px' },
-  stat: { display: 'flex', alignItems: 'center', gap: '6px', fontSize: '14px', color: '#8a9bb0' },
-  desc: { fontSize: '15px', color: '#8a9bb0', lineHeight: 1.75, marginBottom: '28px', maxWidth: '600px' },
-  card: { background: 'rgba(21,32,43,0.9)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '10px', padding: '24px' },
-};
+import { Star, Clock, Calendar, Ticket, Send, CheckCircle, AlertCircle, ArrowLeft, Play, ShieldCheck, Sparkles, User } from 'lucide-react';
 
 export default function MovieDetails() {
   const { id } = useParams();
@@ -51,7 +36,7 @@ export default function MovieDetails() {
     setRevMsg({ type: '', text: '' });
     try {
       await createReview({ movie_id: id, rating: Number(rating), comment });
-      setRevMsg({ type: 'success', text: '✅ Review submitted successfully!' });
+      setRevMsg({ type: 'success', text: 'Review posted successfully!' });
       setComment('');
       const rRes = await getMovieReviews(id);
       setReviews(rRes.data);
@@ -62,107 +47,151 @@ export default function MovieDetails() {
 
   if (loading) {
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh' }}>
-        <div style={{ width: '40px', height: '40px', border: '3px solid rgba(0,168,225,0.2)', borderTop: '3px solid #00a8e1', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
-        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+      <div className="min-h-[60vh] flex flex-col items-center justify-center space-y-3">
+        <div className="w-12 h-12 border-4 border-[#E50914]/20 border-t-[#E50914] rounded-full animate-spin"></div>
+        <p className="font-bebas text-lg text-gray-400">Loading Movie Experience...</p>
       </div>
     );
   }
   if (!movie) return (
-    <div style={{ textAlign: 'center', padding: '60px', color: '#546e7a' }}>Movie not found.</div>
+    <div className="text-center py-20 text-gray-400 font-bebas text-2xl">Movie details not found.</div>
   );
 
   return (
-    <div style={S.page} className="animate-fadeIn">
-      {/* Back button */}
-      <Link to="/" style={S.back}
-        onMouseOver={e => e.currentTarget.style.color = '#fff'}
-        onMouseOut={e => e.currentTarget.style.color = '#8a9bb0'}
+    <div className="animate-fadeIn max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-12">
+      
+      {/* Back Button */}
+      <Link
+        to="/"
+        className="inline-flex items-center gap-2 text-xs font-bold text-gray-400 hover:text-white transition-colors text-decoration-none group"
       >
-        <ArrowLeft size={16} /> Back to Movies
+        <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+        <span>BACK TO CATALOG</span>
       </Link>
 
-      {/* Hero section */}
-      <div style={S.hero}>
-        {/* Poster */}
-        <div style={S.poster}>
+      {/* Hero Section */}
+      <div className="relative rounded-3xl overflow-hidden bg-[#0F111A] border border-white/15 p-6 sm:p-10 lg:p-12 shadow-2xl">
+        {/* Background Backdrop Vignette */}
+        <div className="absolute inset-0 z-0">
           <img
             src={movie.poster_url || 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=500'}
             alt={movie.title}
-            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', minHeight: '340px' }}
-            onError={e => { e.target.src = 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=500'; }}
+            className="w-full h-full object-cover opacity-20 filter blur-md scale-105"
           />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0F111A] via-[#0F111A]/95 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0F111A] via-transparent to-black/50" />
         </div>
 
-        {/* Info */}
-        <div style={S.info}>
-          {/* Badges */}
-          <div>
-            <span style={S.badge}>Prime Exclusive</span>
-            <span style={S.badge}>{movie.language}</span>
-            {movie.genre?.map((g, i) => <span key={i} style={S.genreBadge}>{g}</span>)}
-          </div>
-
-          <h1 style={S.title}>{movie.title}</h1>
-
-          {/* Stats */}
-          <div style={S.stats}>
-            <div style={S.stat}>
-              <Star size={16} fill="#f59e0b" color="#f59e0b" />
-              <strong style={{ color: '#fff' }}>{reviews.average_rating || 'N/A'}</strong>
-              <span style={{ fontSize: '12px', color: '#546e7a' }}>({reviews.total_reviews} reviews)</span>
+        {/* Content Layout */}
+        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          
+          {/* Poster Container */}
+          <div className="lg:col-span-4 flex justify-center">
+            <div className="relative group w-64 sm:w-72 aspect-[2/3] rounded-2xl overflow-hidden border-2 border-white/20 shadow-2xl">
+              <img
+                src={movie.poster_url || 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=500'}
+                alt={movie.title}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+              <div className="absolute top-3 left-3 bg-[#E50914] text-white font-extrabold text-[10px] uppercase px-2.5 py-1 rounded-md tracking-wider">
+                IN CINEMAS
+              </div>
             </div>
-            <div style={S.stat}><Clock size={15} />{movie.duration_mins} mins</div>
-            <div style={S.stat}><Calendar size={15} />{movie.release_date}</div>
           </div>
 
-          <p style={S.desc}>{movie.description}</p>
+          {/* Movie Details */}
+          <div className="lg:col-span-8 space-y-6">
+            
+            {/* Badges */}
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="bg-[#E50914]/20 border border-[#E50914]/40 text-[#E50914] font-extrabold text-xs px-3 py-1 rounded-full uppercase tracking-wider">
+                {movie.language}
+              </span>
+              <span className="bg-[#FFD700]/10 border border-[#FFD700]/30 text-[#FFD700] font-black text-xs px-3 py-1 rounded-full uppercase tracking-widest">
+                IMAX 3D • 4K LASER
+              </span>
+              {movie.genre?.map((g, i) => (
+                <span key={i} className="bg-white/5 border border-white/10 text-gray-300 text-xs font-medium px-3 py-1 rounded-full">
+                  {g}
+                </span>
+              ))}
+            </div>
 
-          {/* CTA */}
-          <button
-            onClick={() => navigate(`/movie/${movie.id}/select-show`)}
-            className="btn-prime"
-            style={{ fontSize: '15px', padding: '12px 28px' }}
-          >
-            <Ticket size={18} /> Book Tickets
-          </button>
+            {/* Title */}
+            <h1 className="font-bebas text-5xl sm:text-6xl text-white tracking-wide leading-tight">
+              {movie.title}
+            </h1>
+
+            {/* Stats */}
+            <div className="flex flex-wrap items-center gap-6 text-sm text-gray-300 border-y border-white/10 py-3">
+              <div className="flex items-center gap-1.5 text-[#FFD700]">
+                <Star className="w-5 h-5 fill-[#FFD700]" />
+                <span className="font-black text-base text-white">{reviews.average_rating || 4.8}</span>
+                <span className="text-xs text-gray-400">({reviews.total_reviews} reviews)</span>
+              </div>
+              <span>•</span>
+              <div className="flex items-center gap-1.5">
+                <Clock className="w-4 h-4 text-[#E50914]" />
+                <span>{movie.duration_mins} Minutes</span>
+              </div>
+              <span>•</span>
+              <div className="flex items-center gap-1.5">
+                <Calendar className="w-4 h-4 text-[#00E5FF]" />
+                <span>Release: {movie.release_date || '2024'}</span>
+              </div>
+            </div>
+
+            {/* Description */}
+            <p className="text-gray-300 text-sm sm:text-base leading-relaxed">
+              {movie.description}
+            </p>
+
+            {/* CTA */}
+            <div className="pt-4 flex flex-wrap items-center gap-4">
+              <button
+                onClick={() => navigate(`/movie/${movie.id}/select-show`)}
+                className="btn-cinema py-4 px-10 text-base shadow-2xl"
+              >
+                <Ticket className="w-5 h-5" />
+                <span>BOOK TICKETS FOR THIS MOVIE</span>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Reviews */}
-      <section>
-        <h2 style={{ fontSize: '22px', fontWeight: 800, color: '#fff', marginBottom: '24px' }}>
-          Audience Reviews
-          {reviews.total_reviews > 0 && (
-            <span style={{ marginLeft: '12px', fontSize: '14px', fontWeight: 600, color: '#546e7a' }}>
-              {reviews.total_reviews} reviews · avg {reviews.average_rating} ★
-            </span>
-          )}
-        </h2>
+      {/* Reviews Section */}
+      <section className="space-y-6">
+        <div className="flex items-center gap-3">
+          <div className="w-1.5 h-8 bg-[#FFD700] rounded-full shadow-[0_0_12px_#FFD700]" />
+          <h2 className="font-bebas text-4xl text-white tracking-wide">AUDIENCE REVIEWS & RATINGS</h2>
+        </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '24px', flexWrap: 'wrap' }}>
-          {/* Write a review */}
-          <div style={S.card}>
-            <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#fff', marginBottom: '18px' }}>Write a Review</h3>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          
+          {/* Post Review Form */}
+          <div className="lg:col-span-5 bg-[#0F111A] border border-white/15 rounded-3xl p-6 shadow-xl space-y-4">
+            <h3 className="font-bebas text-2xl text-white tracking-wide border-b border-white/10 pb-3">
+              WRITE AN AUDIENCE REVIEW
+            </h3>
 
             {revMsg.text && (
-              <div style={{
-                display: 'flex', gap: '8px', alignItems: 'flex-start',
-                background: revMsg.type === 'success' ? 'rgba(70,211,105,0.08)' : 'rgba(244,67,54,0.08)',
-                border: `1px solid ${revMsg.type === 'success' ? 'rgba(70,211,105,0.3)' : 'rgba(244,67,54,0.3)'}`,
-                borderRadius: '6px', padding: '10px 12px', marginBottom: '16px',
-              }}>
-                {revMsg.type === 'success'
-                  ? <CheckCircle size={15} color="#46d369" />
-                  : <AlertCircle size={15} color="#f44336" />}
-                <span style={{ fontSize: '13px', color: revMsg.type === 'success' ? '#46d369' : '#f44336' }}>{revMsg.text}</span>
+              <div className={`p-3 rounded-xl border text-xs flex items-center gap-2 ${
+                revMsg.type === 'success' ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' : 'bg-red-500/10 border-red-500/30 text-red-400'
+              }`}>
+                {revMsg.type === 'success' ? <CheckCircle className="w-4 h-4" /> : <AlertCircle className="w-4 h-4" />}
+                <span>{revMsg.text}</span>
               </div>
             )}
 
-            <form onSubmit={handleReview}>
-              <div style={{ marginBottom: '14px' }}>
-                <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: '#8a9bb0', marginBottom: '6px' }}>Rating</label>
-                <select value={rating} onChange={e => setRating(e.target.value)} className="input-field">
+            <form onSubmit={handleReview} className="space-y-4">
+              <div>
+                <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Rating</label>
+                <select
+                  value={rating}
+                  onChange={(e) => setRating(e.target.value)}
+                  className="w-full bg-[#181a28] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#FFD700]"
+                >
                   <option value={5}>⭐⭐⭐⭐⭐ Outstanding (5/5)</option>
                   <option value={4}>⭐⭐⭐⭐ Great (4/5)</option>
                   <option value={3}>⭐⭐⭐ Good (3/5)</option>
@@ -170,46 +199,59 @@ export default function MovieDetails() {
                   <option value={1}>⭐ Poor (1/5)</option>
                 </select>
               </div>
-              <div style={{ marginBottom: '16px' }}>
-                <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: '#8a9bb0', marginBottom: '6px' }}>Your Review</label>
+
+              <div>
+                <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Your Thoughts</label>
                 <textarea
-                  rows={4} required value={comment}
-                  onChange={e => setComment(e.target.value)}
-                  placeholder="Share your thoughts about this movie..."
-                  className="input-field"
-                  style={{ resize: 'vertical', fontFamily: 'inherit' }}
+                  rows={4}
+                  required
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
+                  placeholder="Share your review of the performance, visuals, sound..."
+                  className="w-full bg-[#181a28] border border-white/10 rounded-xl p-4 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[#FFD700]"
                 />
               </div>
-              <button type="submit" disabled={submitting} className="btn-prime" style={{ width: '100%', justifyContent: 'center', opacity: submitting ? 0.7 : 1 }}>
-                <Send size={15} /> {submitting ? 'Submitting...' : 'Post Review'}
+
+              <button
+                type="submit"
+                disabled={submitting}
+                className="btn-cinema-gold w-full py-3 text-sm rounded-xl flex items-center justify-center gap-2"
+              >
+                <Send className="w-4 h-4" />
+                <span>{submitting ? 'Posting...' : 'Post Audience Review'}</span>
               </button>
             </form>
           </div>
 
-          {/* Reviews list */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+          {/* Reviews List */}
+          <div className="lg:col-span-7 space-y-4">
             {reviews.reviews.length === 0 ? (
-              <div style={{ ...S.card, textAlign: 'center', color: '#546e7a', fontSize: '14px', padding: '40px' }}>
-                No reviews yet. Be the first!
+              <div className="bg-[#0F111A] border border-white/10 rounded-3xl p-12 text-center text-gray-500 text-sm">
+                No audience reviews yet. Be the first to share your thoughts!
               </div>
-            ) : reviews.reviews.map(r => (
-              <div key={r.id} style={S.card}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                  <span style={{ fontWeight: 700, fontSize: '14px', color: '#f0f4f8' }}>{r.user_name}</span>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                    {[...Array(r.rating)].map((_, i) => <Star key={i} size={13} fill="#f59e0b" color="#f59e0b" />)}
-                    <span style={{ fontSize: '12px', color: '#8a9bb0', marginLeft: '4px' }}>{r.rating}/5</span>
+            ) : (
+              reviews.reviews.map((r) => (
+                <div key={r.id} className="bg-[#0F111A] border border-white/10 rounded-2xl p-5 space-y-2 hover:border-white/20 transition-all">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-full bg-[#E50914]/20 border border-[#E50914]/40 flex items-center justify-center text-white font-extrabold text-xs">
+                        {r.user_name?.[0]?.toUpperCase() || 'U'}
+                      </div>
+                      <span className="text-sm font-bold text-white">{r.user_name}</span>
+                    </div>
+                    <div className="flex items-center gap-1 bg-[#FFD700]/10 border border-[#FFD700]/30 px-2.5 py-1 rounded-full">
+                      <Star className="w-3.5 h-3.5 fill-[#FFD700] text-[#FFD700]" />
+                      <span className="text-xs font-black text-[#FFD700]">{r.rating}/5</span>
+                    </div>
                   </div>
+                  <p className="text-xs sm:text-sm text-gray-300 leading-relaxed">{r.comment}</p>
                 </div>
-                <p style={{ fontSize: '13px', color: '#8a9bb0', lineHeight: 1.65 }}>{r.comment}</p>
-                <span style={{ fontSize: '11px', color: '#2d3f54', display: 'block', marginTop: '8px' }}>
-                  {new Date(r.created_at).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' })}
-                </span>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </div>
       </section>
+
     </div>
   );
 }
