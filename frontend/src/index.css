@@ -1,203 +1,349 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 /* ========================================
-   MOVIEHUB DESIGN SYSTEM
+   CINEMATIC DESIGN SYSTEM - CINEPASS
    ======================================== */
+
 :root {
   /* Brand Colors */
-  --red:         #E53935;
-  --red-hover:   #EF5350;
-  --red-dim:     rgba(229, 57, 53, 0.12);
-  --red-border:  rgba(229, 57, 53, 0.3);
+  --cinema-red:       #E50914;
+  --cinema-red-glow:  #FF1E27;
+  --cinema-gold:      #FFD700;
+  --cinema-cyan:      #00E5FF;
 
   /* Backgrounds */
-  --bg-base:     #0b0c1a;
-  --bg-nav:      #0f1020;
-  --bg-card:     #141528;
-  --bg-card2:    #1a1b2e;
-  --bg-input:    rgba(255,255,255,0.05);
-  --bg-hover:    rgba(255,255,255,0.04);
+  --bg-obsidian:  #07080E;
+  --bg-dark-card: #0F111A;
+  --bg-dark-elevated: #161926;
+  --bg-glass:     rgba(15, 17, 26, 0.75);
 
-  /* Borders */
-  --border:      rgba(255,255,255,0.07);
-  --border-sm:   rgba(255,255,255,0.05);
+  /* Glass Borders */
+  --border-glass: rgba(255, 255, 255, 0.08);
+  --border-red-glow: rgba(229, 9, 20, 0.4);
 
-  /* Text */
-  --text-white:  #FFFFFF;
-  --text-light:  #E0E0E0;
-  --text-mid:    #9E9EB8;
-  --text-muted:  #555570;
-
-  /* Status */
-  --green:       #4CAF50;
-  --yellow:      #FFC107;
-  --blue:        #2196F3;
-  --orange:      #FF9800;
+  /* Typography */
+  --font-bebas:  'Bebas Neue', sans-serif;
+  --font-cinzel: 'Cinzel', serif;
+  --font-outfit: 'Outfit', sans-serif;
 }
 
 *, *::before, *::after {
-  box-sizing: border-box; margin: 0; padding: 0;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  color-scheme: dark;
+}
 
 body {
-  font-family: 'Inter', -apple-system, sans-serif;
-  background: var(--bg-base);
-  color: var(--text-light);
-  -webkit-font-smoothing: antialiased;
+  font-family: var(--font-outfit), sans-serif;
+  background-color: var(--bg-obsidian);
+  color: #E2E4F0;
   min-height: 100vh;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Scrollbar */
-::-webkit-scrollbar        { width: 6px; height: 6px; }
-::-webkit-scrollbar-track  { background: var(--bg-base); }
-::-webkit-scrollbar-thumb  { background: #2a2b42; border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: #383955; }
+/* Custom Typography Helpers */
+.font-bebas { font-family: var(--font-bebas); letter-spacing: 1px; }
+.font-cinzel { font-family: var(--font-cinzel); }
+.font-outfit { font-family: var(--font-outfit); }
+
+/* Cinema Scrollbar */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: #07080E; }
+::-webkit-scrollbar-thumb { background: #1f2333; border-radius: 4px; border: 1px solid rgba(255,255,255,0.05); }
+::-webkit-scrollbar-thumb:hover { background: var(--cinema-red); }
 
 /* ========================================
-   COMPONENTS
+   CINEMATIC GLOW & LIGHTING FX
    ======================================== */
 
-/* Buttons */
-.btn-red {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: var(--red); color: #fff;
-  font-weight: 700; font-size: 14px;
-  padding: 11px 24px; border-radius: 6px;
-  border: none; cursor: pointer; text-decoration: none;
-  transition: background 0.2s, box-shadow 0.2s;
-  white-space: nowrap;
+.glow-red {
+  box-shadow: 0 0 25px rgba(229, 9, 20, 0.45);
 }
-.btn-red:hover {
-  background: var(--red-hover);
-  box-shadow: 0 4px 20px rgba(229,57,53,0.35);
+.glow-red-lg {
+  box-shadow: 0 0 40px rgba(229, 9, 20, 0.65), 0 0 80px rgba(229, 9, 20, 0.2);
+}
+.glow-gold {
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+}
+.glow-cyan {
+  box-shadow: 0 0 25px rgba(0, 229, 255, 0.35);
 }
 
-.btn-outline {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: transparent; color: var(--text-light);
-  font-weight: 700; font-size: 14px;
-  padding: 10px 22px; border-radius: 6px;
-  border: 1px solid var(--border); cursor: pointer; text-decoration: none;
-  transition: all 0.2s;
+.text-glow-red {
+  text-shadow: 0 0 15px rgba(229, 9, 20, 0.7);
 }
-.btn-outline:hover {
-  border-color: rgba(255,255,255,0.2);
-  background: var(--bg-hover);
-  color: #fff;
+.text-glow-gold {
+  text-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
 }
 
-.btn-ghost {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: rgba(255,255,255,0.07); color: var(--text-light);
-  font-weight: 600; font-size: 13px;
-  padding: 9px 18px; border-radius: 6px;
-  border: 1px solid var(--border); cursor: pointer; text-decoration: none;
-  transition: all 0.2s;
-}
-.btn-ghost:hover { background: rgba(255,255,255,0.12); color: #fff; }
-
-/* Cards */
-.card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 10px;
+/* Projector Beam Animation */
+@keyframes projectorBeam {
+  0% { opacity: 0.3; transform: scaleX(0.96) rotate(-1deg); }
+  50% { opacity: 0.6; transform: scaleX(1.04) rotate(1deg); }
+  100% { opacity: 0.3; transform: scaleX(0.96) rotate(-1deg); }
 }
 
-/* Movie Card */
-.movie-card {
-  flex-shrink: 0;
-  background: var(--bg-card);
+.projector-light-beam {
+  background: linear-gradient(180deg, rgba(255,255,255,0.25) 0%, rgba(229,9,20,0.1) 40%, transparent 100%);
+  clip-path: polygon(40% 0%, 60% 0%, 100% 100%, 0% 100%);
+  animation: projectorBeam 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Screen Light Arc */
+.cinema-screen-3d {
+  position: relative;
+  height: 24px;
+  width: 80%;
+  margin: 0 auto 30px auto;
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  background: linear-gradient(180deg, #FFFFFF 0%, rgba(229,9,20,0.6) 40%, rgba(7,8,14,0) 100%);
+  box-shadow: 0 -8px 30px rgba(255, 255, 255, 0.8), 0 -15px 50px rgba(229, 9, 20, 0.7);
+  transform: perspective(300px) rotateX(-20deg);
+}
+
+.cinema-screen-3d::after {
+  content: 'SCREEN THIS WAY';
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-bebas);
+  font-size: 13px;
+  letter-spacing: 4px;
+  color: rgba(255, 255, 255, 0.5);
+  text-shadow: 0 0 10px rgba(255,255,255,0.5);
+}
+
+/* ========================================
+   CINEMATIC BUTTONS & CARDS
+   ======================================== */
+
+.btn-cinema {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: linear-gradient(135deg, #E50914 0%, #B80710 100%);
+  color: #FFFFFF;
+  font-family: var(--font-outfit);
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.5px;
+  padding: 12px 28px;
   border-radius: 8px;
-  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.2);
   cursor: pointer;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-  border: 1px solid var(--border-sm);
-}
-.movie-card:hover {
-  transform: scale(1.04) translateY(-3px);
-  box-shadow: 0 12px 30px rgba(0,0,0,0.5);
-  border-color: rgba(229,57,53,0.3);
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 20px rgba(229, 9, 20, 0.4);
 }
 
-/* Inputs */
-.mh-input {
+.btn-cinema:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(229, 9, 20, 0.7), 0 0 15px rgba(255,215,0,0.4);
+  background: linear-gradient(135deg, #FF1E27 0%, #E50914 100%);
+}
+
+.btn-cinema-gold {
+  background: linear-gradient(135deg, #FFD700 0%, #D4AF37 100%);
+  color: #07080E;
+  font-weight: 800;
+  border: 1px solid rgba(255,255,255,0.4);
+  box-shadow: 0 4px 20px rgba(255, 215, 0, 0.35);
+}
+
+.btn-cinema-gold:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(255, 215, 0, 0.6);
+  background: linear-gradient(135deg, #FFE44D 0%, #FFD700 100%);
+}
+
+.btn-cinema-glass {
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(12px);
+  color: #E2E4F0;
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  transition: all 0.25s ease;
+}
+
+.btn-cinema-glass:hover {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #FFFFFF;
+  transform: translateY(-2px);
+}
+
+/* Card Glassmorphism */
+.glass-card {
+  background: rgba(15, 17, 26, 0.85);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+}
+
+.glass-card-hover {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card-hover:hover {
+  transform: translateY(-5px) scale(1.01);
+  border-color: rgba(229, 9, 20, 0.4);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 20px rgba(229, 9, 20, 0.2);
+}
+
+/* Movie Card Poster 3D Hover */
+.movie-poster-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.movie-poster-card:hover {
+  transform: scale(1.05) translateY(-6px);
+  border-color: var(--cinema-red);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 0 0 25px rgba(229, 9, 20, 0.4);
+}
+
+.movie-poster-card .play-overlay {
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.3s ease;
+}
+
+.movie-poster-card:hover .play-overlay {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ========================================
+   CINEMA TICKET STUB UI
+   ======================================== */
+
+.ticket-container {
+  background: linear-gradient(145deg, #141724 0%, #0b0c14 100%);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 30px rgba(255,215,0,0.15);
+}
+
+.ticket-stub-divider {
+  position: relative;
+  border-left: 2px dashed rgba(255, 255, 255, 0.2);
+}
+
+.ticket-stub-divider::before, .ticket-stub-divider::after {
+  content: '';
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  background-color: #07080E;
+  border-radius: 50%;
+  left: -13px;
+}
+
+.ticket-stub-divider::before { top: -12px; }
+.ticket-stub-divider::after { bottom: -12px; }
+
+/* Barcode Scanner Line */
+@keyframes scanLine {
+  0% { top: 0%; opacity: 0.8; }
+  50% { top: 90%; opacity: 1; }
+  100% { top: 0%; opacity: 0.8; }
+}
+
+.barcode-scanner-line {
+  position: absolute;
+  left: 0;
   width: 100%;
-  background: var(--bg-input);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 12px 16px;
-  color: var(--text-light);
-  font-size: 14px;
-  font-family: inherit;
-  outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  height: 2px;
+  background: var(--cinema-red);
+  box-shadow: 0 0 10px var(--cinema-red);
+  animation: scanLine 2.5s infinite ease-in-out;
 }
-.mh-input:focus {
-  border-color: var(--red);
-  box-shadow: 0 0 0 3px rgba(229,57,53,0.12);
+
+/* ========================================
+   SEAT STYLING & ANIMATIONS
+   ======================================== */
+
+.seat-btn {
+  width: 30px;
+  height: 28px;
+  border-radius: 6px 6px 9px 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  user-select: none;
+  position: relative;
 }
-.mh-input::placeholder { color: var(--text-muted); }
-.mh-input option { background: #1a1b2e; }
 
-/* Horizontal scroll row */
-.scroll-row {
-  display: flex; gap: 16px;
-  overflow-x: auto; padding-bottom: 8px;
-  -ms-overflow-style: none; scrollbar-width: none;
+.seat-available {
+  background: #191c2b;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #8c93b3;
 }
-.scroll-row::-webkit-scrollbar { display: none; }
 
-/* Star rating */
-.stars { display: inline-flex; align-items: center; gap: 2px; }
-
-/* Badges */
-.badge {
-  display: inline-flex; align-items: center;
-  font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
-  text-transform: uppercase; padding: 3px 8px; border-radius: 4px;
+.seat-available:hover {
+  background: var(--cinema-red);
+  border-color: #FF5A60;
+  color: #FFFFFF;
+  transform: scale(1.18);
+  box-shadow: 0 0 12px rgba(229, 9, 20, 0.8);
+  z-index: 10;
 }
-.badge-red    { background: var(--red-dim); color: var(--red); border: 1px solid var(--red-border); }
-.badge-green  { background: rgba(76,175,80,0.12); color: #4CAF50; border: 1px solid rgba(76,175,80,0.3); }
-.badge-blue   { background: rgba(33,150,243,0.12); color: #2196F3; border: 1px solid rgba(33,150,243,0.3); }
-.badge-orange { background: rgba(255,152,0,0.12); color: #FF9800; border: 1px solid rgba(255,152,0,0.3); }
 
-/* Section heading */
-.section-heading {
-  font-size: 20px; font-weight: 800;
-  color: var(--text-white); margin-bottom: 20px;
-  display: flex; align-items: center; justify-content: space-between;
+.seat-selected {
+  background: linear-gradient(135deg, #E50914 0%, #FF3842 100%);
+  border: 1px solid #FFA3A6;
+  color: #FFFFFF;
+  box-shadow: 0 0 15px rgba(229, 9, 20, 0.9);
+  transform: scale(1.1);
+  z-index: 5;
 }
-.section-heading a, .section-heading button {
-  font-size: 13px; font-weight: 600; color: var(--red);
-  text-decoration: none; background: none; border: none;
-  cursor: pointer; transition: color 0.2s;
+
+.seat-booked {
+  background: #0d0e17;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  color: #2c2f42;
+  cursor: not-allowed;
+  opacity: 0.5;
 }
-.section-heading a:hover, .section-heading button:hover { color: var(--red-hover); }
 
-/* Seat styles */
-.seat {
-  width: 28px; height: 26px; border-radius: 5px 5px 8px 8px;
-  cursor: pointer; display: flex; align-items: center; justify-content: center;
-  font-size: 9px; font-weight: 700; transition: all 0.15s; border: 1px solid transparent;
+/* Seat Row Header Label */
+.seat-row-label {
+  font-family: var(--font-bebas);
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 15px;
+  width: 24px;
+  text-align: center;
 }
-.seat-avail  { background: #1e2240; border-color: #2a2f55; color: #6d7aad; }
-.seat-avail:hover  { background: var(--red); border-color: var(--red); color: #fff; transform: scale(1.1); }
-.seat-sel    { background: var(--red); border-color: #ff6b6b; color: #fff; box-shadow: 0 0 8px rgba(229,57,53,0.5); }
-.seat-booked { background: #111220; border-color: #1a1b2e; color: #2a2b3a; cursor: not-allowed; }
 
-/* Animations */
-@keyframes fadeIn   { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes mh-spin  { to { transform: rotate(360deg); } }
-@keyframes shimmer  { 0% { background-position: -600px 0; } 100% { background-position: 600px 0; } }
+/* Horizontal Scroll Bar Hide */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-.animate-fadeIn { animation: fadeIn 0.35s ease-out both; }
+/* Pulse animation */
+@keyframes cinemaPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.04); }
+}
 
-.skeleton {
-  background: linear-gradient(90deg, #141528 25%, #1d1e33 50%, #141528 75%);
-  background-size: 600px 100%;
-  animation: shimmer 1.5s infinite;
+.animate-cinemaPulse {
+  animation: cinemaPulse 3s infinite ease-in-out;
 }
