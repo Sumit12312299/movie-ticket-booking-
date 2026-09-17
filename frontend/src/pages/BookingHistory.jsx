@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { getMyBookings, cancelBooking } from '../services/api';
-import { Ticket, Calendar, XCircle, Clock, Film, CheckCircle, AlertTriangle } from 'lucide-react';
+import { Ticket, Calendar, XCircle, Clock, Film, CheckCircle, AlertTriangle, Sparkles, QrCode } from 'lucide-react';
 
 const STATUS = {
-  confirmed: { bg: 'rgba(70,211,105,0.08)', border: 'rgba(70,211,105,0.3)', color: '#46d369' },
-  cancelled:  { bg: 'rgba(244,67,54,0.08)',  border: 'rgba(244,67,54,0.3)',  color: '#f44336' },
-  pending:    { bg: 'rgba(255,153,0,0.08)',   border: 'rgba(255,153,0,0.3)',  color: '#ff9900' },
+  confirmed: { bg: 'bg-emerald-500/10', border: 'border-emerald-500/30', color: 'text-emerald-400' },
+  cancelled:  { bg: 'bg-red-500/10', border: 'border-red-500/30', color: 'text-red-400' },
+  pending:    { bg: 'bg-amber-500/10', border: 'border-amber-500/30', color: 'text-amber-400' },
 };
 
 export default function BookingHistory() {
@@ -26,7 +26,7 @@ export default function BookingHistory() {
   };
 
   const handleCancel = async (id) => {
-    if (!window.confirm('Cancel this booking? This action cannot be undone.')) return;
+    if (!window.confirm('Cancel this booking? Seats will be returned to the live layout.')) return;
     setCancelId(id);
     try {
       await cancelBooking(id);
@@ -36,42 +36,43 @@ export default function BookingHistory() {
     } finally { setCancelId(null); }
   };
 
-  const filtered = filter === 'all' ? bookings : bookings.filter(b => b.status === filter);
+  const filtered = filter === 'all' ? bookings : bookings.filter((b) => b.status === filter);
 
   if (loading) {
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh' }}>
-        <div style={{ width: '40px', height: '40px', border: '3px solid rgba(0,168,225,0.2)', borderTop: '3px solid #00a8e1', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
-        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+      <div className="min-h-[60vh] flex flex-col items-center justify-center space-y-3">
+        <div className="w-12 h-12 border-4 border-[#E50914]/20 border-t-[#E50914] rounded-full animate-spin"></div>
+        <p className="font-bebas text-lg text-gray-400">Retrieving E-Tickets...</p>
       </div>
     );
   }
 
   return (
-    <div style={{ paddingBottom: '60px' }} className="animate-fadeIn">
+    <div className="animate-fadeIn max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8">
+      
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '28px', flexWrap: 'wrap', gap: '16px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <Ticket size={26} color="#00a8e1" />
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-6">
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 rounded-2xl bg-[#E50914] flex items-center justify-center text-white shadow-lg shadow-[#E50914]/30">
+            <Ticket className="w-6 h-6" />
+          </div>
           <div>
-            <h1 style={{ fontSize: '26px', fontWeight: 900, color: '#fff', margin: 0 }}>My Bookings</h1>
-            <p style={{ fontSize: '13px', color: '#546e7a', margin: 0 }}>{bookings.length} total booking{bookings.length !== 1 ? 's' : ''}</p>
+            <h1 className="font-bebas text-4xl text-white tracking-wide">MY CINEMA PASSES</h1>
+            <p className="text-xs text-gray-400">Total {bookings.length} reservations recorded</p>
           </div>
         </div>
 
-        {/* Filter tabs */}
-        <div style={{ display: 'flex', gap: '8px' }}>
-          {['all', 'confirmed', 'cancelled'].map(f => (
+        {/* Filter Pills */}
+        <div className="flex items-center gap-2">
+          {['all', 'confirmed', 'cancelled'].map((f) => (
             <button
               key={f}
               onClick={() => setFilter(f)}
-              style={{
-                fontSize: '12px', fontWeight: 700, padding: '7px 16px', borderRadius: '6px',
-                border: filter === f ? '1px solid rgba(0,168,225,0.5)' : '1px solid rgba(255,255,255,0.08)',
-                background: filter === f ? 'rgba(0,168,225,0.1)' : 'rgba(255,255,255,0.03)',
-                color: filter === f ? '#00a8e1' : '#8a9bb0',
-                cursor: 'pointer', textTransform: 'capitalize', transition: 'all 0.2s',
-              }}
+              className={`px-4 py-2 rounded-xl text-xs font-bold capitalize transition-all cursor-pointer ${
+                filter === f
+                  ? 'bg-[#E50914] text-white shadow-md'
+                  : 'bg-[#131624] text-gray-400 border border-white/10 hover:text-white'
+              }`}
             >
               {f}
             </button>
@@ -80,98 +81,61 @@ export default function BookingHistory() {
       </div>
 
       {filtered.length === 0 ? (
-        <div style={{
-          background: 'rgba(21,32,43,0.7)', border: '1px solid rgba(255,255,255,0.07)',
-          borderRadius: '12px', padding: '60px', textAlign: 'center',
-        }}>
-          <Film size={48} color="#2d3f54" style={{ margin: '0 auto 16px' }} />
-          <p style={{ fontSize: '16px', fontWeight: 700, color: '#546e7a' }}>
-            {filter === 'all' ? 'No bookings yet' : `No ${filter} bookings`}
-          </p>
-          <p style={{ fontSize: '13px', color: '#2d3f54', marginTop: '6px' }}>
-            Browse movies and book your first ticket!
-          </p>
+        <div className="bg-[#0F111A] border border-white/10 rounded-3xl p-16 text-center space-y-3">
+          <Film className="w-12 h-12 text-gray-600 mx-auto" />
+          <h3 className="font-bebas text-2xl text-gray-400">No {filter !== 'all' ? filter : ''} E-Tickets Found</h3>
+          <p className="text-xs text-gray-500">Explore the latest movies and reserve your first IMAX seat!</p>
         </div>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(380px, 1fr))', gap: '20px' }}>
-          {filtered.map(b => {
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filtered.map((b) => {
             const st = STATUS[b.status] || STATUS.pending;
             return (
-              <div key={b.id} style={{
-                background: 'rgba(21,32,43,0.9)', border: '1px solid rgba(255,255,255,0.07)',
-                borderRadius: '12px', padding: '24px', position: 'relative', overflow: 'hidden',
-              }}>
-                {/* Status accent bar */}
-                <div style={{ position: 'absolute', top: 0, left: 0, bottom: 0, width: '3px', background: st.color, borderRadius: '12px 0 0 12px' }} />
-
-                {/* Movie name + status */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px', paddingLeft: '8px' }}>
+              <div key={b.id} className="bg-[#0F111A] border border-white/15 rounded-3xl p-6 shadow-xl relative overflow-hidden flex flex-col justify-between space-y-4 hover:border-white/30 transition-all">
+                
+                {/* Accent Status Indicator */}
+                <div className="flex items-start justify-between">
                   <div>
-                    <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#fff', margin: '0 0 4px' }}>{b.movie_title}</h3>
-                    <p style={{ fontSize: '12px', color: '#546e7a', margin: 0 }}>{b.theatre_name}</p>
+                    <h3 className="font-bebas text-2xl text-white tracking-wide leading-tight">{b.movie_title}</h3>
+                    <p className="text-xs text-gray-400">{b.theatre_name || 'INOX Grand'}</p>
                   </div>
-                  <span style={{
-                    fontSize: '10px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.5px',
-                    padding: '4px 10px', borderRadius: '4px', flexShrink: 0,
-                    background: st.bg, border: `1px solid ${st.border}`, color: st.color,
-                    display: 'flex', alignItems: 'center', gap: '4px',
-                  }}>
-                    {b.status === 'confirmed' ? <CheckCircle size={10} /> : b.status === 'cancelled' ? <XCircle size={10} /> : <AlertTriangle size={10} />}
+                  <span className={`text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-full border flex items-center gap-1 ${st.bg} ${st.border} ${st.color}`}>
+                    {b.status === 'confirmed' ? <CheckCircle className="w-3 h-3" /> : <XCircle className="w-3 h-3" />}
                     {b.status}
                   </span>
                 </div>
 
-                {/* Details grid */}
-                <div style={{
-                  display: 'grid', gridTemplateColumns: '1fr 1fr',
-                  gap: '12px', paddingTop: '16px', borderTop: '1px solid rgba(255,255,255,0.06)',
-                  marginLeft: '8px',
-                }}>
+                <div className="grid grid-cols-2 gap-3 text-xs bg-[#131624] border border-white/5 rounded-2xl p-4">
                   <div>
-                    <p style={{ fontSize: '11px', color: '#546e7a', marginBottom: '3px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Seats</p>
-                    <p style={{ fontSize: '14px', fontWeight: 700, color: '#00a8e1' }}>{b.seats?.join(', ')}</p>
+                    <span className="text-[9px] font-bold text-gray-500 uppercase block">Reserved Seats</span>
+                    <span className="font-extrabold text-[#E50914] text-sm">{b.seats?.join(', ')}</span>
                   </div>
                   <div>
-                    <p style={{ fontSize: '11px', color: '#546e7a', marginBottom: '3px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Amount Paid</p>
-                    <p style={{ fontSize: '14px', fontWeight: 700, color: '#fff' }}>₹{b.total_amount}</p>
+                    <span className="text-[9px] font-bold text-gray-500 uppercase block">Total Amount</span>
+                    <span className="font-extrabold text-white text-sm">₹{b.total_amount}</span>
                   </div>
-                  <div>
-                    <p style={{ fontSize: '11px', color: '#546e7a', marginBottom: '3px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Booking Date</p>
-                    <p style={{ fontSize: '13px', color: '#8a9bb0', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                      <Calendar size={12} />
-                      {new Date(b.booking_time).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' })}
-                    </p>
-                  </div>
-                  <div>
-                    <p style={{ fontSize: '11px', color: '#546e7a', marginBottom: '3px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Booking ID</p>
-                    <p style={{ fontSize: '11px', fontFamily: 'monospace', color: '#546e7a' }}>{b.id?.slice(0, 12)}…</p>
+                  <div className="col-span-2 pt-2 border-t border-white/5 flex justify-between items-center text-[10px] text-gray-400">
+                    <span>Date: {new Date(b.booking_time).toLocaleDateString('en-IN')}</span>
+                    <span className="font-mono text-gray-500">ID: {b.id?.slice(0, 10)}...</span>
                   </div>
                 </div>
 
-                {/* Cancel action */}
                 {b.status === 'confirmed' && (
-                  <div style={{ marginTop: '16px', paddingLeft: '8px', display: 'flex', justifyContent: 'flex-end' }}>
-                    <button
-                      onClick={() => handleCancel(b.id)}
-                      disabled={cancellingId === b.id}
-                      style={{
-                        display: 'flex', alignItems: 'center', gap: '5px',
-                        fontSize: '12px', fontWeight: 700, color: '#f44336',
-                        background: 'none', border: 'none', cursor: 'pointer',
-                        opacity: cancellingId === b.id ? 0.5 : 1,
-                        transition: 'opacity 0.2s',
-                      }}
-                    >
-                      <XCircle size={14} />
-                      {cancellingId === b.id ? 'Cancelling…' : 'Cancel Booking'}
-                    </button>
-                  </div>
+                  <button
+                    onClick={() => handleCancel(b.id)}
+                    disabled={cancellingId === b.id}
+                    className="text-xs font-bold text-red-400 hover:text-red-300 flex items-center justify-end gap-1 bg-transparent border-0 cursor-pointer self-end"
+                  >
+                    <XCircle className="w-3.5 h-3.5" />
+                    <span>{cancellingId === b.id ? 'Cancelling...' : 'Cancel Reservation'}</span>
+                  </button>
                 )}
               </div>
             );
           })}
         </div>
       )}
+
     </div>
   );
 }
