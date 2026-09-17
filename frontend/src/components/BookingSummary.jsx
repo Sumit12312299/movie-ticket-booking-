@@ -1,5 +1,5 @@
 import React from 'react';
-import { Ticket, Calendar, Clock, Film } from 'lucide-react';
+import { Ticket, Calendar, Clock, Film, Sparkles } from 'lucide-react';
 
 export default function BookingSummary({ show, selectedSeats = [], onProceed, loading = false }) {
   const price = show?.price || 0;
@@ -11,34 +11,42 @@ export default function BookingSummary({ show, selectedSeats = [], onProceed, lo
   const showTime = show?.show_time ? new Date(show.show_time).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' }) : '';
 
   return (
-    <div className="card" style={{ padding: '24px', display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'space-between' }}>
-      <div>
-        <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#fff', borderBottom: '1px solid var(--border)', paddingBottom: '16px', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Ticket size={20} color="var(--red)" />
-          Booking Summary
-        </h3>
+    <div className="bg-[#0F111A] border border-white/15 rounded-3xl p-6 shadow-2xl flex flex-col justify-between space-y-6">
+      <div className="space-y-6">
+        
+        {/* Header */}
+        <div className="flex items-center justify-between border-b border-white/10 pb-4">
+          <div className="flex items-center gap-2">
+            <Ticket className="w-5 h-5 text-[#E50914]" />
+            <h3 className="font-bebas text-2xl text-white tracking-wide">BOOKING SUMMARY</h3>
+          </div>
+          <span className="text-[10px] font-black text-[#FFD700] bg-[#FFD700]/10 border border-[#FFD700]/30 px-2 py-0.5 rounded uppercase">
+            IMAX PASS
+          </span>
+        </div>
 
-        {/* Movie Details */}
-        <div style={{ marginBottom: '24px' }}>
-          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', marginBottom: '12px' }}>
-            <Film size={18} color="var(--text-muted)" style={{ marginTop: '2px' }} />
+        {/* Movie Info */}
+        <div className="space-y-3">
+          <div className="flex items-start gap-3">
+            <Film className="w-5 h-5 text-[#E50914] shrink-0 mt-1" />
             <div>
-              <p style={{ fontSize: '15px', fontWeight: 700, color: '#fff', margin: '0 0 4px' }}>{show?.movie_title}</p>
-              <p style={{ fontSize: '13px', color: 'var(--text-mid)', margin: 0 }}>{show?.theatre_name}</p>
+              <h4 className="font-bebas text-xl text-white tracking-wide">{show?.movie_title}</h4>
+              <p className="text-xs text-gray-400 font-medium">{show?.theatre_name}</p>
             </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', fontSize: '12px', color: 'var(--text-mid)', marginLeft: '28px' }}>
-            <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Calendar size={14} color="var(--text-muted)" /> {showDate}</span>
-            <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Clock size={14} color="var(--text-muted)" /> {showTime}</span>
+          <div className="flex items-center gap-4 text-xs text-gray-300 font-semibold pl-8">
+            <span className="flex items-center gap-1"><Calendar className="w-3.5 h-3.5 text-[#00E5FF]" /> {showDate}</span>
+            <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5 text-[#FFD700]" /> {showTime}</span>
           </div>
 
+          {/* Selected Seat Badges */}
           {selectedSeats.length > 0 && (
-            <div style={{ marginTop: '20px', paddingTop: '16px', borderTop: '1px solid var(--border-sm)', marginLeft: '28px' }}>
-              <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '8px' }}>Selected Seats:</p>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-                {selectedSeats.map(seat => (
-                  <span key={seat} style={{ background: 'var(--bg-input)', border: '1px solid var(--border)', color: '#fff', fontSize: '11px', fontWeight: 700, padding: '3px 8px', borderRadius: '4px' }}>
+            <div className="pl-8 pt-3 border-t border-white/5 space-y-2">
+              <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider block">Selected Seats ({selectedSeats.length})</span>
+              <div className="flex flex-wrap gap-1.5">
+                {selectedSeats.map((seat) => (
+                  <span key={seat} className="bg-[#E50914]/20 border border-[#E50914]/50 text-white font-extrabold text-xs px-2.5 py-1 rounded-md shadow-sm">
                     {seat}
                   </span>
                 ))}
@@ -47,27 +55,32 @@ export default function BookingSummary({ show, selectedSeats = [], onProceed, lo
           )}
         </div>
 
-        {/* Price */}
-        <div style={{ marginTop: 'auto', borderTop: '1px solid var(--border)', paddingTop: '20px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: 'var(--text-mid)', marginBottom: '10px' }}>
-            <span>Ticket Price ({selectedSeats.length} x ₹{price})</span>
-            <span style={{ color: '#fff' }}>₹{subtotal}</span>
+        {/* Price Breakdown */}
+        <div className="border-t border-white/10 pt-4 space-y-2.5 text-xs">
+          <div className="flex justify-between text-gray-400">
+            <span>Ticket Price ({selectedSeats.length} × ₹{price})</span>
+            <span className="text-white font-bold">₹{subtotal}</span>
           </div>
           {selectedSeats.length > 0 && (
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: 'var(--text-mid)', marginBottom: '16px' }}>
-              <span>Convenience Fee</span>
-              <span style={{ color: '#fff' }}>₹{convenienceFee}</span>
+            <div className="flex justify-between text-gray-400">
+              <span>Convenience & Dolby Fee</span>
+              <span className="text-white font-bold">₹{convenienceFee}</span>
             </div>
           )}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid var(--border-sm)', paddingTop: '16px', marginBottom: '24px' }}>
-            <span style={{ fontSize: '15px', fontWeight: 800, color: '#fff' }}>Total Payable</span>
-            <span style={{ fontSize: '20px', fontWeight: 900, color: 'var(--red)' }}>₹{totalAmount}</span>
+          <div className="flex justify-between items-center border-t border-white/10 pt-3 text-sm">
+            <span className="font-bebas text-lg text-white tracking-wide">TOTAL PAYABLE</span>
+            <span className="font-bebas text-2xl text-[#E50914] text-glow-red">₹{totalAmount}</span>
           </div>
         </div>
       </div>
 
-      <button onClick={onProceed} disabled={selectedSeats.length === 0 || loading} className="btn-red" style={{ width: '100%', justifyContent: 'center', padding: '14px', opacity: selectedSeats.length === 0 || loading ? 0.5 : 1 }}>
-        {loading ? 'Processing...' : `Proceed to Payment (₹${totalAmount})`}
+      <button
+        onClick={onProceed}
+        disabled={selectedSeats.length === 0 || loading}
+        className="btn-cinema w-full py-3.5 text-sm flex items-center justify-center gap-2 rounded-xl disabled:opacity-40 disabled:cursor-not-allowed"
+      >
+        <Ticket className="w-4 h-4" />
+        <span>{loading ? 'Processing...' : `PROCEED TO CHECKOUT (₹${totalAmount})`}</span>
       </button>
     </div>
   );
