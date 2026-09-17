@@ -1,75 +1,94 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-
-const Logo = () => (
-  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
-    <div style={{ width: '32px', height: '32px', background: 'var(--red)', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><polygon points="3,2 12,7 3,12" fill="white" /></svg>
-    </div>
-    <span style={{ fontSize: '18px', fontWeight: 900, color: '#fff' }}>Movie<span style={{ color: 'var(--red)' }}>Hub</span></span>
-  </div>
-);
+import { Film, Sparkles, Shield, Heart } from 'lucide-react';
 
 export default function Footer() {
   const year = new Date().getFullYear();
 
-  const sections = [
-    { title: 'Quick Links', links: [['/', 'Home'], ['/', 'Movies'], ['/', 'Theatres'], ['/', 'Offers'], ['/my-bookings', 'My Bookings']] },
-    { title: 'Support',     links: [['#', 'Help & FAQ'], ['#', 'Contact Us'], ['#', 'Refund Policy'], ['#', 'Careers']] },
-    { title: 'Legal',       links: [['#', 'Privacy Policy'], ['#', 'Terms of Service'], ['#', 'Cookie Policy'], ['#', 'Sitemap']] },
-  ];
-
   return (
-    <footer style={{ background: 'var(--bg-nav)', borderTop: '1px solid var(--border)', marginTop: '60px', padding: '52px 40px 28px' }}>
-      <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '40px', marginBottom: '44px' }}>
-
-          {/* Brand */}
-          <div>
-            <Logo />
-            <p style={{ fontSize: '13px', color: 'var(--text-muted)', lineHeight: 1.75, maxWidth: '240px' }}>
-              Your one-stop destination for movie ticket booking. Fast, secure, and seamless experience.
-            </p>
-            {/* Social icons */}
-            <div style={{ display: 'flex', gap: '10px', marginTop: '18px' }}>
-              {['𝕏', 'in', 'f', '▶'].map((icon, i) => (
-                <a key={i} href="#" style={{
-                  width: '34px', height: '34px', borderRadius: '6px',
-                  background: 'rgba(255,255,255,0.06)', border: '1px solid var(--border)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  color: 'var(--text-mid)', fontSize: '14px', fontWeight: 800, textDecoration: 'none',
-                  transition: 'all 0.2s',
-                }}
-                  onMouseOver={e => { e.currentTarget.style.background = 'var(--red)'; e.currentTarget.style.color = '#fff'; e.currentTarget.style.borderColor = 'var(--red)'; }}
-                  onMouseOut={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; e.currentTarget.style.color = 'var(--text-mid)'; e.currentTarget.style.borderColor = 'var(--border)'; }}
-                >{icon}</a>
-              ))}
+    <footer className="bg-[#07080e] border-t border-white/10 mt-20 pt-16 pb-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+        
+        {/* Top Partner Showcase */}
+        <div className="bg-[#0F111A] border border-white/10 rounded-2xl p-6 flex flex-wrap items-center justify-between gap-6">
+          <div className="flex items-center gap-3">
+            <Film className="w-6 h-6 text-[#E50914]" />
+            <div>
+              <h4 className="font-bebas text-xl text-white tracking-wider">OFFICIAL CINEMA PARTNER</h4>
+              <p className="text-xs text-gray-400">Authorized Ticketing Platform for IMAX 3D, Dolby Atmos & 4K Laser Screens</p>
             </div>
           </div>
 
-          {/* Links */}
-          {sections.map(section => (
-            <div key={section.title}>
-              <h4 style={{ fontSize: '14px', fontWeight: 800, color: '#fff', marginBottom: '16px' }}>{section.title}</h4>
-              <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                {section.links.map(([href, label]) => (
-                  <li key={label}>
-                    <Link to={href} style={{ fontSize: '13px', color: 'var(--text-muted)', textDecoration: 'none', transition: 'color 0.2s' }}
-                      onMouseOver={e => e.target.style.color = 'var(--red)'}
-                      onMouseOut={e => e.target.style.color = 'var(--text-muted)'}
-                    >{label}</Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+          <div className="flex items-center gap-4 text-xs font-black tracking-widest text-[#FFD700]">
+            <span className="bg-black/60 px-3 py-1.5 rounded-lg border border-[#FFD700]/30">IMAX 3D</span>
+            <span className="bg-black/60 px-3 py-1.5 rounded-lg border border-[#FFD700]/30">DOLBY ATMOS</span>
+            <span className="bg-black/60 px-3 py-1.5 rounded-lg border border-[#FFD700]/30">4K LASER</span>
+          </div>
         </div>
 
-        {/* Bottom bar */}
-        <div style={{ borderTop: '1px solid var(--border)', paddingTop: '24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
-          <p style={{ fontSize: '12px', color: 'var(--text-muted)' }}>© {year} MovieHub Inc. All rights reserved.</p>
-          <p style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Built with FastAPI · React · MongoDB</p>
+        {/* Links Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          
+          {/* Brand */}
+          <div className="space-y-4">
+            <Link to="/" className="flex items-center gap-2 text-decoration-none">
+              <div className="w-8 h-8 rounded-lg bg-[#E50914] flex items-center justify-center text-white">
+                <Film className="w-4 h-4" />
+              </div>
+              <span className="font-bebas text-2xl text-white tracking-wider">
+                CINE<span className="text-[#E50914]">PASS</span>
+              </span>
+            </Link>
+            <p className="text-xs text-gray-400 leading-relaxed">
+              India's premier movie ticketing platform. Experience blockbusters with real-time seat visualizers, instant QR passes, and zero booking friction.
+            </p>
+          </div>
+
+          {/* Quick Links */}
+          <div className="space-y-3">
+            <h5 className="font-bebas text-lg text-white tracking-wider">QUICK NAVIGATION</h5>
+            <ul className="space-y-2 text-xs text-gray-400">
+              <li><Link to="/" className="hover:text-[#E50914] transition-colors text-decoration-none">Spotlight Movies</Link></li>
+              <li><Link to="/#movies" className="hover:text-[#E50914] transition-colors text-decoration-none">Now Showing</Link></li>
+              <li><Link to="/my-bookings" className="hover:text-[#E50914] transition-colors text-decoration-none">My E-Tickets</Link></li>
+            </ul>
+          </div>
+
+          {/* Experience */}
+          <div className="space-y-3">
+            <h5 className="font-bebas text-lg text-white tracking-wider">CINEMA TECH</h5>
+            <ul className="space-y-2 text-xs text-gray-400">
+              <li><span className="text-gray-300">IMAX Enhanced Visuals</span></li>
+              <li><span className="text-gray-300">Dolby 7.1 Spatial Audio</span></li>
+              <li><span className="text-gray-300">VIP Leather Recliners</span></li>
+            </ul>
+          </div>
+
+          {/* Newsletter */}
+          <div className="space-y-3">
+            <h5 className="font-bebas text-lg text-white tracking-wider">PREMIERE NOTIFICATIONS</h5>
+            <p className="text-xs text-gray-400">Subscribe for early access tickets & midnight premiere passes.</p>
+            <div className="flex gap-2">
+              <input
+                type="email"
+                placeholder="Enter email..."
+                className="w-full bg-[#131624] border border-white/10 rounded-xl px-3 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#E50914]"
+              />
+              <button className="btn-cinema text-xs py-2 px-4 rounded-xl shrink-0">Join</button>
+            </div>
+          </div>
+
         </div>
+
+        {/* Bottom copyright */}
+        <div className="border-t border-white/10 pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-gray-500 gap-4">
+          <p>© {year} CINEPASS Inc. All Rights Reserved.</p>
+          <p className="flex items-center gap-1">
+            <span>Built for Cinema Lovers with</span>
+            <Heart className="w-3.5 h-3.5 text-[#E50914] fill-[#E50914]" />
+          </p>
+        </div>
+
       </div>
     </footer>
   );
