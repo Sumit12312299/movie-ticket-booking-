@@ -1,10 +1,19 @@
-fastapi
-uvicorn[standard]
-motor
-pydantic[email]
-pydantic-settings
+# Core FastAPI Web Framework & ASGI Server
+fastAPI>=0.109.0
+uvicorn[standard]>=0.27.0
+
+# Database & Async Drivers
+motor>=3.3.2
+
+# Data Validation & Configuration
+pydantic[email]>=2.6.0
+pydantic-settings>=2.1.0
+
+# Authentication & Security
 bcrypt==3.2.2
-passlib[bcrypt]
-python-jose[cryptography]
-python-dotenv
-python-multipart
+passlib[bcrypt]>=1.7.4
+python-jose[cryptography]>=3.3.0
+
+# Utilities & Form Handling
+python-dotenv>=1.0.0
+python-multipart>=0.0.9
